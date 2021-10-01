@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - Remember the time we use to play.mp3-ff3f5d8b62d634c6dc08121fb980980f.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - Remember the time we use to play.mp3"
+dest_files=[ "res://.import/Komiku - Remember the time we use to play.mp3-ff3f5d8b62d634c6dc08121fb980980f.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

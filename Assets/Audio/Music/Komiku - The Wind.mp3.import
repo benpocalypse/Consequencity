@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - The Wind.mp3-56e65c40d8b944550a26fe2f6552ed9e.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - The Wind.mp3"
+dest_files=[ "res://.import/Komiku - The Wind.mp3-56e65c40d8b944550a26fe2f6552ed9e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

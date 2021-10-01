@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - Friends, 2068.mp3-42e5f8d3e5b3e16bf260fe63e7566b7d.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - Friends, 2068.mp3"
+dest_files=[ "res://.import/Komiku - Friends, 2068.mp3-42e5f8d3e5b3e16bf260fe63e7566b7d.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

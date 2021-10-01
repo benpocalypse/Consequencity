@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - The road we use to travel when we were kids.mp3-4002b025f70e1d505a19eee98cbb6b7e.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - The road we use to travel when we were kids.mp3"
+dest_files=[ "res://.import/Komiku - The road we use to travel when we were kids.mp3-4002b025f70e1d505a19eee98cbb6b7e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

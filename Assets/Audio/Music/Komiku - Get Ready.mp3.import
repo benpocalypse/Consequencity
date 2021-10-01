@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - Get Ready.mp3-093ff135fa94a169fc872ecc19509d65.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - Get Ready.mp3"
+dest_files=[ "res://.import/Komiku - Get Ready.mp3-093ff135fa94a169fc872ecc19509d65.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

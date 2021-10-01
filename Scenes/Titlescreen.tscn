@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Audio/Music/Komiku - Tale on the Late (Main Theme).mp3" type="AudioStream" id=1]
+
+[sub_resource type="CSharpScript" id=1]
+resource_name = "Titlescreen"
+script/source = "using Godot;
+using System;
+
+public class Titlescreen : Node2D
+{
+	// Declare member variables here. Examples:
+	// private int a = 2;
+	// private string b = \"text\";
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		
+	}
+
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
+}
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="TitleText" type="RichTextLabel" parent="."]
+margin_left = 850.922
+margin_top = 513.852
+margin_right = 945.922
+margin_bottom = 529.852
+rect_scale = Vector2( 2, 2 )
+text = "Consequencity"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Start Button" type="Button" parent="."]
+margin_left = 895.704
+margin_top = 901.468
+margin_right = 1010.7
+margin_bottom = 938.468
+text = "Start Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+autoplay = true
+
+[connection signal="pressed" from="Start Button" to="." method="_on_Start_Button_pressed"]

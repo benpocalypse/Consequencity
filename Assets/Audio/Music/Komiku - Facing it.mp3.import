@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - Facing it.mp3-9a59747a9a7b2a0c489b609262e51f18.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - Facing it.mp3"
+dest_files=[ "res://.import/Komiku - Facing it.mp3-9a59747a9a7b2a0c489b609262e51f18.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

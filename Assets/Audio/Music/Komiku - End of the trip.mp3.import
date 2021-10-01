@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Komiku - End of the trip.mp3-3e2aa5987a32752514e6995c97fe48d3.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Komiku - End of the trip.mp3"
+dest_files=[ "res://.import/Komiku - End of the trip.mp3-3e2aa5987a32752514e6995c97fe48d3.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
