@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Source/ThreeDTest.cs" type="Script" id=1]
-[ext_resource path="res://Scenes/Building.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Graphics/Backgrounds/blank.jpg" type="Texture" id=3]
 [ext_resource path="res://Assets/Audio/Music/Komiku - The road we use to travel when we were kids.mp3" type="AudioStream" id=4]
 
@@ -49,11 +48,9 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/limit = 0.5
-shader_param/blur = 3.35
-shader_param/intensity = 0.38
+shader_param/blur = 3.64
+shader_param/intensity = 0.395
 shader_param/debug = false
-
-[sub_resource type="PlaneMesh" id=3]
 
 [node name="Spatial" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00707543, 2.38419e-07, -0.00277948 )
@@ -71,6 +68,9 @@ __meta__ = {
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/TiltShift"]
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/TiltShift/MarginContainer"]
 material = SubResource( 2 )
@@ -78,28 +78,16 @@ margin_right = 1920.0
 margin_bottom = 1080.0
 texture = ExtResource( 3 )
 
-[node name="Spatial" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.72073 )
-
-[node name="Spatial2" parent="." instance=ExtResource( 2 )]
-
-[node name="Spatial3" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.54646 )
-
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.722195, -0.0852662, -0.686414, 0.69169, 0.0890267, 0.716687, 0, -0.992373, 0.123272, -7.38566, 6.29138, 0 )
 spot_range = 5.08825
 spot_angle = 32.8692
 
-[node name="Floor" type="MeshInstance" parent="."]
-mesh = SubResource( 3 )
-material/0 = null
-
 [node name="Cambase" type="Spatial" parent="."]
 transform = Transform( 0.838671, 0, 0.544639, 0, 1, 0, -0.544639, 0, 0.838671, 0, 0, 0 )
 
 [node name="Camera" type="Camera" parent="Cambase"]
-transform = Transform( 0.044105, 0.37417, -0.926311, -0.0177954, 0.92736, 0.373747, 0.998868, -2.61066e-08, 0.0475597, -9.77205, 4.12405, 0.0247751 )
+transform = Transform( -4.37114e-08, 0.5, -0.866026, 0, 0.866025, 0.5, 1, 2.18557e-08, -3.78552e-08, -10, 5, 0 )
 fov = 53.4375
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
