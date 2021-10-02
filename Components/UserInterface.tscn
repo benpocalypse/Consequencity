@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Source/UserInterface.cs" type="Script" id=1]
+
+[node name="UserInterface" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.8909
+margin_bottom = 0.890869
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Residential" type="Button" parent="."]
+margin_left = 25.0
+margin_top = 22.0
+margin_right = 139.0
+margin_bottom = 61.0
+rect_pivot_offset = Vector2( 83, 93.1091 )
+text = "Residential"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Commercial" type="Button" parent="."]
+margin_left = 26.0
+margin_top = 71.1091
+margin_right = 140.0
+margin_bottom = 110.109
+text = "Commercial"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Industrial" type="Button" parent="."]
+margin_left = 26.0
+margin_top = 119.109
+margin_right = 140.0
+margin_bottom = 158.109
+text = "Industrial"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Delete" type="Button" parent="."]
+margin_left = 26.0
+margin_top = 167.109
+margin_right = 140.0
+margin_bottom = 206.109
+text = "Delete"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Residential" to="." method="_on_Residential_pressed"]
+[connection signal="pressed" from="Commercial" to="." method="_on_Commercial_pressed"]
+[connection signal="pressed" from="Industrial" to="." method="_on_Industrial_pressed"]
+[connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]

@@ -51,49 +51,5 @@ namespace ConsequencityNoodling
 			// Update demand values based on current map values.
 
 		}
-
-		public void Display()
-		{
-			System.Console.WriteLine("--------------------------------------------------------------------------------");
-			for (int height = 0; height < landMap.GetLength(1); height++)
-			{
-				// Type
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					System.Console.Write($"| {landMap[height, width].Type.ToString().PadRight(12, ' ')} ");
-				}
-				System.Console.WriteLine("| ");
-
-				// Population
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					System.Console.Write($"| Pop: {landMap[height, width].Population.ToString("D3").PadRight(7, ' ')} ");
-				}
-				System.Console.WriteLine("| ");
-
-				// Value
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					System.Console.Write($"| Val: {landMap[height, width].Value.ToString("D3").PadRight(7, ' ')} ");
-				}
-				System.Console.WriteLine("| ");
-
-				// Crime
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					System.Console.Write($"| Crm: {landMap[height, width].Crime.ToString("D3").PadRight(7, ' ')} ");
-				}
-				System.Console.WriteLine("| ");
-
-				// Pollution
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					System.Console.Write($"| Pol: {landMap[height, width].Pollution.ToString("D3").PadRight(7, ' ')} ");
-				}
-				System.Console.WriteLine("| ");
-
-				System.Console.WriteLine("--------------------------------------------------------------------------------");
-			}
-		}
 	}
 }

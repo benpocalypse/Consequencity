@@ -18,51 +18,87 @@ public class Globals : Node
 	};
 	
 	public enum LandSpaceType
+	{
+		Residential,
+		Commercial,
+		Industrial,
+		Agricultural,
+		None
+		// Water???
+	}
+
+	public enum InputModeType
+	{
+		None,
+		Residential,
+		Commercial,
+		Industrial,
+		Delete
+	}
+
+	public LandSpaceType InputModeTypeToLandSpaceType(InputModeType _type)
+	{
+		LandSpaceType result = LandSpaceType.None;
+		switch (_type)
 		{
-			Residential,
-			Commercial,
-			Industrial,
-			Agricultural
-			// Water???
+			case InputModeType.None:
+				result = LandSpaceType.None;
+				break;
+
+			case InputModeType.Residential:
+				result = LandSpaceType.Residential;
+				break;
+
+			case InputModeType.Commercial:
+				result = LandSpaceType.Commercial;
+				break;
+
+			case InputModeType.Industrial:
+				result = LandSpaceType.Industrial;
+				break;
 		}
 
-		public const int MaximumLandValue = 100;
+		return result;
+	}
+
+	public const int MaximumLandValue = 100;
+	public InputModeType InputMode = InputModeType.None;
 
 
-		// TODO - Maybe this isn't needed? Perhaps just the amount that each property type affects it's next nearest
-		//        neighbor is good enough? We'll see I guess.
-		private Dictionary<LandSpaceType, int> ValueAffectAgacency = new Dictionary<Globals.LandSpaceType, int>()
+	// TODO - Maybe this isn't needed? Perhaps just the amount that each property type affects it's next nearest
+	//        neighbor is good enough? We'll see I guess.
+	private Dictionary<LandSpaceType, int> ValueAffectAgacency = new Dictionary<Globals.LandSpaceType, int>()
+	{
+		{LandSpaceType.Residential, 2},
+		{LandSpaceType.Commercial, 2},
+		{LandSpaceType.Industrial, 6},
+		{LandSpaceType.Agricultural, 4 }
+	};
+
+	private Dictionary<LandSpaceType, float> ValueAffect = new Dictionary<Globals.LandSpaceType, float>()
+	{
+		{LandSpaceType.Residential, 0.5f},
+		{LandSpaceType.Commercial, 0.8f},
+		{LandSpaceType.Industrial, 1.0f},
+		{LandSpaceType.Agricultural, 0.2f}
+	};
+
+	static Globals()
+	{
+	}
+
+	private Globals()
+	{
+	}
+
+	private static readonly Globals instance = new Globals();
+	public static Globals Instance
+	{
+		get
 		{
-			{LandSpaceType.Residential, 2},
-			{LandSpaceType.Commercial, 2},
-			{LandSpaceType.Industrial, 6},
-			{LandSpaceType.Agricultural, 4 }
-		};
-
-		private Dictionary<LandSpaceType, float> ValueAffect = new Dictionary<Globals.LandSpaceType, float>()
-		{
-			{LandSpaceType.Residential, 0.5f},
-			{LandSpaceType.Commercial, 0.8f},
-			{LandSpaceType.Industrial, 1.0f},
-			{LandSpaceType.Agricultural, 0.2f}
-		};
-
-		static Globals()
-		{
+			return instance;
 		}
-
-		private Globals()
-		{
-		}
-
-		private static readonly Globals instance = new Globals();
-		public static Globals Instance
-		{
-			get
-			{
-				return instance;
-			}
-		}
+	}
 
 	public const int ScreenWidth = 1280;
 	public const int ScreenHeight = 720;

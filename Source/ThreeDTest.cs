@@ -5,11 +5,14 @@ public class ThreeDTest : Spatial
 {
 	private Spatial cameraBase;
 	private Camera camera;
+	private Globals globals;
 
 	public override void _Ready()
 	{
+		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 		cameraBase = ((Spatial)this.GetNode("Cambase"));
 		camera = ((Camera)cameraBase.GetNode("Camera"));
+		GetNode("UiLayer").GetNode("UserInterface").Connect("On_ResidentialButton_pressed", this, nameof(On_ResidentialButton_pressed));
 		PopulateTestMap();
 	}
 
@@ -53,15 +56,25 @@ public class ThreeDTest : Spatial
 					var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000;
 					var space_state = GetWorld().DirectSpaceState;
 					var selection = space_state.IntersectRay(fromPos, toPos);
-					var test = ((StaticBody)selection["collider"]);
+					
+					try
+					{
+						var test = ((StaticBody)selection["collider"]);
+						var selectedLand = ((Land)test.GetParent());
+						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+						//selectedLand.Selected();
 
-					var selectedLand = ((Land)test.GetParent());
-					//selectedLand.Selected();
+/*
+						var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
+						Spatial newBuilding = (Spatial)building.Instance();
+						newBuilding.Translate(selectedLand.Translation);
+						AddChild(newBuilding);
+						*/
+					}
+					catch(Exception ex)
+					{
 
-					var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
-					Spatial newBuilding = (Spatial)building.Instance();
-					newBuilding.Translate(selectedLand.Translation);
-					AddChild(newBuilding);
+					}
 
 					break;
 
@@ -77,6 +90,12 @@ public class ThreeDTest : Spatial
 					break;
 			}
 		}
+	}
+
+	private void On_ResidentialButton_pressed()
+	{
+		GD.Print("Residential Button pressed!");
+		GD.Print($"InputMode = {globals.InputMode}");
 	}
 
 	public void PopulateTestMap()
