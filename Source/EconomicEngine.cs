@@ -1,55 +1,37 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
-namespace ConsequencityNoodling
+public sealed class EconomicEngine
 {
-	public sealed class EconomicEngine
+	public Dictionary<Vector2, LandSpace> Map = new Dictionary<Vector2, LandSpace>();
+
+	private Dictionary<Globals.LandSpaceType, float> landDemand = new Dictionary<Globals.LandSpaceType, float>();
+
+	public EconomicEngine()
 	{
-		private LandSpace[,] landMap = new LandSpace[4, 4]
+		// FIXME - remove this code in the future and have proper map autogeneration.
+		for (int i = 0; i < 30; i++)
 		{
-			{new LandSpace(Globals.LandSpaceType.Agricultural), new LandSpace(Globals.LandSpaceType.Residential),   new LandSpace(Globals.LandSpaceType.Residential),   new LandSpace(Globals.LandSpaceType.Residential)},
-			{new LandSpace(Globals.LandSpaceType.Agricultural), new LandSpace(Globals.LandSpaceType.Commercial),    new LandSpace(Globals.LandSpaceType.Industrial),    new LandSpace(Globals.LandSpaceType.Industrial)},
-			{new LandSpace(Globals.LandSpaceType.Agricultural), new LandSpace(Globals.LandSpaceType.Agricultural),  new LandSpace(Globals.LandSpaceType.Agricultural),  new LandSpace(Globals.LandSpaceType.Agricultural)},
-			{new LandSpace(Globals.LandSpaceType.Agricultural), new LandSpace(Globals.LandSpaceType.Agricultural),  new LandSpace(Globals.LandSpaceType.Agricultural),  new LandSpace(Globals.LandSpaceType.Agricultural)}
-		};
-
-		private Dictionary<Globals.LandSpaceType, float> landDemand = new Dictionary<Globals.LandSpaceType, float>();
-
-		public EconomicEngine()
-		{
-			landDemand.Add(Globals.LandSpaceType.Agricultural, 1.0f);
-			landDemand.Add(Globals.LandSpaceType.Commercial, 1.0f);
-			landDemand.Add(Globals.LandSpaceType.Industrial, 1.0f);
-			landDemand.Add(Globals.LandSpaceType.Residential, 1.1f);
-		}
-
-		public void Update(float timeStep)
-		{
-
-		}
-
-		public void UpdateMap(float timeStep)
-		{
-			var g = Globals.Instance;
-
-			// Update map values based on current demands.
-			for (int height = 0; height < landMap.GetLength(1); height++)
+			for (int j = 0; j < 30; j++)
 			{
-				for (int width = 0; width < landMap.GetLength(0); width++)
-				{
-					landMap[height, width].Value = (int)(
-													   landMap[height, width].Value *
-													   landDemand[landMap[height, width].Type] *
-													   timeStep
-												   );
-				}
+				Map.Add(new Vector2(i,j), new LandSpace(Globals.LandSpaceType.None));
 			}
 		}
+	}
 
-		public void UpdateDemand(float timeStep)
-		{
-			// Update demand values based on current map values.
+	public void Update(float timeStep)
+	{
 
-		}
+	}
+
+	public void UpdateMap(float timeStep)
+	{
+		var g = Globals.Instance;
+	}
+
+	public void UpdateDemand(float timeStep)
+	{
+		// Update demand values based on current map values.
 	}
 }

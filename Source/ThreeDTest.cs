@@ -6,14 +6,17 @@ public class ThreeDTest : Spatial
 	private Spatial cameraBase;
 	private Camera camera;
 	private Globals globals;
+	private EconomicEngine engine;
 
 	public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 		cameraBase = ((Spatial)this.GetNode("Cambase"));
 		camera = ((Camera)cameraBase.GetNode("Camera"));
+		engine = new EconomicEngine();
 		GetNode("UiLayer").GetNode("UserInterface").Connect("On_ResidentialButton_pressed", this, nameof(On_ResidentialButton_pressed));
-		PopulateTestMap();
+		PopulateEngineMap();
+		//PopulateTestMap();
 	}
 
 	public override void _Process(float delta)
@@ -51,6 +54,8 @@ public class ThreeDTest : Spatial
 			switch ((ButtonList)mouseEvent.ButtonIndex)
 			{
 				case ButtonList.Left:
+					// FIXME - This is very sloppy. Refactor it.
+
 					GD.Print($"Left button was clicked at {mouseEvent.Position}");
 					var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
 					var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000;
@@ -62,6 +67,8 @@ public class ThreeDTest : Spatial
 						var test = ((StaticBody)selection["collider"]);
 						var selectedLand = ((Land)test.GetParent());
 						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+						engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+						
 						//selectedLand.Selected();
 
 /*
@@ -96,6 +103,20 @@ public class ThreeDTest : Spatial
 	{
 		GD.Print("Residential Button pressed!");
 		GD.Print($"InputMode = {globals.InputMode}");
+	}
+
+	public void PopulateEngineMap()
+	{
+		foreach (var space in engine.Map)
+		{
+			var land = (PackedScene)ResourceLoader.Load("res://Scenes/Land.tscn");
+			Land newLand = (Land)land.Instance();
+			var newPos = new Vector3(space.Key.x * 2, 0, space.Key.y * 2);
+			newLand.SetLandType(space.Value.Type);
+			newLand.SetPosition(space.Key);
+			newLand.Translate(newPos);
+			AddChild(newLand);
+		}
 	}
 
 	public void PopulateTestMap()

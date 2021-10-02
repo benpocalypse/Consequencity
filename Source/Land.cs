@@ -3,10 +3,7 @@ using System;
 
 public class Land : Spatial
 {
-    [Signal]
-    public delegate void MySignal();
-
-    private Vector2 Position;
+    public Vector2 Position;
 
     public override void _Ready()
     {

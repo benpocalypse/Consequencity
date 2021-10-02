@@ -19,11 +19,11 @@ public class Globals : Node
 	
 	public enum LandSpaceType
 	{
-		Residential,
-		Commercial,
-		Industrial,
-		Agricultural,
-		None
+		Residential = 0,
+		Commercial = 1,
+		Industrial = 2,
+		Agricultural = 3,
+		None = 4
 		// Water???
 	}
 
