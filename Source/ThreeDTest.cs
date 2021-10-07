@@ -16,7 +16,6 @@ public class ThreeDTest : Spatial
 		engine = new EconomicEngine();
 		GetNode("UiLayer").GetNode("UserInterface").Connect("On_ResidentialButton_pressed", this, nameof(On_ResidentialButton_pressed));
 		PopulateEngineMap();
-		//PopulateTestMap();
 	}
 
 	public override void _Process(float delta)
@@ -45,6 +44,9 @@ public class ThreeDTest : Spatial
 			var newPosition = new Vector3(-0.5f, 0, 0);
 			cameraBase.Translate(newPosition);
 		}
+
+		engine.Update(delta);
+		UpdateAgentMap();
 	}
 
 	public override void _Input(InputEvent inputEvent)
@@ -119,17 +121,18 @@ public class ThreeDTest : Spatial
 		}
 	}
 
-	public void PopulateTestMap()
+	public void UpdateAgentMap()
 	{
-		for (int i = 0; i < 20; i++)
+		foreach (var agent in engine.Agents)
 		{
-			for (int j = 0; j < 20; j++)
+			if (agent.HasHome != false && agent.HasBeenDrawn == false)
 			{
-				var land = (PackedScene)ResourceLoader.Load("res://Scenes/Land.tscn");
-				Spatial newLand = (Spatial)land.Instance();
-				var newPos = new Vector3(i * 2, 0, j * 2);
-				newLand.Translate(newPos);
-				AddChild(newLand);
+				agent.HasBeenDrawn = true;
+				var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
+				Spatial newBuilding = (Spatial)building.Instance();
+				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
+				newBuilding.Translate(housePosition);
+				AddChild(newBuilding);	
 			}
 		}
 	}
