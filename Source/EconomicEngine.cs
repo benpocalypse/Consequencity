@@ -39,7 +39,8 @@ public sealed class EconomicEngine
 
 		foreach(var agent in Agents)
 		{
-			// If our agent doesn't have a home, and should perform an 
+			// If our agent doesn't have a home, and should perform an action,
+			// then let's try to find him a home.
 			if (agent.HasHome == false && agent.CanPerformAction())
 			{
 				agent.Home = new Vector2(_random.Next(0, _mapWidth), _random.Next(0, _mapHeight));

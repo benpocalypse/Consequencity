@@ -66,14 +66,16 @@ public class ThreeDTest : Spatial
 					
 					try
 					{
-						var test = ((StaticBody)selection["collider"]);
-						var selectedLand = ((Land)test.GetParent());
+						var selectedCollider = ((StaticBody)selection["collider"]);
+						var selectedLand = ((Land)selectedCollider.GetParent());
 						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+
+						// FIXME - all the update logic should be in our Economic Engine, not here.
 						engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
 						
-						//selectedLand.Selected();
-
-/*
+						/*
+						selectedLand.Selected();
+						
 						var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
 						Spatial newBuilding = (Spatial)building.Instance();
 						newBuilding.Translate(selectedLand.Translation);
@@ -82,7 +84,7 @@ public class ThreeDTest : Spatial
 					}
 					catch(Exception ex)
 					{
-
+						GD.Print($"Exception occurred when selecting a land: {ex}");
 					}
 
 					break;
@@ -121,6 +123,7 @@ public class ThreeDTest : Spatial
 		}
 	}
 
+	// FIXME - all the update logic should be in our Economic Engine, not here.
 	public void UpdateAgentMap()
 	{
 		foreach (var agent in engine.Agents)
