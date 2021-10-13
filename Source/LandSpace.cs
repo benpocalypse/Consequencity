@@ -4,36 +4,36 @@ public sealed class LandSpace
 	private int _population = 0;
 	public int Population
 	{
-		get { return _population; }
-		set { _population = value; }
+		get => _population;
+		set => _population = value;
 	}
 
 	private int _value = 10;
 	public int Value
 	{
-		get { return _value; }
-		set { _value = value; }
+		get => _value;
+		set => _value = value;
 	}
 
 	private int _crime = 0;
 	public int Crime
 	{
-		get { return _crime; }
-		set { _crime = value; }
+		get => _crime;
+		set => _crime = value;
 	}
 
 	private int _pollution = 0;
 	public int Pollution
 	{
-		get { return _pollution; }
-		set { _pollution = value; }
+		get => _pollution;
+		set => _pollution = value;
 	}
 
 	private int _density = 0;
 	public int Density
 	{
-		get { return _density; }
-		set { _density = value; }
+		get => _density;
+		set => _density = value;
 	}
 
 	public Globals.LandSpaceType Type = Globals.LandSpaceType.None;

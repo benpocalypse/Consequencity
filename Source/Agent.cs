@@ -29,15 +29,5 @@ public sealed class Agent
         _seed = _random.Next(0, 1000);
     }
 
-    public bool CanPerformAction()
-    {
-        if (_seed == _random.Next(0, 1000))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    public bool CanPerformAction() => _seed == _random.Next(0, 1000);
 }
