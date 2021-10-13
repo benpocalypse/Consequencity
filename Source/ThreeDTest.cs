@@ -6,14 +6,12 @@ public class ThreeDTest : Spatial
 	private Spatial cameraBase;
 	private Camera camera;
 	private Globals globals;
-	private EconomicEngine engine;
 
 	public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 		cameraBase = ((Spatial)this.GetNode("Cambase"));
 		camera = ((Camera)cameraBase.GetNode("Camera"));
-		engine = new EconomicEngine();
 		GetNode("UiLayer").GetNode("UserInterface").Connect("On_ResidentialButton_pressed", this, nameof(On_ResidentialButton_pressed));
 		PopulateEngineMap();
 	}
@@ -45,7 +43,7 @@ public class ThreeDTest : Spatial
 			cameraBase.Translate(newPosition);
 		}
 
-		engine.Update(delta);
+		globals.Engine.Update(delta);
 		UpdateAgentMap();
 	}
 
@@ -69,7 +67,7 @@ public class ThreeDTest : Spatial
 						var test = ((StaticBody)selection["collider"]);
 						var selectedLand = ((Land)test.GetParent());
 						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
-						engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+						globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
 						
 						//selectedLand.Selected();
 
@@ -109,7 +107,7 @@ public class ThreeDTest : Spatial
 
 	public void PopulateEngineMap()
 	{
-		foreach (var space in engine.Map)
+		foreach (var space in globals.Engine.Map)
 		{
 			var land = (PackedScene)ResourceLoader.Load("res://Scenes/Land.tscn");
 			Land newLand = (Land)land.Instance();
@@ -123,7 +121,7 @@ public class ThreeDTest : Spatial
 
 	public void UpdateAgentMap()
 	{
-		foreach (var agent in engine.Agents)
+		foreach (var agent in globals.Engine.Agents)
 		{
 			if (agent.HasHome != false && agent.HasBeenDrawn == false)
 			{
