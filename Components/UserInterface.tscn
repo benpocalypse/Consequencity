@@ -53,6 +53,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Population" type="RichTextLabel" parent="."]
+margin_left = 1721.98
+margin_top = 23.4545
+margin_right = 1852.98
+margin_bottom = 63.4545
+text = "Population: 0"
+
 [connection signal="pressed" from="Residential" to="." method="_on_Residential_pressed"]
 [connection signal="pressed" from="Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Industrial" to="." method="_on_Industrial_pressed"]

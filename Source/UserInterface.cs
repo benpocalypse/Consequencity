@@ -28,6 +28,8 @@ public class UserInterface : Control
 		{
 			GetTree().Quit();
 		}
+
+		((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
 	}
 
 	public void _on_Residential_pressed()
