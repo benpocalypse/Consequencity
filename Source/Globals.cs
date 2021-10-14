@@ -23,7 +23,8 @@ public class Globals : Node
 		Commercial = 1,
 		Industrial = 2,
 		Agricultural = 3,
-		None = 4
+		Transportation = 4,
+		None = 5
 		// Water???
 	}
 
@@ -33,6 +34,7 @@ public class Globals : Node
 		Residential,
 		Commercial,
 		Industrial,
+		Transportation,
 		Delete
 	}
 
@@ -77,6 +79,10 @@ public class Globals : Node
 
 			case InputModeType.Industrial:
 				result = LandSpaceType.Industrial;
+				break;
+
+			case InputModeType.Transportation:
+				result = LandSpaceType.Transportation;
 				break;
 		}
 

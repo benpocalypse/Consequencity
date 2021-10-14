@@ -29,12 +29,14 @@ public sealed class EconomicEngine
 
 	public EconomicEngine()
 	{
+		_random = new Random();
+
 		// FIXME - remove this code in the future and have proper map autogeneration.
 		for (int i = 0; i < _mapWidth; i++)
 		{
 			for (int j = 0; j < _mapHeight; j++)
 			{
-				Map.Add(new Vector2(i,j), new LandSpace(Globals.LandSpaceType.None));
+				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,5)));//  Globals.LandSpaceType.None));
 			}
 		}
 

@@ -13,6 +13,9 @@ public class UserInterface : Control
 	public delegate void On_IndustrialButton_pressed();
 
 	[Signal]
+	public delegate void On_TransportationButton_pressed();
+
+	[Signal]
 	public delegate void On_DeleteButton_pressed();
 
 	private Globals globals;
@@ -24,12 +27,12 @@ public class UserInterface : Control
 
 	public override void _Process(float delta)
 	{
+		((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
+
 		if (Input.IsActionPressed("ui_cancel"))
 		{
 			GetTree().Quit();
-		}
-
-		((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
+		}		
 	}
 
 	public void _on_Residential_pressed()
@@ -72,6 +75,20 @@ public class UserInterface : Control
 		}
 
 		EmitSignal(nameof(On_IndustrialButton_pressed));
+	}
+
+	public void _on_Transportation_pressed()
+	{
+		if (globals.InputMode != Globals.InputModeType.Transportation)
+		{
+			globals.InputMode = Globals.InputModeType.Transportation;
+		}
+		else
+		{
+			globals.InputMode = Globals.InputModeType.None;
+		}
+
+		EmitSignal(nameof(On_TransportationButton_pressed));
 	}
 
 	public void _on_Delete_pressed()
