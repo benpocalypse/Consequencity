@@ -22,7 +22,7 @@ albedo_color = Color( 0.988235, 0.937255, 0.552941, 1 )
 extents = Vector3( 1, 0.1, 1 )
 
 [sub_resource type="SpatialMaterial" id=8]
-albedo_color = Color( 0.85098, 0.741176, 0.784314, 1 )
+albedo_color = Color( 0.419608, 0.788235, 0.423529, 1 )
 
 [sub_resource type="SpatialMaterial" id=9]
 albedo_color = Color( 0.682353, 0.886275, 1, 1 )

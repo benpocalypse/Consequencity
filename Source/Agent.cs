@@ -21,12 +21,11 @@ public sealed class Agent
     public Vector2 Work { get; }
     public bool HasBeenDrawn = false;
     private Random _random;
-    private int _seed;
+    private int _seed = 0;
 
     public Agent()
     {
         _random = new Random();
-        _seed = _random.Next(0, 1000);
     }
 
     public bool CanPerformAction() => _seed == _random.Next(0, 1000);

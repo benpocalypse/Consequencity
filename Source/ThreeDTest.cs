@@ -54,9 +54,6 @@ public class ThreeDTest : Spatial
 			switch ((ButtonList)mouseEvent.ButtonIndex)
 			{
 				case ButtonList.Left:
-					// FIXME - This is very sloppy. Refactor it.
-
-					GD.Print($"Left button was clicked at {mouseEvent.Position}");
 					var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
 					var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000;
 					var space_state = GetWorld().DirectSpaceState;
@@ -69,14 +66,7 @@ public class ThreeDTest : Spatial
 						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
 						globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
 						
-						/*
 						selectedLand.Selected();
-						
-						var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
-						Spatial newBuilding = (Spatial)building.Instance();
-						newBuilding.Translate(selectedLand.Translation);
-						AddChild(newBuilding);
-						*/
 					}
 					catch(Exception ex)
 					{
@@ -86,7 +76,6 @@ public class ThreeDTest : Spatial
 					break;
 
 				case ButtonList.WheelUp:
-					GD.Print("Wheel up");
 					var newPosition = new Vector3(0, -0.5f, 0);
 					cameraBase.Translate(newPosition);
 					break;

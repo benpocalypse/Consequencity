@@ -13,12 +13,12 @@ public sealed class EconomicEngine
 	{
 		get
 		{
-			var total = 0;
+			_population = 0;
 			foreach (var space in Map)
 			{
-				total += space.Value.Population;
+				_population += space.Value.Population;
 			}
-			return total;
+			return _population;
 		}
 	}
 
@@ -36,7 +36,7 @@ public sealed class EconomicEngine
 		{
 			for (int j = 0; j < _mapHeight; j++)
 			{
-				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,5)));//  Globals.LandSpaceType.None));
+				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,4)));
 			}
 		}
 
@@ -44,8 +44,6 @@ public sealed class EconomicEngine
 		{
 			Agents.Add(new Agent());
 		}
-
-		_random = new Random();
 	}
 
 	public void Update(float timeStep)
@@ -57,7 +55,7 @@ public sealed class EconomicEngine
 		foreach(var agent in Agents)
 		{
 			// If our agent doesn't have a home, and should perform an action,
-			// then let's try to find him a home.
+			// then let's try to find them a home.
 			if (agent.HasHome == false && agent.CanPerformAction() && Map[newHomeLocation].Type == Globals.LandSpaceType.Residential)
 			{
 				agent.Home = newHomeLocation;
@@ -68,7 +66,7 @@ public sealed class EconomicEngine
 
 	public void UpdateMap(float timeStep)
 	{
-		var g = Globals.Instance;
+
 	}
 
 	public void UpdateDemand(float timeStep)
