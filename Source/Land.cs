@@ -23,6 +23,7 @@ public class Land : Spatial
                 ((Spatial)GetNode("Residential")).Visible = true;
                 ((Spatial)GetNode("Commercial")).Visible = false;
                 ((Spatial)GetNode("Industrial")).Visible = false;
+                ((Spatial)GetNode("Agricultural")).Visible = false;
                 ((Spatial)GetNode("Transportation")).Visible = false;
                 ((Spatial)GetNode("Land")).Visible = false;
                 break;
@@ -31,6 +32,7 @@ public class Land : Spatial
                 ((Spatial)GetNode("Residential")).Visible = false;
                 ((Spatial)GetNode("Commercial")).Visible = true;
                 ((Spatial)GetNode("Industrial")).Visible = false;
+                ((Spatial)GetNode("Agricultural")).Visible = false;
                 ((Spatial)GetNode("Transportation")).Visible = false;
                 ((Spatial)GetNode("Land")).Visible = false;
                 break;
@@ -39,6 +41,16 @@ public class Land : Spatial
                 ((Spatial)GetNode("Residential")).Visible = false;
                 ((Spatial)GetNode("Commercial")).Visible = false;
                 ((Spatial)GetNode("Industrial")).Visible = true;
+                ((Spatial)GetNode("Agricultural")).Visible = false;
+                ((Spatial)GetNode("Transportation")).Visible = false;
+                ((Spatial)GetNode("Land")).Visible = false;
+                break;
+
+            case Globals.LandSpaceType.Agricultural:
+                ((Spatial)GetNode("Residential")).Visible = false;
+                ((Spatial)GetNode("Commercial")).Visible = false;
+                ((Spatial)GetNode("Industrial")).Visible = false;
+                ((Spatial)GetNode("Agricultural")).Visible = true;
                 ((Spatial)GetNode("Transportation")).Visible = false;
                 ((Spatial)GetNode("Land")).Visible = false;
                 break;
@@ -47,6 +59,7 @@ public class Land : Spatial
                 ((Spatial)GetNode("Residential")).Visible = false;
                 ((Spatial)GetNode("Commercial")).Visible = false;
                 ((Spatial)GetNode("Industrial")).Visible = false;
+                ((Spatial)GetNode("Agricultural")).Visible = false;
                 ((Spatial)GetNode("Transportation")).Visible = true;
                 ((Spatial)GetNode("Land")).Visible = false;
                 break;
@@ -55,6 +68,7 @@ public class Land : Spatial
                 ((Spatial)GetNode("Residential")).Visible = false;
                 ((Spatial)GetNode("Commercial")).Visible = false;
                 ((Spatial)GetNode("Industrial")).Visible = false;
+                ((Spatial)GetNode("Agricultural")).Visible = false;
                 ((Spatial)GetNode("Transportation")).Visible = false;
                 ((Spatial)GetNode("Land")).Visible = true;
                 break;

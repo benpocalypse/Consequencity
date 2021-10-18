@@ -14,9 +14,9 @@ __meta__ = {
 
 [node name="Transportation" type="Button" parent="."]
 margin_left = 26.0
-margin_top = 167.0
+margin_top = 216.0
 margin_right = 140.0
-margin_bottom = 207.0
+margin_bottom = 256.0
 text = "Transportation"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -55,9 +55,9 @@ __meta__ = {
 
 [node name="Delete" type="Button" parent="."]
 margin_left = 26.0
-margin_top = 215.109
+margin_top = 264.109
 margin_right = 140.0
-margin_bottom = 254.109
+margin_bottom = 303.109
 text = "Delete"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -70,8 +70,19 @@ margin_right = 1852.98
 margin_bottom = 63.4545
 text = "Population: 0"
 
+[node name="Button" type="Button" parent="."]
+margin_left = 26.0
+margin_top = 167.109
+margin_right = 141.0
+margin_bottom = 207.109
+text = "Agricultural"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="Transportation" to="." method="_on_Transportation_pressed"]
 [connection signal="pressed" from="Residential" to="." method="_on_Residential_pressed"]
 [connection signal="pressed" from="Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Industrial" to="." method="_on_Industrial_pressed"]
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_Agricultural_pressed"]

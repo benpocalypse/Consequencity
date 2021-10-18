@@ -3,7 +3,7 @@ using Godot;
 
 public sealed class Agent
 {
-    public int Money { get; } = 100;
+    public int Currency { get; } = 100;
     public bool HasHome { get; private set; } = false;
     public bool HasWork { get; private set; } = false;
 
@@ -18,7 +18,17 @@ public sealed class Agent
         }
     }
 
-    public Vector2 Work { get; }
+    private Vector2 _work = new Vector2(0, 0);
+    public Vector2 Work
+    {
+        get { return _work; }
+        set
+        {
+            HasWork = true;
+            _work = value;
+        }
+    }
+
     public bool HasBeenDrawn = false;
     private Random _random;
     private int _seed = 0;

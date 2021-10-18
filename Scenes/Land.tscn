@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Source/Land.cs" type="Script" id=1]
 
@@ -31,10 +31,17 @@ albedo_color = Color( 0.682353, 0.886275, 1, 1 )
 albedo_color = Color( 1, 0.721569, 0.47451, 1 )
 
 [sub_resource type="SpatialMaterial" id=11]
-albedo_color = Color( 0.85098, 0.741176, 0.784314, 1 )
+albedo_color = Color( 0.917647, 0.384314, 0.384314, 1 )
 
 [sub_resource type="PlaneMesh" id=12]
 material = SubResource( 11 )
+size = Vector2( 1.9, 1.9 )
+
+[sub_resource type="SpatialMaterial" id=13]
+albedo_color = Color( 0.85098, 0.741176, 0.784314, 1 )
+
+[sub_resource type="PlaneMesh" id=14]
+material = SubResource( 13 )
 size = Vector2( 1.9, 1.9 )
 
 [node name="Land" type="Spatial"]
@@ -75,7 +82,12 @@ visible = false
 mesh = SubResource( 1 )
 material/0 = SubResource( 10 )
 
-[node name="Transportation" type="MeshInstance" parent="."]
+[node name="Agricultural" type="MeshInstance" parent="."]
 visible = false
 mesh = SubResource( 12 )
+material/0 = null
+
+[node name="Transportation" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 14 )
 material/0 = null

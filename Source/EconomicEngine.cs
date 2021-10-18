@@ -6,7 +6,8 @@ public sealed class EconomicEngine
 {
 	public Dictionary<Vector2, LandSpace> Map = new Dictionary<Vector2, LandSpace>();
 	public List<Agent> Agents = new List<Agent>();
-	private Dictionary<Globals.LandSpaceType, float> landDemand = new Dictionary<Globals.LandSpaceType, float>();
+	private Dictionary<Globals.LandSpaceType, float> _demand = new Dictionary<Globals.LandSpaceType, float>();
+
 
 	private int _population = 0;
 	public int Population 
@@ -36,7 +37,7 @@ public sealed class EconomicEngine
 		{
 			for (int j = 0; j < _mapHeight; j++)
 			{
-				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,4)));
+				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,5)));
 			}
 		}
 
@@ -52,7 +53,7 @@ public sealed class EconomicEngine
 
 		_timeCounter += timeStep;
 
-		foreach(var agent in Agents)
+		foreach (var agent in Agents)
 		{
 			// If our agent doesn't have a home, and should perform an action,
 			// then let's try to find them a home.

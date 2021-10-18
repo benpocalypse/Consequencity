@@ -13,6 +13,9 @@ public class UserInterface : Control
 	public delegate void On_IndustrialButton_pressed();
 
 	[Signal]
+	public delegate void On_AgriculturalButton_pressed();
+
+	[Signal]
 	public delegate void On_TransportationButton_pressed();
 
 	[Signal]
@@ -75,6 +78,20 @@ public class UserInterface : Control
 		}
 
 		EmitSignal(nameof(On_IndustrialButton_pressed));
+	}
+
+	public void _on_Agricultural_pressed()
+	{
+		if (globals.InputMode != Globals.InputModeType.Agricultural)
+		{
+			globals.InputMode = Globals.InputModeType.Agricultural;
+		}
+		else
+		{
+			globals.InputMode = Globals.InputModeType.None;
+		}
+
+		EmitSignal(nameof(On_AgriculturalButton_pressed));
 	}
 
 	public void _on_Transportation_pressed()

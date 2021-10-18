@@ -34,6 +34,7 @@ public class Globals : Node
 		Residential,
 		Commercial,
 		Industrial,
+		Agricultural,
 		Transportation,
 		Delete
 	}
@@ -79,6 +80,10 @@ public class Globals : Node
 
 			case InputModeType.Industrial:
 				result = LandSpaceType.Industrial;
+				break;
+
+			case InputModeType.Agricultural:
+				result = LandSpaceType.Agricultural;
 				break;
 
 			case InputModeType.Transportation:
