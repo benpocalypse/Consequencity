@@ -32,6 +32,12 @@ public class UserInterface : Control
 	{
 		((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
 
+		((RichTextLabel)GetNode("Demand")).BbcodeText = $"[right]Demand" + System.Environment.NewLine +
+														$"{globals.Engine.Demand[Globals.LandSpaceType.Residential]} R" + System.Environment.NewLine +
+														$"{globals.Engine.Demand[Globals.LandSpaceType.Commercial]} C" + System.Environment.NewLine +
+														$"{globals.Engine.Demand[Globals.LandSpaceType.Industrial]} I" + System.Environment.NewLine +
+														$"{globals.Engine.Demand[Globals.LandSpaceType.Agricultural]} A[/right]";
+
 		if (Input.IsActionPressed("ui_cancel"))
 		{
 			GetTree().Quit();

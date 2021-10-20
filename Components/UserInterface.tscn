@@ -64,11 +64,14 @@ __meta__ = {
 }
 
 [node name="Population" type="RichTextLabel" parent="."]
-margin_left = 1721.98
-margin_top = 23.4545
-margin_right = 1852.98
-margin_bottom = 63.4545
+margin_left = 896.0
+margin_top = 22.0
+margin_right = 1027.0
+margin_bottom = 62.0
 text = "Population: 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Button" type="Button" parent="."]
 margin_left = 26.0
@@ -76,6 +79,26 @@ margin_top = 167.109
 margin_right = 141.0
 margin_bottom = 207.109
 text = "Agricultural"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Demand" type="RichTextLabel" parent="."]
+margin_left = 1792.0
+margin_top = 22.0
+margin_right = 1904.0
+margin_bottom = 102.0
+bbcode_enabled = true
+bbcode_text = "[right]Demand
+0 R
+0 C
+0 I
+0 A[/right]"
+text = "Demand
+0 R
+0 C
+0 I
+0 A"
 __meta__ = {
 "_edit_use_anchors_": false
 }

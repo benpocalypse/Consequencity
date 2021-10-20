@@ -29,7 +29,7 @@ public sealed class LandSpace
 		set => _pollution = value;
 	}
 
-	private int _density = 0;
+	private int _density = 1;
 	public int Density
 	{
 		get => _density;

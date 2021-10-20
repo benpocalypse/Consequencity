@@ -98,7 +98,7 @@ public class ThreeDTest : Spatial
 	{
 		foreach (var space in globals.Engine.Map)
 		{
-			var land = (PackedScene)ResourceLoader.Load("res://Scenes/Land.tscn");
+			var land = (PackedScene)ResourceLoader.Load("res://Components/Land.tscn");
 			Land newLand = (Land)land.Instance();
 			var newPos = new Vector3(space.Key.x * 2, 0, space.Key.y * 2);
 			newLand.SetLandType(space.Value.Type);
@@ -116,7 +116,7 @@ public class ThreeDTest : Spatial
 			if (agent.HasHome != false && agent.HasBeenDrawn == false)
 			{
 				agent.HasBeenDrawn = true;
-				var building = (PackedScene)ResourceLoader.Load("res://Scenes/Building.tscn");
+				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
 				Spatial newBuilding = (Spatial)building.Instance();
 				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
 				newBuilding.Translate(housePosition);
