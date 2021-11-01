@@ -72,6 +72,7 @@ public sealed class EconomicEngine
 	public void UpdateAgents()
 	{
 		var newHomeLocation = new Vector2(_random.Next(0, _mapWidth), _random.Next(0, _mapHeight));
+		var newJobLocation = new Vector2(_random.Next(0, _mapWidth), _random.Next(0, _mapHeight));
 
 		foreach (var agent in Agents)
 		{
@@ -85,6 +86,19 @@ public sealed class EconomicEngine
 				agent.Home = newHomeLocation;
 				Map[newHomeLocation].Population += 1;
 			}
+
+			if (agent.HasHome && 
+				agent.CanPerformAction() && 
+				(
+					Map[newJobLocation].Type == Globals.LandSpaceType.Commercial ||
+					Map[newJobLocation].Type == Globals.LandSpaceType.Industrial ||
+					Map[newJobLocation].Type == Globals.LandSpaceType.Agricultural
+				) &&
+				Map[newJobLocation].Population < Map[newJobLocation].Density)
+			{
+				agent.JobLocation = newJobLocation;
+				agent.JobType = ((Globals.JobType)Map[newJobLocation].Type);
+			}
 		}
 	}
 
@@ -95,12 +109,31 @@ public sealed class EconomicEngine
 
 	public void UpdateDemand()
 	{
-		var agentsWithoutHomes = Agents.Where(agent => agent.HasHome == false).Count();
+		var agentsWithoutHomes = float.Parse(Agents.Where(agent => agent.HasHome == false).Count().ToString());
+		var agentsWithoutJobs = float.Parse(Agents.Where(agent => agent.HasJob == false).Count().ToString());
 
-		// FIXME - what we actually want to do is count the occupied residential capacity, vs the total available capacity.
-		var openResidentialCapacity = Map.Where(space => space.Value.Type == Globals.LandSpaceType.Residential).Count();
+		var agentsWithCommercialJobs = float.Parse(Agents.Where(agent => agent.HasJob == false && agent.JobType == Globals.JobType.Commercial).Count().ToString());
+
+		var totalAgents = float.Parse(Agents.Count.ToString());
+
+		var openResidentialCapacity = float.Parse(
+				Map.Where(space => space.Value.Type == Globals.LandSpaceType.Residential).Count().ToString()
+			);
+		var openCommercialCapacity = float.Parse(
+				Map.Where(space => space.Value.Type == Globals.LandSpaceType.Commercial).Count().ToString()
+			);
+		var openIndustrialCapacity = float.Parse(
+				Map.Where(space => space.Value.Type == Globals.LandSpaceType.Industrial).Count().ToString()
+			);
+		var openAgriculturalCapacity = float.Parse(
+				Map.Where(space => space.Value.Type == Globals.LandSpaceType.Agricultural).Count().ToString()
+			);
 
 		// FIXME - The residential demand should factor in population, capaity, crime, value, etc.
-		_demand[Globals.LandSpaceType.Residential] = (int) ((((float)agentsWithoutHomes) / ((float)Agents.Count)) * 100);
+		// FIXME - Decouple the CIA demands so that they reflect who wants what type of job, how many jobs are available, etc.
+		_demand[Globals.LandSpaceType.Residential] = (int) ((agentsWithoutHomes / totalAgents) * 100);
+		_demand[Globals.LandSpaceType.Commercial] = (int) ((agentsWithoutJobs / totalAgents) * 100);
+		_demand[Globals.LandSpaceType.Industrial] = (int) ((agentsWithoutJobs / totalAgents) * 100);
+		_demand[Globals.LandSpaceType.Agricultural] = (int) ((agentsWithoutJobs / totalAgents) * 100);
 	}
 }

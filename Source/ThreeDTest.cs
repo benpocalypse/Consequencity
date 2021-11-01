@@ -113,13 +113,23 @@ public class ThreeDTest : Spatial
 	{
 		foreach (var agent in globals.Engine.Agents)
 		{
-			if (agent.HasHome != false && agent.HasBeenDrawn == false)
+			if (agent.HasHome != false && agent.HomeHasBeenDrawn == false)
 			{
-				agent.HasBeenDrawn = true;
+				agent.HomeHasBeenDrawn = true;
 				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
 				Spatial newBuilding = (Spatial)building.Instance();
 				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
 				newBuilding.Translate(housePosition);
+				AddChild(newBuilding);	
+			}
+
+			if (agent.HasJob != false && agent.JobHasBeenDrawn == false)
+			{
+				agent.JobHasBeenDrawn = true;
+				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
+				Spatial newBuilding = (Spatial)building.Instance();
+				var jobPosition = new Vector3(agent.JobLocation.x * 2, 0, agent.JobLocation.y * 2);
+				newBuilding.Translate(jobPosition);
 				AddChild(newBuilding);	
 			}
 		}

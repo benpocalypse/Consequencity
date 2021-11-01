@@ -25,7 +25,14 @@ public class Globals : Node
 		Agricultural = 3,
 		Transportation = 4,
 		None = 5
-		// Water???
+	}
+
+	public enum JobType
+	{
+		None = 0,
+		Commercial = 1,
+		Industrial = 2,
+		Agricultural = 3
 	}
 
 	public enum InputModeType
