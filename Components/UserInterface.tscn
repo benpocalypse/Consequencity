@@ -5,8 +5,6 @@
 [node name="UserInterface" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 0.8909
-margin_bottom = 0.890869
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -73,7 +71,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="."]
+[node name="Agricultural" type="Button" parent="."]
 margin_left = 26.0
 margin_top = 167.109
 margin_right = 141.0
@@ -84,28 +82,83 @@ __meta__ = {
 }
 
 [node name="Demand" type="RichTextLabel" parent="."]
-margin_left = 1792.0
-margin_top = 22.0
-margin_right = 1904.0
-margin_bottom = 102.0
-bbcode_enabled = true
-bbcode_text = "[right]Demand
-0 R
-0 C
-0 I
-0 A[/right]"
-text = "Demand
-0 R
-0 C
-0 I
-0 A"
+margin_left = 1752.0
+margin_top = 24.0
+margin_right = 1864.0
+margin_bottom = 41.0
+text = "Demand"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ResidentialProgress" type="ProgressBar" parent="."]
+margin_left = 1752.0
+margin_top = 48.0
+margin_right = 1904.0
+margin_bottom = 73.0
+rounded = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ResidentialProgress"]
+margin_left = -16.0
+margin_bottom = 25.0
+text = "R"
+valign = 1
+
+[node name="CommercialProgress" type="ProgressBar" parent="."]
+margin_left = 1752.0
+margin_top = 80.0
+margin_right = 1904.0
+margin_bottom = 104.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CommercialProgress"]
+margin_left = -16.0
+margin_bottom = 24.0
+text = "C"
+valign = 1
+
+[node name="IndustrialProgress" type="ProgressBar" parent="."]
+margin_left = 1752.0
+margin_top = 112.0
+margin_right = 1904.0
+margin_bottom = 136.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="IndustrialProgress"]
+margin_left = -16.0
+margin_top = -2.0
+margin_bottom = 24.0
+text = "I"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AgriculturalProgress" type="ProgressBar" parent="."]
+margin_left = 1752.0
+margin_top = 144.0
+margin_right = 1904.0
+margin_bottom = 168.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="AgriculturalProgress"]
+margin_left = -16.0
+margin_bottom = 23.0
+text = "A"
+valign = 1
 
 [connection signal="pressed" from="Transportation" to="." method="_on_Transportation_pressed"]
 [connection signal="pressed" from="Residential" to="." method="_on_Residential_pressed"]
 [connection signal="pressed" from="Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Industrial" to="." method="_on_Industrial_pressed"]
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
-[connection signal="pressed" from="Button" to="." method="_on_Agricultural_pressed"]
+[connection signal="pressed" from="Agricultural" to="." method="_on_Agricultural_pressed"]
