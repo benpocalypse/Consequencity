@@ -63,9 +63,9 @@ __meta__ = {
 
 [node name="Population" type="RichTextLabel" parent="."]
 margin_left = 896.0
-margin_top = 22.0
+margin_top = 64.0
 margin_right = 1027.0
-margin_bottom = 62.0
+margin_bottom = 88.0
 text = "Population: 0"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -77,6 +77,16 @@ margin_top = 167.109
 margin_right = 141.0
 margin_bottom = 207.109
 text = "Agricultural"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Date" type="RichTextLabel" parent="."]
+margin_left = 896.0
+margin_top = 32.0
+margin_right = 1056.0
+margin_bottom = 57.0
+text = "Date:"
 __meta__ = {
 "_edit_use_anchors_": false
 }

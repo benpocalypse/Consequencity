@@ -23,6 +23,8 @@ public class UserInterface : Control
 
 	private Globals globals;
 
+	private float _timeCounter = 0.0f;
+
 	public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
@@ -30,20 +32,26 @@ public class UserInterface : Control
 
 	public override void _Process(float delta)
 	{
-		((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
+		_timeCounter += delta;
 
-		/*
-		((RichTextLabel)GetNode("Demand")).BbcodeText = $"[right]Demand" + System.Environment.NewLine +
-														$"{globals.Engine.Demand[Globals.LandSpaceType.Residential]} R" + System.Environment.NewLine +
-														$"{globals.Engine.Demand[Globals.LandSpaceType.Commercial]} C" + System.Environment.NewLine +
-														$"{globals.Engine.Demand[Globals.LandSpaceType.Industrial]} I" + System.Environment.NewLine +
-														$"{globals.Engine.Demand[Globals.LandSpaceType.Agricultural]} A[/right]";
-		*/
+		if ( _timeCounter >= 1.0f )
+		{
+			((RichTextLabel)GetNode("Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
+			((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
 
-		((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Residential];
-		((ProgressBar)GetNode("CommercialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Commercial];
-		((ProgressBar)GetNode("IndustrialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Industrial];
-		((ProgressBar)GetNode("AgriculturalProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Agricultural];
+			/*
+			((RichTextLabel)GetNode("Demand")).BbcodeText = $"[right]Demand" + System.Environment.NewLine +
+															$"{globals.Engine.Demand[Globals.LandSpaceType.Residential]} R" + System.Environment.NewLine +
+															$"{globals.Engine.Demand[Globals.LandSpaceType.Commercial]} C" + System.Environment.NewLine +
+															$"{globals.Engine.Demand[Globals.LandSpaceType.Industrial]} I" + System.Environment.NewLine +
+															$"{globals.Engine.Demand[Globals.LandSpaceType.Agricultural]} A[/right]";
+			*/
+
+			((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Residential];
+			((ProgressBar)GetNode("CommercialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Commercial];
+			((ProgressBar)GetNode("IndustrialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Industrial];
+			((ProgressBar)GetNode("AgriculturalProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Agricultural];
+		}
 
 		if (Input.IsActionPressed("ui_cancel"))
 		{

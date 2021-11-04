@@ -33,6 +33,13 @@ public sealed class EconomicEngine
 		}
 	}
 
+	private DateTime _date = new DateTime();
+	public DateTime Date
+	{
+		get { return _date; }
+		private set { _date = value; }
+	}
+
 	private const int _mapWidth = 30;
 	private const int _mapHeight = 30;
 	private float _timeCounter = 0.0f;
@@ -66,6 +73,10 @@ public sealed class EconomicEngine
 			UpdateAgents();
 			UpdateDemand();
 			UpdateMap();
+
+			_date += new TimeSpan(1, 0, 0, 0);
+
+			_timeCounter = 0.0f;
 		}
 	}
 

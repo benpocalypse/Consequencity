@@ -117,9 +117,10 @@ public class ThreeDTest : Spatial
 			{
 				agent.HomeHasBeenDrawn = true;
 				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
-				Spatial newBuilding = (Spatial)building.Instance();
+				Building newBuilding = (Building)building.Instance();
 				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
 				newBuilding.Translate(housePosition);
+				newBuilding.SetType(Globals.LandSpaceType.Residential);
 				AddChild(newBuilding);	
 			}
 
@@ -127,7 +128,8 @@ public class ThreeDTest : Spatial
 			{
 				agent.JobHasBeenDrawn = true;
 				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
-				Spatial newBuilding = (Spatial)building.Instance();
+				Building newBuilding = (Building)building.Instance();
+				newBuilding.SetType((Globals.LandSpaceType)agent.JobType);
 				var jobPosition = new Vector3(agent.JobLocation.x * 2, 0, agent.JobLocation.y * 2);
 				newBuilding.Translate(jobPosition);
 				AddChild(newBuilding);	
