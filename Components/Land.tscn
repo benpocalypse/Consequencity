@@ -37,14 +37,14 @@ albedo_color = Color( 0.917647, 0.384314, 0.384314, 1 )
 material = SubResource( 11 )
 size = Vector2( 1.9, 1.9 )
 
-[sub_resource type="SpatialMaterial" id=15]
+[sub_resource type="SpatialMaterial" id=13]
 albedo_color = Color( 0.94902, 0.682353, 0.6, 1 )
 
-[sub_resource type="SpatialMaterial" id=13]
+[sub_resource type="SpatialMaterial" id=14]
 albedo_color = Color( 0.85098, 0.741176, 0.784314, 1 )
 
-[sub_resource type="PlaneMesh" id=14]
-material = SubResource( 13 )
+[sub_resource type="PlaneMesh" id=15]
+material = SubResource( 14 )
 size = Vector2( 1.9, 1.9 )
 
 [node name="Land" type="Spatial"]
@@ -88,9 +88,9 @@ material/0 = SubResource( 10 )
 [node name="Agricultural" type="MeshInstance" parent="."]
 visible = false
 mesh = SubResource( 12 )
-material/0 = SubResource( 15 )
+material/0 = SubResource( 13 )
 
 [node name="Transportation" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 14 )
+mesh = SubResource( 15 )
 material/0 = null

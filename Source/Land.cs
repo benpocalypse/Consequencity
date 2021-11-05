@@ -75,14 +75,17 @@ public class Land : Spatial
         }
     }
 
+    public bool IsSelected = false;
     public void Selected()
     {
+        IsSelected = true;
         ((Spatial)GetNode("Selected")).Visible = true;
         ((Spatial)GetNode("Unselected")).Visible = false;
     }
 
     public void Unselected()
     {
+        IsSelected = false;
         ((Spatial)GetNode("Selected")).Visible = false;
         ((Spatial)GetNode("Unselected")).Visible = true;
     }

@@ -43,7 +43,6 @@ public class Globals : Node
 		Industrial,
 		Agricultural,
 		Transportation,
-		Delete
 	}
 
 	public EconomicEngine Engine = new EconomicEngine();

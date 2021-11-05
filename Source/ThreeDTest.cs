@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class ThreeDTest : Spatial
 {
@@ -47,43 +48,98 @@ public class ThreeDTest : Spatial
 		UpdateAgentMap();
 	}
 
+	private bool leftButtonClicked = false;
+	private Vector3 initialClickPosition = new Vector3();
+	private List<Land> landSelectionlist = new List<Land>();
 	public override void _Input(InputEvent inputEvent)
 	{
-		if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+		if (inputEvent is InputEventMouseButton mouseEvent)
 		{
-			switch ((ButtonList)mouseEvent.ButtonIndex)
+			if(mouseEvent.Pressed)
 			{
-				case ButtonList.Left:
-					var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
-					var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000;
-					var space_state = GetWorld().DirectSpaceState;
-					var selection = space_state.IntersectRay(fromPos, toPos);
-					
-					try
-					{
-						var selectedCollider = ((StaticBody)selection["collider"]);
-						var selectedLand = ((Land)selectedCollider.GetParent());
-						selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
-						globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+				switch ((ButtonList)mouseEvent.ButtonIndex)
+				{
+					case ButtonList.Left:
+						leftButtonClicked = true;
+
+						var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
+						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this actually be?
+						var space_state = GetWorld().DirectSpaceState;
+						var selection = space_state.IntersectRay(fromPos, toPos);
 						
-						selectedLand.Selected();
-					}
-					catch(Exception ex)
-					{
-						GD.Print($"Exception occurred when selecting a land: {ex}");
-					}
+						try
+						{
+							var selectedCollider = ((StaticBody)selection["collider"]);
+							var selectedLand = ((Land)selectedCollider.GetParent());
 
-					break;
+							initialClickPosition = selectedLand.Translation;
 
-				case ButtonList.WheelUp:
-					var newPosition = new Vector3(0, -0.5f, 0);
-					cameraBase.Translate(newPosition);
-					break;
+							if (!landSelectionlist.Contains(selectedLand))
+							{
+								landSelectionlist.Add(selectedLand);
+							}
 
-				case ButtonList.WheelDown:
-					newPosition = new Vector3(0, 0.5f, 0);
-					cameraBase.Translate(newPosition);
-					break;
+							selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+							globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+							
+							selectedLand.Selected();
+						}
+						catch(Exception ex)
+						{
+							GD.Print($"Exception occurred when selecting a land: {ex}");
+						}
+
+						break;
+
+					case ButtonList.WheelUp:
+						var newPosition = new Vector3(0, -0.5f, 0);
+						cameraBase.Translate(newPosition);
+						break;
+						
+
+					case ButtonList.WheelDown:
+						newPosition = new Vector3(0, 0.5f, 0);
+						cameraBase.Translate(newPosition);
+						break;
+				}
+			}
+			else
+			{
+				leftButtonClicked = false;
+
+				foreach (Land land in landSelectionlist)
+				{
+					land.Unselected();
+					land.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+					globals.Engine.Map[land.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+				}
+
+				landSelectionlist.Clear();
+			}
+		}
+
+		if (leftButtonClicked && inputEvent is InputEventMouseMotion motionEvent)
+		{
+			var fromPos = camera.ProjectRayOrigin(motionEvent.Position);
+			var toPos = fromPos + camera.ProjectRayNormal(motionEvent.Position) * 1000; // FIXME - what should this actually be?
+			var space_state = GetWorld().DirectSpaceState;
+			var selection = space_state.IntersectRay(fromPos, toPos);
+
+			try
+			{
+				var selectedCollider = ((StaticBody)selection["collider"]);
+				var selectedLand = ((Land)selectedCollider.GetParent());
+				initialClickPosition = selectedLand.Translation;
+
+				if (!landSelectionlist.Contains(selectedLand))
+				{
+					selectedLand.Selected();
+					landSelectionlist.Add(selectedLand);
+				}
+			}
+			catch(Exception ex)
+			{
+				GD.Print($"Exception occurred when selecting a land: {ex}");
 			}
 		}
 	}
