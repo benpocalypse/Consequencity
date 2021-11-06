@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ThreeDTest : Spatial
 {
@@ -49,13 +50,16 @@ public class ThreeDTest : Spatial
 	}
 
 	private bool leftButtonClicked = false;
-	private Vector3 initialClickPosition = new Vector3();
-	private List<Land> landSelectionlist = new List<Land>();
+	private Vector3 previousClickPosition = new Vector3();
+	private Vector3 currentClickPosition = new Vector3();
+	private float maxX = 0.0f;
+	private float maxY = 0.0f;
+	private List<Highlight> highlightSelectionlist = new List<Highlight>();
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton mouseEvent)
 		{
-			if(mouseEvent.Pressed)
+			if (mouseEvent.Pressed)
 			{
 				switch ((ButtonList)mouseEvent.ButtonIndex)
 				{
@@ -72,17 +76,24 @@ public class ThreeDTest : Spatial
 							var selectedCollider = ((StaticBody)selection["collider"]);
 							var selectedLand = ((Land)selectedCollider.GetParent());
 
-							initialClickPosition = selectedLand.Translation;
+							previousClickPosition = selectedLand.Translation;
 
-							if (!landSelectionlist.Contains(selectedLand))
+							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+							Highlight newHighlight = (Highlight)highlight.Instance();
+							newHighlight.Translate(selectedLand.Translation);
+							AddChild(newHighlight);
+
+							if (!highlightSelectionlist.Contains(newHighlight))
 							{
-								landSelectionlist.Add(selectedLand);
+								highlightSelectionlist.Add(newHighlight);
 							}
 
+							/*
 							selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
 							globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
 							
 							selectedLand.Selected();
+							*/
 						}
 						catch(Exception ex)
 						{
@@ -95,7 +106,7 @@ public class ThreeDTest : Spatial
 						var newPosition = new Vector3(0, -0.5f, 0);
 						cameraBase.Translate(newPosition);
 						break;
-						
+
 
 					case ButtonList.WheelDown:
 						newPosition = new Vector3(0, 0.5f, 0);
@@ -107,14 +118,29 @@ public class ThreeDTest : Spatial
 			{
 				leftButtonClicked = false;
 
-				foreach (Land land in landSelectionlist)
+				foreach (Highlight light in highlightSelectionlist)
 				{
-					land.Unselected();
-					land.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
-					globals.Engine.Map[land.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+					var spaceState = GetWorld().DirectSpaceState;
+					var result = spaceState.IntersectRay(
+						from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
+						to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
+						exclude: null,
+						collisionMask: 2147483647,
+						collideWithBodies: true,
+						collideWithAreas: true);
+
+					var selectedCollider = ((StaticBody)result["collider"]);
+					var selectedLand = ((Land)selectedCollider.GetParent());
+
+					//selectedLand.Selected();
+
+					selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
+					globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+
+					light.QueueFree();
 				}
 
-				landSelectionlist.Clear();
+				highlightSelectionlist.Clear();
 			}
 		}
 
@@ -129,12 +155,68 @@ public class ThreeDTest : Spatial
 			{
 				var selectedCollider = ((StaticBody)selection["collider"]);
 				var selectedLand = ((Land)selectedCollider.GetParent());
-				initialClickPosition = selectedLand.Translation;
+				currentClickPosition = selectedLand.Translation;
 
-				if (!landSelectionlist.Contains(selectedLand))
+				// FIXME - have all these account for negatives so you can highlight in a different direction.
+				if (currentClickPosition.x > previousClickPosition.x)
 				{
-					selectedLand.Selected();
-					landSelectionlist.Add(selectedLand);
+					var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+					Highlight newHighlight = (Highlight)highlight.Instance();
+
+					List<Highlight> newHighlightList = new List<Highlight>();
+
+					foreach (var light in highlightSelectionlist.Where(_ => _.Translation.x >= (currentClickPosition.x-2.0f)))
+					{
+						var newLight = ((Highlight)light.Duplicate(8));
+						newLight.Translate(new Vector3(2.0f, 0, 0));
+						newHighlightList.Add(newLight);
+						AddChild(newLight);
+					}
+
+					highlightSelectionlist.AddRange(newHighlightList);
+					previousClickPosition = currentClickPosition;
+				}
+
+				if (currentClickPosition.x < previousClickPosition.x)
+				{
+					foreach (var oldLight in highlightSelectionlist.Where(_ => _.Translation.x >= previousClickPosition.x))
+					{
+						oldLight.QueueFree();
+					}
+
+					highlightSelectionlist.RemoveAll(_ => _.Translation.x >= previousClickPosition.x);
+					previousClickPosition = currentClickPosition;
+				}
+
+				if (currentClickPosition.z > previousClickPosition.z)
+				{
+					var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+					Highlight newHighlight = (Highlight)highlight.Instance();
+
+					List<Highlight> newHighlightList = new List<Highlight>();
+
+					foreach (var light in highlightSelectionlist.Where(_ => _.Translation.z >= (currentClickPosition.z - 2.0f)))
+					{
+						var newLight = ((Highlight)light.Duplicate(8));
+						newLight.Translate(new Vector3(0, 0, 2.0f));
+						newHighlightList.Add(newLight);
+						AddChild(newLight);
+					}
+
+					highlightSelectionlist.AddRange(newHighlightList);
+					previousClickPosition = currentClickPosition;
+				}
+
+				if (currentClickPosition.z < previousClickPosition.z)
+				{
+					foreach (var oldLight in highlightSelectionlist.Where(_ => _.Translation.z > currentClickPosition.z))
+					{
+						oldLight.QueueFree();
+					}
+
+					highlightSelectionlist.RemoveAll(_ => _.Translation.z > currentClickPosition.z);
+
+					previousClickPosition = currentClickPosition;
 				}
 			}
 			catch(Exception ex)
