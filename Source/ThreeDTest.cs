@@ -21,19 +21,19 @@ public class ThreeDTest : Spatial
 	public override void _Process(float delta)
 	{
 		var camPosition = cameraBase.GlobalTransform.origin;
-		
+
 		if (Input.IsActionPressed("move_left"))
 		{
 			var newPosition = new Vector3(0, 0, -0.5f);
 			cameraBase.Translate(newPosition);
 		}
-		
+
 		if (Input.IsActionPressed("move_right"))
 		{
 			var newPosition = new Vector3(0, 0, 0.5f);
 			cameraBase.Translate(newPosition);
 		}
-		
+
 		if (Input.IsActionPressed("move_up"))
 		{
 			var newPosition = new Vector3(0.5f, 0, 0);
@@ -50,6 +50,7 @@ public class ThreeDTest : Spatial
 	}
 
 	private bool leftButtonClicked = false;
+	private Vector3 initialClickPosition = new Vector3();
 	private Vector3 previousClickPosition = new Vector3();
 	private Vector3 currentClickPosition = new Vector3();
 	private float maxX = 0.0f;
@@ -70,12 +71,13 @@ public class ThreeDTest : Spatial
 						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this actually be?
 						var space_state = GetWorld().DirectSpaceState;
 						var selection = space_state.IntersectRay(fromPos, toPos);
-						
+
 						try
 						{
 							var selectedCollider = ((StaticBody)selection["collider"]);
 							var selectedLand = ((Land)selectedCollider.GetParent());
 
+							initialClickPosition = selectedLand.Translation;
 							previousClickPosition = selectedLand.Translation;
 
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
@@ -91,7 +93,7 @@ public class ThreeDTest : Spatial
 							/*
 							selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
 							globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
-							
+
 							selectedLand.Selected();
 							*/
 						}
@@ -157,64 +159,45 @@ public class ThreeDTest : Spatial
 				var selectedLand = ((Land)selectedCollider.GetParent());
 				currentClickPosition = selectedLand.Translation;
 
-				// FIXME - have all these account for negatives so you can highlight in a different direction.
-				if (currentClickPosition.x > previousClickPosition.x)
+				if (currentClickPosition != previousClickPosition)
 				{
-					var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-					Highlight newHighlight = (Highlight)highlight.Instance();
-
-					List<Highlight> newHighlightList = new List<Highlight>();
-
-					foreach (var light in highlightSelectionlist.Where(_ => _.Translation.x >= (currentClickPosition.x-2.0f)))
+					// Clear the current list of highlights.
+					foreach (Highlight light in highlightSelectionlist)
 					{
-						var newLight = ((Highlight)light.Duplicate(8));
-						newLight.Translate(new Vector3(2.0f, 0, 0));
-						newHighlightList.Add(newLight);
-						AddChild(newLight);
+						light.QueueFree();
 					}
 
-					highlightSelectionlist.AddRange(newHighlightList);
-					previousClickPosition = currentClickPosition;
-				}
+					highlightSelectionlist.Clear();
 
-				if (currentClickPosition.x < previousClickPosition.x)
-				{
-					foreach (var oldLight in highlightSelectionlist.Where(_ => _.Translation.x >= previousClickPosition.x))
+					var xIncrement = 2.0f;
+					var zIncrement = 2.0f;
+
+					if (initialClickPosition.x > currentClickPosition.x)
 					{
-						oldLight.QueueFree();
+						xIncrement = -2.0f;
 					}
 
-					highlightSelectionlist.RemoveAll(_ => _.Translation.x >= previousClickPosition.x);
-					previousClickPosition = currentClickPosition;
-				}
-
-				if (currentClickPosition.z > previousClickPosition.z)
-				{
-					var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-					Highlight newHighlight = (Highlight)highlight.Instance();
-
-					List<Highlight> newHighlightList = new List<Highlight>();
-
-					foreach (var light in highlightSelectionlist.Where(_ => _.Translation.z >= (currentClickPosition.z - 2.0f)))
+					if (initialClickPosition.z > currentClickPosition.z)
 					{
-						var newLight = ((Highlight)light.Duplicate(8));
-						newLight.Translate(new Vector3(0, 0, 2.0f));
-						newHighlightList.Add(newLight);
-						AddChild(newLight);
+						zIncrement = -2.0f;
 					}
 
-					highlightSelectionlist.AddRange(newHighlightList);
-					previousClickPosition = currentClickPosition;
-				}
-
-				if (currentClickPosition.z < previousClickPosition.z)
-				{
-					foreach (var oldLight in highlightSelectionlist.Where(_ => _.Translation.z > currentClickPosition.z))
+					// Draw a rectangle of highlights from the initial click position to the current click position.
+					for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
 					{
-						oldLight.QueueFree();
-					}
+						for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
+						{
+							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+							Highlight newHighlight = (Highlight)highlight.Instance();
+							newHighlight.Translate(new Vector3(x, 0, z));
+							AddChild(newHighlight);
 
-					highlightSelectionlist.RemoveAll(_ => _.Translation.z > currentClickPosition.z);
+							if (!highlightSelectionlist.Contains(newHighlight))
+							{
+								highlightSelectionlist.Add(newHighlight);
+							}
+						}
+					}
 
 					previousClickPosition = currentClickPosition;
 				}
@@ -259,7 +242,7 @@ public class ThreeDTest : Spatial
 				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
 				newBuilding.Translate(housePosition);
 				newBuilding.SetType(Globals.LandSpaceType.Residential);
-				AddChild(newBuilding);	
+				AddChild(newBuilding);
 			}
 
 			if (agent.HasJob != false && agent.JobHasBeenDrawn == false)
@@ -270,7 +253,7 @@ public class ThreeDTest : Spatial
 				newBuilding.SetType((Globals.LandSpaceType)agent.JobType);
 				var jobPosition = new Vector3(agent.JobLocation.x * 2, 0, agent.JobLocation.y * 2);
 				newBuilding.Translate(jobPosition);
-				AddChild(newBuilding);	
+				AddChild(newBuilding);
 			}
 		}
 	}
