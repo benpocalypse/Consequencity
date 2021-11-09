@@ -16,7 +16,7 @@ public class Globals : Node
 		//Level3,
 		Gameover
 	};
-	
+
 	public enum LandSpaceType
 	{
 		Residential = 0,
@@ -35,7 +35,7 @@ public class Globals : Node
 		Agricultural = 3
 	}
 
-	public enum InputModeType
+	public enum PlacementModeType
 	{
 		None,
 		Residential,
@@ -45,9 +45,17 @@ public class Globals : Node
 		Transportation,
 	}
 
+	public enum InputModeType
+	{
+		None,
+		Select,
+		Place
+	}
+
 	public EconomicEngine Engine = new EconomicEngine();
 
 	public const int MaximumLandValue = 100;
+	public PlacementModeType PlacementMode = PlacementModeType.None;
 	public InputModeType InputMode = InputModeType.None;
 
 	static Globals()
@@ -67,32 +75,32 @@ public class Globals : Node
 		}
 	}
 
-	public LandSpaceType InputModeTypeToLandSpaceType(InputModeType _type)
+	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementModeType _type)
 	{
 		LandSpaceType result = LandSpaceType.None;
 		switch (_type)
 		{
-			case InputModeType.None:
+			case PlacementModeType.None:
 				result = LandSpaceType.None;
 				break;
 
-			case InputModeType.Residential:
+			case PlacementModeType.Residential:
 				result = LandSpaceType.Residential;
 				break;
 
-			case InputModeType.Commercial:
+			case PlacementModeType.Commercial:
 				result = LandSpaceType.Commercial;
 				break;
 
-			case InputModeType.Industrial:
+			case PlacementModeType.Industrial:
 				result = LandSpaceType.Industrial;
 				break;
 
-			case InputModeType.Agricultural:
+			case PlacementModeType.Agricultural:
 				result = LandSpaceType.Agricultural;
 				break;
 
-			case InputModeType.Transportation:
+			case PlacementModeType.Transportation:
 				result = LandSpaceType.Transportation;
 				break;
 		}

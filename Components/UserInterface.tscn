@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Source/UserInterface.cs" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.419608, 0.788235, 0.423529, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.682353, 0.886275, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 0.721569, 0.47451, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.917647, 0.384314, 0.384314, 1 )
 
 [node name="UserInterface" type="Control"]
 anchor_right = 1.0
@@ -106,6 +118,7 @@ margin_left = 1752.0
 margin_top = 48.0
 margin_right = 1904.0
 margin_bottom = 73.0
+custom_styles/fg = SubResource( 1 )
 rounded = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -122,6 +135,7 @@ margin_left = 1752.0
 margin_top = 80.0
 margin_right = 1904.0
 margin_bottom = 104.0
+custom_styles/fg = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -137,6 +151,7 @@ margin_left = 1752.0
 margin_top = 112.0
 margin_right = 1904.0
 margin_bottom = 136.0
+custom_styles/fg = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -156,6 +171,7 @@ margin_left = 1752.0
 margin_top = 144.0
 margin_right = 1904.0
 margin_bottom = 168.0
+custom_styles/fg = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -166,9 +182,30 @@ margin_bottom = 23.0
 text = "A"
 valign = 1
 
+[node name="InfoPopup" type="RichTextLabel" parent="."]
+margin_left = 1640.0
+margin_top = 920.0
+margin_right = 1896.0
+margin_bottom = 1040.0
+text = "Information:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="Button" parent="."]
+margin_left = 26.0
+margin_top = 312.0
+margin_right = 141.0
+margin_bottom = 352.0
+text = "Select"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="Transportation" to="." method="_on_Transportation_pressed"]
 [connection signal="pressed" from="Residential" to="." method="_on_Residential_pressed"]
 [connection signal="pressed" from="Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Industrial" to="." method="_on_Industrial_pressed"]
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Agricultural" to="." method="_on_Agricultural_pressed"]
+[connection signal="pressed" from="Select" to="." method="_on_Select_pressed"]

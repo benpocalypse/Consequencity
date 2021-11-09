@@ -53,8 +53,6 @@ public class ThreeDTest : Spatial
 	private Vector3 initialClickPosition = new Vector3();
 	private Vector3 previousClickPosition = new Vector3();
 	private Vector3 currentClickPosition = new Vector3();
-	private float maxX = 0.0f;
-	private float maxY = 0.0f;
 	private List<Highlight> highlightSelectionlist = new List<Highlight>();
 	public override void _Input(InputEvent inputEvent)
 	{
@@ -71,6 +69,8 @@ public class ThreeDTest : Spatial
 						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this actually be?
 						var space_state = GetWorld().DirectSpaceState;
 						var selection = space_state.IntersectRay(fromPos, toPos);
+
+						globals.Engine.SelectedLandList.Clear();
 
 						try
 						{
@@ -91,8 +91,8 @@ public class ThreeDTest : Spatial
 							}
 
 							/*
-							selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
-							globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+							selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
+							globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
 
 							selectedLand.Selected();
 							*/
@@ -136,8 +136,9 @@ public class ThreeDTest : Spatial
 
 					//selectedLand.Selected();
 
-					selectedLand.SetLandType(globals.InputModeTypeToLandSpaceType(globals.InputMode));
-					globals.Engine.Map[selectedLand.Position].Type = globals.InputModeTypeToLandSpaceType(globals.InputMode);
+					globals.Engine.SelectedLandList.Add(globals.Engine.Map[selectedLand.Position]);
+					selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
+					globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
 
 					light.QueueFree();
 				}
@@ -212,7 +213,7 @@ public class ThreeDTest : Spatial
 	private void On_ResidentialButton_pressed()
 	{
 		GD.Print("Residential Button pressed!");
-		GD.Print($"InputMode = {globals.InputMode}");
+		GD.Print($"PlacementMode = {globals.PlacementMode}");
 	}
 
 	public void PopulateEngineMap()

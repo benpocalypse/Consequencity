@@ -40,6 +40,13 @@ public sealed class EconomicEngine
 		private set { _date = value; }
 	}
 
+	private List<LandSpace> _selectedLandList = new List<LandSpace>();
+	public List<LandSpace> SelectedLandList
+	{
+		get => _selectedLandList;
+		set => _selectedLandList =  value;
+	}
+
 	private const int _mapWidth = 30;
 	private const int _mapHeight = 30;
 	private float _timeCounter = 0.0f;

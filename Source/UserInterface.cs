@@ -21,6 +21,9 @@ public class UserInterface : Control
 	[Signal]
 	public delegate void On_DeleteButton_pressed();
 
+	[Signal]
+	public delegate void On_SelectButton_pressed();
+
 	private Globals globals;
 
 	private float _timeCounter = 0.0f;
@@ -39,6 +42,18 @@ public class UserInterface : Control
 			((RichTextLabel)GetNode("Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
 			((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
 
+			var infoType = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Type.ToString() : string.Empty;
+			var infoPopulation = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Population .ToString(): string.Empty;
+			var infoValue = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Value.ToString() : string.Empty;
+
+			((RichTextLabel)GetNode("InfoPopup")).Text =
+$@"Information:
+     Type: {infoType}
+     Population: {infoPopulation}
+     Value: {infoValue}";
+
+	 		((RichTextLabel)GetNode("InfoPopup")).Visible = infoType == string.Empty ? false : true;
+
 			/*
 			((RichTextLabel)GetNode("Demand")).BbcodeText = $"[right]Demand" + System.Environment.NewLine +
 															$"{globals.Engine.Demand[Globals.LandSpaceType.Residential]} R" + System.Environment.NewLine +
@@ -56,83 +71,81 @@ public class UserInterface : Control
 		if (Input.IsActionPressed("ui_cancel"))
 		{
 			GetTree().Quit();
-		}		
+		}
 	}
 
 	public void _on_Residential_pressed()
 	{
-		if (globals.InputMode != Globals.InputModeType.Residential)
+		if (globals.PlacementMode != Globals.PlacementModeType.Residential)
 		{
-			globals.InputMode = Globals.InputModeType.Residential;
+			globals.PlacementMode = Globals.PlacementModeType.Residential;
 		}
-		else
-		{
-			globals.InputMode = Globals.InputModeType.None;
-		}
+
+		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_ResidentialButton_pressed));
 	}
 
 	public void _on_Commercial_pressed()
 	{
-		if (globals.InputMode != Globals.InputModeType.Commercial)
+		if (globals.PlacementMode != Globals.PlacementModeType.Commercial)
 		{
-			globals.InputMode = Globals.InputModeType.Commercial;
+			globals.PlacementMode = Globals.PlacementModeType.Commercial;
 		}
-		else
-		{
-			globals.InputMode = Globals.InputModeType.None;
-		}
+
+		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_CommercialButton_pressed));
 	}
 
 	public void _on_Industrial_pressed()
 	{
-		if (globals.InputMode != Globals.InputModeType.Industrial)
+		if (globals.PlacementMode != Globals.PlacementModeType.Industrial)
 		{
-			globals.InputMode = Globals.InputModeType.Industrial;
+			globals.PlacementMode = Globals.PlacementModeType.Industrial;
 		}
-		else
-		{
-			globals.InputMode = Globals.InputModeType.None;
-		}
+
+		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_IndustrialButton_pressed));
 	}
 
 	public void _on_Agricultural_pressed()
 	{
-		if (globals.InputMode != Globals.InputModeType.Agricultural)
+		if (globals.PlacementMode != Globals.PlacementModeType.Agricultural)
 		{
-			globals.InputMode = Globals.InputModeType.Agricultural;
+			globals.PlacementMode = Globals.PlacementModeType.Agricultural;
 		}
-		else
-		{
-			globals.InputMode = Globals.InputModeType.None;
-		}
+
+		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_AgriculturalButton_pressed));
 	}
 
 	public void _on_Transportation_pressed()
 	{
-		if (globals.InputMode != Globals.InputModeType.Transportation)
+		if (globals.PlacementMode != Globals.PlacementModeType.Transportation)
 		{
-			globals.InputMode = Globals.InputModeType.Transportation;
+			globals.PlacementMode = Globals.PlacementModeType.Transportation;
 		}
-		else
-		{
-			globals.InputMode = Globals.InputModeType.None;
-		}
+
+		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_TransportationButton_pressed));
 	}
 
+	// FIXME - Revisit this. May need another input mode or something like that.
 	public void _on_Delete_pressed()
 	{
-		globals.InputMode = Globals.InputModeType.None;
-		
+		globals.PlacementMode = Globals.PlacementModeType.None;
+		globals.InputMode = Globals.InputModeType.Place;
+
 		EmitSignal(nameof(On_DeleteButton_pressed));
+	}
+
+	public void _on_Select_pressed()
+	{
+		globals.InputMode = Globals.InputModeType.Select;
+		EmitSignal(nameof(On_SelectButton_pressed));
 	}
 }
