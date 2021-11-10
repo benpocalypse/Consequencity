@@ -54,6 +54,7 @@ public class ThreeDTest : Spatial
 	private Vector3 previousClickPosition = new Vector3();
 	private Vector3 currentClickPosition = new Vector3();
 	private List<Highlight> highlightSelectionlist = new List<Highlight>();
+	private List<Land> landSelectionList = new List<Land>();
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton mouseEvent)
@@ -70,8 +71,6 @@ public class ThreeDTest : Spatial
 						var space_state = GetWorld().DirectSpaceState;
 						var selection = space_state.IntersectRay(fromPos, toPos);
 
-						globals.Engine.SelectedLandList.Clear();
-
 						try
 						{
 							var selectedCollider = ((StaticBody)selection["collider"]);
@@ -79,27 +78,38 @@ public class ThreeDTest : Spatial
 
 							initialClickPosition = selectedLand.Translation;
 							previousClickPosition = selectedLand.Translation;
+						}
+						catch(Exception){}
 
+						landSelectionList.ForEach(_ => _.Unselected());
+						landSelectionList.Clear();
+
+						if (globals.InputMode == Globals.InputModeType.Select)
+						{
+							globals.Engine.SelectedLandList.Clear();
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
 							Highlight newHighlight = (Highlight)highlight.Instance();
-							newHighlight.Translate(selectedLand.Translation);
+							newHighlight.Translate(initialClickPosition);
 							AddChild(newHighlight);
 
 							if (!highlightSelectionlist.Contains(newHighlight))
 							{
 								highlightSelectionlist.Add(newHighlight);
 							}
-
-							/*
-							selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
-							globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
-
-							selectedLand.Selected();
-							*/
 						}
-						catch(Exception ex)
+
+						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode != Globals.PlacementModeType.None)
 						{
-							GD.Print($"Exception occurred when selecting a land: {ex}");
+							globals.Engine.SelectedLandList.Clear();
+							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+							Highlight newHighlight = (Highlight)highlight.Instance();
+							newHighlight.Translate(initialClickPosition);
+							AddChild(newHighlight);
+
+							if (!highlightSelectionlist.Contains(newHighlight))
+							{
+								highlightSelectionlist.Add(newHighlight);
+							}
 						}
 
 						break;
@@ -120,92 +130,120 @@ public class ThreeDTest : Spatial
 			{
 				leftButtonClicked = false;
 
-				foreach (Highlight light in highlightSelectionlist)
+				if (globals.InputMode == Globals.InputModeType.Place)
 				{
-					var spaceState = GetWorld().DirectSpaceState;
-					var result = spaceState.IntersectRay(
-						from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
-						to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
-						exclude: null,
-						collisionMask: 2147483647,
-						collideWithBodies: true,
-						collideWithAreas: true);
+					foreach (Highlight light in highlightSelectionlist)
+					{
+						var spaceState = GetWorld().DirectSpaceState;
+						var result = spaceState.IntersectRay(
+							from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
+							to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
+							exclude: null,
+							collisionMask: 2147483647,
+							collideWithBodies: true,
+							collideWithAreas: true);
 
-					var selectedCollider = ((StaticBody)result["collider"]);
-					var selectedLand = ((Land)selectedCollider.GetParent());
+						var selectedCollider = ((StaticBody)result["collider"]);
+						var selectedLand = ((Land)selectedCollider.GetParent());
 
-					//selectedLand.Selected();
+						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
+						globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
 
-					globals.Engine.SelectedLandList.Add(globals.Engine.Map[selectedLand.Position]);
-					selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
-					globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
+						light.QueueFree();
+					}
 
-					light.QueueFree();
+					highlightSelectionlist.Clear();
 				}
 
-				highlightSelectionlist.Clear();
+				if (globals.InputMode == Globals.InputModeType.Select)
+				{
+					foreach (Highlight light in highlightSelectionlist)
+					{
+						var spaceState = GetWorld().DirectSpaceState;
+						var result = spaceState.IntersectRay(
+							from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
+							to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
+							exclude: null,
+							collisionMask: 2147483647,
+							collideWithBodies: true,
+							collideWithAreas: true);
+
+						var selectedCollider = ((StaticBody)result["collider"]);
+						var selectedLand = ((Land)selectedCollider.GetParent());
+
+						landSelectionList.Add(selectedLand);
+
+						globals.Engine.SelectedLandList.Add(globals.Engine.Map[selectedLand.Position]);
+						selectedLand.Selected();
+
+						light.QueueFree();
+					}
+
+					highlightSelectionlist.Clear();
+				}
 			}
 		}
 
 		if (leftButtonClicked && inputEvent is InputEventMouseMotion motionEvent)
 		{
-			var fromPos = camera.ProjectRayOrigin(motionEvent.Position);
-			var toPos = fromPos + camera.ProjectRayNormal(motionEvent.Position) * 1000; // FIXME - what should this actually be?
-			var space_state = GetWorld().DirectSpaceState;
-			var selection = space_state.IntersectRay(fromPos, toPos);
 
-			try
+			if (globals.InputMode != Globals.InputModeType.None)
 			{
-				var selectedCollider = ((StaticBody)selection["collider"]);
-				var selectedLand = ((Land)selectedCollider.GetParent());
-				currentClickPosition = selectedLand.Translation;
+				var fromPos = camera.ProjectRayOrigin(motionEvent.Position);
+				var toPos = fromPos + camera.ProjectRayNormal(motionEvent.Position) * 1000; // FIXME - what should this actually be?
+				var space_state = GetWorld().DirectSpaceState;
+				var selection = space_state.IntersectRay(fromPos, toPos);
 
-				if (currentClickPosition != previousClickPosition)
+				try
 				{
-					// Clear the current list of highlights.
-					foreach (Highlight light in highlightSelectionlist)
+					var selectedCollider = ((StaticBody)selection["collider"]);
+					var selectedLand = ((Land)selectedCollider.GetParent());
+					currentClickPosition = selectedLand.Translation;
+
+					if (currentClickPosition != previousClickPosition)
 					{
-						light.QueueFree();
-					}
-
-					highlightSelectionlist.Clear();
-
-					var xIncrement = 2.0f;
-					var zIncrement = 2.0f;
-
-					if (initialClickPosition.x > currentClickPosition.x)
-					{
-						xIncrement = -2.0f;
-					}
-
-					if (initialClickPosition.z > currentClickPosition.z)
-					{
-						zIncrement = -2.0f;
-					}
-
-					// Draw a rectangle of highlights from the initial click position to the current click position.
-					for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
-					{
-						for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
+						// Clear the current list of highlights.
+						foreach (Highlight light in highlightSelectionlist)
 						{
-							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-							Highlight newHighlight = (Highlight)highlight.Instance();
-							newHighlight.Translate(new Vector3(x, 0, z));
-							AddChild(newHighlight);
+							light.QueueFree();
+						}
 
-							if (!highlightSelectionlist.Contains(newHighlight))
+						highlightSelectionlist.Clear();
+
+						var xIncrement = 2.0f;
+						var zIncrement = 2.0f;
+
+						if (initialClickPosition.x > currentClickPosition.x)
+						{
+							xIncrement = -2.0f;
+						}
+
+						if (initialClickPosition.z > currentClickPosition.z)
+						{
+							zIncrement = -2.0f;
+						}
+
+						// Draw a rectangle of highlights from the initial click position to the current click position.
+						for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
+						{
+							for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
 							{
-								highlightSelectionlist.Add(newHighlight);
+								var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+								Highlight newHighlight = (Highlight)highlight.Instance();
+								newHighlight.Translate(new Vector3(x, 0, z));
+								AddChild(newHighlight);
+
+								if (!highlightSelectionlist.Contains(newHighlight))
+								{
+									highlightSelectionlist.Add(newHighlight);
+								}
 							}
 						}
-					}
 
-					previousClickPosition = currentClickPosition;
+						previousClickPosition = currentClickPosition;
+					}
 				}
-			}
-			catch(Exception ex)
-			{
-				GD.Print($"Exception occurred when selecting a land: {ex}");
+				catch(Exception){}
 			}
 		}
 	}

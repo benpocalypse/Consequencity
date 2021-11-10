@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public class UserInterface : Control
 {
@@ -42,25 +43,31 @@ public class UserInterface : Control
 			((RichTextLabel)GetNode("Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
 			((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
 
-			var infoType = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Type.ToString() : string.Empty;
-			var infoPopulation = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Population .ToString(): string.Empty;
-			var infoValue = globals.Engine.SelectedLandList.Count > 0 ? globals.Engine.SelectedLandList[0].Value.ToString() : string.Empty;
+			// FIXME - Have this account for multi-select.
+			var infoType = globals.Engine.SelectedLandList.Count == 1 ?
+				globals.Engine.SelectedLandList[0].Type.ToString() :
+				globals.Engine.SelectedLandList.Count == 0 ?
+					string.Empty :
+					globals.Engine.SelectedLandList.Select(_ => _.Type).Distinct().Count() == 1 ?
+						globals.Engine.SelectedLandList[0].Type.ToString() :
+						"Multiple Types Selected";
+
+			var infoDensity = globals.Engine.SelectedLandList.Sum(_ => _.Density).ToString();
+			var infoPopulation = globals.Engine.SelectedLandList.Sum(_ => _.Population).ToString();
+			var infoValue = globals.Engine.SelectedLandList.Sum(_ => _.Value).ToString();
+			var infoCrime = globals.Engine.SelectedLandList.Sum(_ => _.Crime).ToString();
+			var infoPollution = globals.Engine.SelectedLandList.Sum(_ => _.Pollution).ToString();
 
 			((RichTextLabel)GetNode("InfoPopup")).Text =
 $@"Information:
-     Type: {infoType}
-     Population: {infoPopulation}
-     Value: {infoValue}";
+   Type: {infoType}
+   Density: {infoDensity}
+   Population: {infoPopulation}
+   Value: {infoValue}
+   Crime: {infoCrime}
+   Pollution: {infoPollution}";
 
 	 		((RichTextLabel)GetNode("InfoPopup")).Visible = infoType == string.Empty ? false : true;
-
-			/*
-			((RichTextLabel)GetNode("Demand")).BbcodeText = $"[right]Demand" + System.Environment.NewLine +
-															$"{globals.Engine.Demand[Globals.LandSpaceType.Residential]} R" + System.Environment.NewLine +
-															$"{globals.Engine.Demand[Globals.LandSpaceType.Commercial]} C" + System.Environment.NewLine +
-															$"{globals.Engine.Demand[Globals.LandSpaceType.Industrial]} I" + System.Environment.NewLine +
-															$"{globals.Engine.Demand[Globals.LandSpaceType.Agricultural]} A[/right]";
-			*/
 
 			((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Residential];
 			((ProgressBar)GetNode("CommercialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Commercial];
