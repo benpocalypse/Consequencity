@@ -45,7 +45,7 @@ public class ThreeDTest : Spatial
 			cameraBase.Translate(newPosition);
 		}
 
-		globals.Engine.Update(delta);
+		globals.Engine.Update(delta * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
 		UpdateAgentMap();
 	}
 
@@ -118,7 +118,6 @@ public class ThreeDTest : Spatial
 						var newPosition = new Vector3(0, -0.5f, 0);
 						cameraBase.Translate(newPosition);
 						break;
-
 
 					case ButtonList.WheelDown:
 						newPosition = new Vector3(0, 0.5f, 0);

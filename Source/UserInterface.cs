@@ -28,6 +28,8 @@ public class UserInterface : Control
 	private Globals globals;
 
 	private float _timeCounter = 0.0f;
+	private bool _menuFadingIn = false;
+	private bool _menuFadingOut = false;
 
 	public override void _Ready()
 	{
@@ -36,12 +38,88 @@ public class UserInterface : Control
 
 	public override void _Process(float delta)
 	{
+		if (_menuFadingIn == true)
+		{
+			var rootPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D"));
+			rootPathFollow2d.Offset += 150 * delta;
+
+			var rootPathChildren = rootPathFollow2d.GetChildren();
+
+			foreach (var rootChild in rootPathChildren)
+			{
+				if (rootChild.GetType().ToString() == "Godot.Button")
+				{
+					((Button)rootChild).Modulate = new Color(1,1,1,rootPathFollow2d.Offset/48);
+				}
+
+				if (rootPathFollow2d.Offset >= 47)
+				{
+					if (rootChild.GetType().ToString() == "Godot.Button")
+					{
+						((BaseButton)rootChild).Disabled = false;
+					}
+
+					var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
+					childPathFollow2d.Offset += 150 * delta;
+
+					var subPathChildren = childPathFollow2d.GetChildren();
+
+					foreach (var subChild in subPathChildren)
+					{
+						((Button)subChild).Modulate = new Color(1,1,1,childPathFollow2d.Offset/136);
+					}
+				}
+			}
+		}
+
+		if (_menuFadingOut == true)
+		{
+			var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
+			childPathFollow2d.Offset -= 400 * delta;
+
+			var subPathChildren = childPathFollow2d.GetChildren();
+
+			foreach (var subChild in subPathChildren)
+			{
+				((Button)subChild).Modulate = new Color(1,1,1,childPathFollow2d.Offset/136);
+			}
+
+			if (childPathFollow2d.Offset <= 0)
+			{
+				var rootPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D"));
+				rootPathFollow2d.Offset -= 150 * delta;
+
+				var rootPathChildren = rootPathFollow2d.GetChildren();
+
+				foreach (var rootChild in rootPathChildren)
+				{
+					if (rootChild.GetType().ToString() == "Godot.Button")
+					{
+						((Button)rootChild).Modulate = new Color(1,1,1,rootPathFollow2d.Offset/48);
+					}
+
+					if (rootPathFollow2d.Offset <= 0)
+					{
+						if (rootChild.GetType().ToString() == "Godot.Button")
+							{
+								((BaseButton)rootChild).Disabled = true;
+							}
+					}
+				}
+			}
+		}
+
 		_timeCounter += delta;
 
 		if ( _timeCounter >= 1.0f )
 		{
-			((RichTextLabel)GetNode("Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
-			((RichTextLabel)GetNode("Population")).Text = $"Population: {globals.Engine.Population}";
+			var speed = globals.GameRunning == Globals.GameRunningType.Playing ?
+				globals.Gamespeed.ToString() :
+				"Paused";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Gamespeed")).Text = $"Speed: {speed}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Population")).Text = $"Population: {globals.Engine.Population}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Funds")).Text = $"Funds: {globals.Engine.Funds}";
 
 			// FIXME - Have this account for multi-select.
 			var infoType = globals.Engine.SelectedLandList.Count == 1 ?
@@ -58,7 +136,7 @@ public class UserInterface : Control
 			var infoCrime = globals.Engine.SelectedLandList.Sum(_ => _.Crime).ToString();
 			var infoPollution = globals.Engine.SelectedLandList.Sum(_ => _.Pollution).ToString();
 
-			((RichTextLabel)GetNode("InfoPopup")).Text =
+			((RichTextLabel)GetNode("InfoPanel/InfoPopup")).Text =
 $@"Information:
    Type: {infoType}
    Density: {infoDensity}
@@ -67,7 +145,9 @@ $@"Information:
    Crime: {infoCrime}
    Pollution: {infoPollution}";
 
-	 		((RichTextLabel)GetNode("InfoPopup")).Visible = infoType == string.Empty ? false : true;
+	 		((PanelContainer)GetNode("InfoPanel")).Visible =
+				((RichTextLabel)GetNode("InfoPanel/InfoPopup")).Visible =
+					infoType == string.Empty ? false : true;
 
 			((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Residential];
 			((ProgressBar)GetNode("CommercialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Commercial];
@@ -83,11 +163,7 @@ $@"Information:
 
 	public void _on_Residential_pressed()
 	{
-		if (globals.PlacementMode != Globals.PlacementModeType.Residential)
-		{
-			globals.PlacementMode = Globals.PlacementModeType.Residential;
-		}
-
+		globals.PlacementMode = Globals.PlacementModeType.Residential;
 		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_ResidentialButton_pressed));
@@ -95,11 +171,7 @@ $@"Information:
 
 	public void _on_Commercial_pressed()
 	{
-		if (globals.PlacementMode != Globals.PlacementModeType.Commercial)
-		{
-			globals.PlacementMode = Globals.PlacementModeType.Commercial;
-		}
-
+		globals.PlacementMode = Globals.PlacementModeType.Commercial;
 		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_CommercialButton_pressed));
@@ -107,11 +179,7 @@ $@"Information:
 
 	public void _on_Industrial_pressed()
 	{
-		if (globals.PlacementMode != Globals.PlacementModeType.Industrial)
-		{
-			globals.PlacementMode = Globals.PlacementModeType.Industrial;
-		}
-
+		globals.PlacementMode = Globals.PlacementModeType.Industrial;
 		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_IndustrialButton_pressed));
@@ -119,11 +187,7 @@ $@"Information:
 
 	public void _on_Agricultural_pressed()
 	{
-		if (globals.PlacementMode != Globals.PlacementModeType.Agricultural)
-		{
-			globals.PlacementMode = Globals.PlacementModeType.Agricultural;
-		}
-
+		globals.PlacementMode = Globals.PlacementModeType.Agricultural;
 		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_AgriculturalButton_pressed));
@@ -131,11 +195,7 @@ $@"Information:
 
 	public void _on_Transportation_pressed()
 	{
-		if (globals.PlacementMode != Globals.PlacementModeType.Transportation)
-		{
-			globals.PlacementMode = Globals.PlacementModeType.Transportation;
-		}
-
+		globals.PlacementMode = Globals.PlacementModeType.Transportation;
 		globals.InputMode = Globals.InputModeType.Place;
 
 		EmitSignal(nameof(On_TransportationButton_pressed));
@@ -153,6 +213,83 @@ $@"Information:
 	public void _on_Select_pressed()
 	{
 		globals.InputMode = Globals.InputModeType.Select;
+		globals.PlacementMode = Globals.PlacementModeType.None;
+
 		EmitSignal(nameof(On_SelectButton_pressed));
+	}
+
+	public void _on_MenuButton_pressed()
+	{
+		if (_menuFadingIn == false)
+		{
+			((Button)GetNode("MenuButton")).Text = "^";
+			_menuFadingIn = true;
+			_menuFadingOut = false;
+			globals.InputMode = Globals.InputModeType.None;
+			globals.PlacementMode = Globals.PlacementModeType.None;
+		}
+		else
+		{
+			((Button)GetNode("MenuButton")).Text = ">";
+			_menuFadingIn = false;
+			_menuFadingOut = true;
+			globals.InputMode = Globals.InputModeType.None;
+			globals.PlacementMode = Globals.PlacementModeType.None;
+		}
+	}
+
+	public void _on_PlayPauseButton_pressed()
+	{
+		if (globals.GameRunning == Globals.GameRunningType.Playing)
+		{
+			((Button)GetNode("PlayPauseButton")).Text = "||";
+			((Button)GetNode("SpeedupButton")).Disabled = true;
+			((Button)GetNode("SlowdownButton")).Disabled = true;
+			globals.GameRunning = Globals.GameRunningType.Paused;
+		}
+		else
+		{
+			((Button)GetNode("PlayPauseButton")).Text = ">";
+
+			if (globals.Gamespeed != Globals.GametimeType.Fasteset)
+			{
+				((Button)GetNode("SpeedupButton")).Disabled = false;
+			}
+
+			if (globals.Gamespeed != Globals.GametimeType.Normal)
+			{
+				((Button)GetNode("SlowdownButton")).Disabled = false;
+			}
+
+			globals.GameRunning = Globals.GameRunningType.Playing;
+		}
+	}
+
+	public void _on_SpeedupButton_pressed()
+	{
+		if (globals.Gamespeed < Globals.GametimeType.Fasteset)
+		{
+			globals.Gamespeed++;
+			((Button)GetNode("SpeedupButton")).Disabled = false;
+			((Button)GetNode("SlowdownButton")).Disabled = false;
+		}
+		else
+		{
+			((Button)GetNode("SpeedupButton")).Disabled = true;
+		}
+	}
+
+	public void _on_SlowdownButton_pressed()
+	{
+		if (globals.Gamespeed >= Globals.GametimeType.Fast)
+		{
+			globals.Gamespeed--;
+			((Button)GetNode("SlowdownButton")).Disabled = false;
+			((Button)GetNode("SpeedupButton")).Disabled = false;
+		}
+		else
+		{
+			((Button)GetNode("SlowdownButton")).Disabled = true;
+		}
 	}
 }

@@ -52,11 +52,36 @@ public class Globals : Node
 		Place
 	}
 
-	public EconomicEngine Engine = new EconomicEngine();
+	public enum GameRunningType
+	{
+		Paused = 0,
+		Playing = 1
+	}
 
-	public const int MaximumLandValue = 100;
+	public enum GametimeType
+	{
+		Normal = 1,
+		Fast = 2,
+		Faster = 3,
+		Fasteset = 4
+	}
+
+	public EconomicEngine Engine = new EconomicEngine();
 	public PlacementModeType PlacementMode = PlacementModeType.None;
 	public InputModeType InputMode = InputModeType.None;
+
+	private GameRunningType _gameRunning = GameRunningType.Playing;
+	public GameRunningType GameRunning
+	{
+		get => _gameRunning;
+		set => _gameRunning = value;
+	}
+	private GametimeType _gamespeed = GametimeType.Normal;
+	public GametimeType Gamespeed
+	{
+		get => _gamespeed;
+		set => _gamespeed = value;
+	}
 
 	static Globals()
 	{

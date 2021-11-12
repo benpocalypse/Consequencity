@@ -20,7 +20,7 @@ public sealed class EconomicEngine
 	}
 
 	private int _population = 0;
-	public int Population 
+	public int Population
 	{
 		get
 		{
@@ -31,6 +31,13 @@ public sealed class EconomicEngine
 			}
 			return _population;
 		}
+	}
+
+	private int _funds = 0;
+	public int Funds
+	{
+		get => _funds;
+		set => _funds = value;
 	}
 
 	private DateTime _date = new DateTime();
@@ -96,7 +103,7 @@ public sealed class EconomicEngine
 		{
 			// If our agent doesn't have a home, and should perform an action,
 			// then let's try to find them a home.
-			if (agent.HasHome == false && 
+			if (agent.HasHome == false &&
 				agent.CanPerformAction() &&
 				Map[newHomeLocation].Type == Globals.LandSpaceType.Residential &&
 				Map[newHomeLocation].Population < Map[newHomeLocation].Density)
@@ -105,8 +112,8 @@ public sealed class EconomicEngine
 				Map[newHomeLocation].Population += 1;
 			}
 
-			if (agent.HasHome && 
-				agent.CanPerformAction() && 
+			if (agent.HasHome &&
+				agent.CanPerformAction() &&
 				(
 					Map[newJobLocation].Type == Globals.LandSpaceType.Commercial ||
 					Map[newJobLocation].Type == Globals.LandSpaceType.Industrial ||
