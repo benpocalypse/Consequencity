@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class UserInterface : Control
@@ -117,24 +118,24 @@ public class UserInterface : Control
 				globals.Gamespeed.ToString() :
 				"Paused";
 			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Gamespeed")).Text = $"Speed: {speed}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Date")).Text = $"Date: {globals.Engine.Date.ToString("MMMM dd, yyyy")}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Population")).Text = $"Population: {globals.Engine.Population}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Funds")).Text = $"Funds: {globals.Engine.Funds}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Date")).Text = $"Date: {globals.Economy.Date.ToString("MMMM dd, yyyy")}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Population")).Text = $"Population: {globals.Economy.Population}";
+			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Funds")).Text = $"Funds: {globals.Economy.Funds}";
 
 			// FIXME - Have this account for multi-select.
-			var infoType = globals.Engine.SelectedLandList.Count == 1 ?
-				globals.Engine.SelectedLandList[0].Type.ToString() :
-				globals.Engine.SelectedLandList.Count == 0 ?
+			var infoType = globals.Economy.SelectedLandList.Count == 1 ?
+				globals.Economy.SelectedLandList[0].Type.ToString() :
+				globals.Economy.SelectedLandList.Count == 0 ?
 					string.Empty :
-					globals.Engine.SelectedLandList.Select(_ => _.Type).Distinct().Count() == 1 ?
-						globals.Engine.SelectedLandList[0].Type.ToString() :
+					globals.Economy.SelectedLandList.Select(_ => _.Type).Distinct().Count() == 1 ?
+						globals.Economy.SelectedLandList[0].Type.ToString() :
 						"Multiple Types Selected";
 
-			var infoDensity = globals.Engine.SelectedLandList.Sum(_ => _.Density).ToString();
-			var infoPopulation = globals.Engine.SelectedLandList.Sum(_ => _.Population).ToString();
-			var infoValue = globals.Engine.SelectedLandList.Sum(_ => _.Value).ToString();
-			var infoCrime = globals.Engine.SelectedLandList.Sum(_ => _.Crime).ToString();
-			var infoPollution = globals.Engine.SelectedLandList.Sum(_ => _.Pollution).ToString();
+			var infoDensity = globals.Economy.SelectedLandList.Sum(_ => _.Density).ToString();
+			var infoPopulation = globals.Economy.SelectedLandList.Sum(_ => _.Population).ToString();
+			var infoValue = globals.Economy.SelectedLandList.Sum(_ => _.Value).ToString();
+			var infoCrime = globals.Economy.SelectedLandList.Sum(_ => _.Crime).ToString();
+			var infoPollution = globals.Economy.SelectedLandList.Sum(_ => _.Pollution).ToString();
 
 			((RichTextLabel)GetNode("InfoPanel/InfoPopup")).Text =
 $@"Information:
@@ -149,10 +150,10 @@ $@"Information:
 				((RichTextLabel)GetNode("InfoPanel/InfoPopup")).Visible =
 					infoType == string.Empty ? false : true;
 
-			((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Residential];
-			((ProgressBar)GetNode("CommercialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Commercial];
-			((ProgressBar)GetNode("IndustrialProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Industrial];
-			((ProgressBar)GetNode("AgriculturalProgress")).Value = globals.Engine.Demand[Globals.LandSpaceType.Agricultural];
+			((ProgressBar)GetNode("ResidentialProgress")).Value = globals.Economy.Demand[Globals.LandSpaceType.Residential];
+			((ProgressBar)GetNode("CommercialProgress")).Value = globals.Economy.Demand[Globals.LandSpaceType.Commercial];
+			((ProgressBar)GetNode("IndustrialProgress")).Value = globals.Economy.Demand[Globals.LandSpaceType.Industrial];
+			((ProgressBar)GetNode("AgriculturalProgress")).Value = globals.Economy.Demand[Globals.LandSpaceType.Agricultural];
 		}
 
 		if (Input.IsActionPressed("ui_cancel"))

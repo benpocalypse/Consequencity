@@ -45,7 +45,8 @@ public class ThreeDTest : Spatial
 			cameraBase.Translate(newPosition);
 		}
 
-		globals.Engine.Update(delta * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
+		globals.Economy.Update(delta * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
+		globals.Decisions.Update();
 		UpdateAgentMap();
 	}
 
@@ -86,7 +87,7 @@ public class ThreeDTest : Spatial
 
 						if (globals.InputMode == Globals.InputModeType.Select)
 						{
-							globals.Engine.SelectedLandList.Clear();
+							globals.Economy.SelectedLandList.Clear();
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
 							Highlight newHighlight = (Highlight)highlight.Instance();
 							newHighlight.Translate(initialClickPosition);
@@ -100,7 +101,7 @@ public class ThreeDTest : Spatial
 
 						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode != Globals.PlacementModeType.None)
 						{
-							globals.Engine.SelectedLandList.Clear();
+							globals.Economy.SelectedLandList.Clear();
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
 							Highlight newHighlight = (Highlight)highlight.Instance();
 							newHighlight.Translate(initialClickPosition);
@@ -146,7 +147,7 @@ public class ThreeDTest : Spatial
 						var selectedLand = ((Land)selectedCollider.GetParent());
 
 						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
-						globals.Engine.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
+						globals.Economy.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
 
 						light.QueueFree();
 					}
@@ -172,7 +173,7 @@ public class ThreeDTest : Spatial
 
 						landSelectionList.Add(selectedLand);
 
-						globals.Engine.SelectedLandList.Add(globals.Engine.Map[selectedLand.Position]);
+						globals.Economy.SelectedLandList.Add(globals.Economy.Map[selectedLand.Position]);
 						selectedLand.Selected();
 
 						light.QueueFree();
@@ -255,7 +256,7 @@ public class ThreeDTest : Spatial
 
 	public void PopulateEngineMap()
 	{
-		foreach (var space in globals.Engine.Map)
+		foreach (var space in globals.Economy.Map)
 		{
 			var land = (PackedScene)ResourceLoader.Load("res://Components/Land.tscn");
 			Land newLand = (Land)land.Instance();
@@ -270,7 +271,7 @@ public class ThreeDTest : Spatial
 	// FIXME - all the update logic should be in our Economic Engine, not here.
 	public void UpdateAgentMap()
 	{
-		foreach (var agent in globals.Engine.Agents)
+		foreach (var agent in globals.Economy.Agents)
 		{
 			if (agent.HasHome != false && agent.HomeHasBeenDrawn == false)
 			{

@@ -129,7 +129,7 @@ public sealed class EconomicEngine
 
 	public void UpdateMap()
 	{
-
+		// FIXME - Do we really need this? What should happen here?
 	}
 
 	public void UpdateDemand()

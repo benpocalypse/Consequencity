@@ -66,7 +66,8 @@ public class Globals : Node
 		Fasteset = 4
 	}
 
-	public EconomicEngine Engine = new EconomicEngine();
+	public EconomicEngine Economy;
+	public DecisionEngine Decisions;
 	public PlacementModeType PlacementMode = PlacementModeType.None;
 	public InputModeType InputMode = InputModeType.None;
 
@@ -76,6 +77,7 @@ public class Globals : Node
 		get => _gameRunning;
 		set => _gameRunning = value;
 	}
+
 	private GametimeType _gamespeed = GametimeType.Normal;
 	public GametimeType Gamespeed
 	{
@@ -91,13 +93,35 @@ public class Globals : Node
 	{
 	}
 
-	private static readonly Globals instance = new Globals();
+	private static Globals instance;
 	public static Globals Instance
 	{
 		get
 		{
 			return instance;
 		}
+	}
+
+	public void PopupDialog(string _decisionText, List<string> _decisions)
+	{
+		var decisionDialogScene = (PackedScene)ResourceLoader.Load("res://Components/UI/DecisionDialog.tscn");
+		var decisionDialog = (DecisionDialog)decisionDialogScene.Instance();
+		decisionDialog.New(
+			_decisionText: _decisionText,
+			_decisionButtonText: _decisions);
+
+		decisionDialog.Connect("DecisionMade", this, "_on_DecisionMade");
+
+		_gameRunning = GameRunningType.Paused;
+		this.AddChild(decisionDialog);
+		decisionDialog.PopupCentered();
+	}
+
+	public void _on_DecisionMade(string decisionText)
+	{
+		GD.Print($"Decision: {decisionText}");
+		Decisions.DecisionMade(decisionText);
+		_gameRunning = GameRunningType.Playing;
 	}
 
 	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementModeType _type)
@@ -156,6 +180,10 @@ public class Globals : Node
 
 		Viewport root = GetTree().Root;
 		CurrentSceneFile = root.GetChild(root.GetChildCount() - 1);
+
+		instance = GetNode<Globals>("/root/ConsequencityGlobals");
+		Economy = new EconomicEngine();
+		Decisions =  new DecisionEngine();
 	}
 
 	public override void _Notification(int notification)
