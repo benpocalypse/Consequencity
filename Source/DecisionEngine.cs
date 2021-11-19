@@ -13,9 +13,6 @@ public sealed class DecisionEngine
     {
         globals = Globals.Instance;
 
-        Func<bool> isPopulationOne = () => { return globals.Economy.Population == 1; };
-        Func<bool> isPopulationThree = () => { return _previousDecision == "Yes" && globals.Economy.Population == 3; };
-
         _behaviorTree = new BehaviorTree();
 
         _behaviorTree.RootNode
@@ -26,8 +23,16 @@ public sealed class DecisionEngine
                             () => globals.PopupDialog(
                                 _decisionText: "Now that you live here, other people have noticed and would like to join you. Will you let other people live on the island?",
                                 _decisions: new List<string>() { "Yes", "No"})
+                        )
+                        .Add(
+                            () =>
+                            {
+                                var residentialZoning = globals.Features.First(_ => _.Feature.Key == GameFeature.FeatureType.ResidentialZoning);
+                                globals.Features = globals.Features.Remove(residentialZoning);
+                                globals.Features = globals.Features.Add(residentialZoning.WithValue(true));
+                            }
                         ),
-                    _entranceCriteria: new NodeTransitionCriteria(isPopulationOne)
+                    _entranceCriteria: new NodeTransitionCriteria(() => { return globals.Economy.Population == 1; })
                     )
                     .AddChild(
                         new BehaviorNode(
@@ -37,7 +42,7 @@ public sealed class DecisionEngine
                                         _decisionText: "More people have moved in, and they want the ability to buy things. Should we mint a currency for them?",
                                         _decisions: new List<string>() { "Yes", "No"})
                                 ),
-                            _entranceCriteria: new NodeTransitionCriteria(isPopulationThree)
+                            _entranceCriteria: new NodeTransitionCriteria(() => { return _previousDecision == "Yes" && globals.Economy.Population == 3; })
                         )
                     )
             );

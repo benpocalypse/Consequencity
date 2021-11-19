@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 public class Globals : Node
 {
@@ -70,6 +71,14 @@ public class Globals : Node
 	public DecisionEngine Decisions;
 	public PlacementModeType PlacementMode = PlacementModeType.None;
 	public InputModeType InputMode = InputModeType.None;
+
+	public ImmutableList<GameFeature> Features = ImmutableList<GameFeature>.Empty
+			.Add(new GameFeature(GameFeature.FeatureType.ResidentialZoning, false))
+			.Add(new GameFeature(GameFeature.FeatureType.CommercialZoning, false))
+			.Add(new GameFeature(GameFeature.FeatureType.IndustrialZoning, false))
+			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
+			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false));
+
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;
 	public GameRunningType GameRunning

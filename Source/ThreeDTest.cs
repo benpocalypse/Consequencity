@@ -18,6 +18,17 @@ public class ThreeDTest : Spatial
 		PopulateEngineMap();
 	}
 
+	public static Vector3 PointOnCircle(float radius, float angleInDegrees, Vector3 origin, float factor)
+    {
+        // Convert from degrees to radians via multiplication by PI/180
+        float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F)) + origin.x;
+        float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F)) + origin.y;
+
+        return new Vector3(90, y, factor *  x);
+    }
+
+	private float angleInDegrees = 0.0f;
+
 	public override void _Process(float delta)
 	{
 		var camPosition = cameraBase.GlobalTransform.origin;
@@ -44,6 +55,15 @@ public class ThreeDTest : Spatial
 			var newPosition = new Vector3(-0.5f, 0, 0);
 			cameraBase.Translate(newPosition);
 		}
+
+		var sunLight = GetNode<Spatial>("SunLight");
+		angleInDegrees += delta * 30;
+		var pOc1 = PointOnCircle(90, angleInDegrees, new Vector3(30, 0, 90), 1);
+		sunLight.Translation = pOc1;
+		sunLight.LookAt(new Vector3(30,0,30), Vector3.Left);
+
+		//var pathToFollow = GetNode<PathFollow>("Path/PathFollow");
+		//pathToFollow.Offset += 10 * delta;
 
 		globals.Economy.Update(delta * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
 		globals.Decisions.Update();
@@ -113,6 +133,8 @@ public class ThreeDTest : Spatial
 							}
 						}
 
+						// FIXME - We don't have "delete" implemented correctly.
+
 						break;
 
 					case ButtonList.WheelUp:
@@ -181,6 +203,8 @@ public class ThreeDTest : Spatial
 
 					highlightSelectionlist.Clear();
 				}
+
+				// FIXME - We don't have "delete" implemented correctly.
 			}
 		}
 
@@ -245,9 +269,12 @@ public class ThreeDTest : Spatial
 				}
 				catch(Exception){}
 			}
+
+			// FIXME - We don't have "delete" implemented correctly.
 		}
 	}
 
+	// FIXME - Remove this, this was just for testing.
 	private void On_ResidentialButton_pressed()
 	{
 		GD.Print("Residential Button pressed!");

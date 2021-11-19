@@ -1,9 +1,10 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
-public class UserInterface : Control
+public class UserInterface : Control, IObserver
 {
 	[Signal]
 	public delegate void On_ResidentialButton_pressed();
@@ -32,9 +33,52 @@ public class UserInterface : Control
 	private bool _menuFadingIn = false;
 	private bool _menuFadingOut = false;
 
-	public override void _Ready()
+	public void PropertyChanged(IObservable observable)
+	{
+		if (observable is GameFeature feature)
+		{
+			switch (feature.Feature.Key)
+			{
+				case GameFeature.FeatureType.ResidentialZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Residential").Disabled = !feature.Feature.Value;
+					break;
+
+				case GameFeature.FeatureType.CommercialZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial").Disabled = !feature.Feature.Value;
+					break;
+
+				case GameFeature.FeatureType.IndustrialZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial").Disabled = !feature.Feature.Value;
+					break;
+
+				case GameFeature.FeatureType.AgriculturalZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Agricultural").Disabled = !feature.Feature.Value;
+					break;
+
+				case GameFeature.FeatureType.TransportationZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Transporation").Disabled = !feature.Feature.Value;
+					break;
+
+				case GameFeature.FeatureType.DeleteZoning:
+					GetNode<Button>("Path2D/PathFollow2D/Delete").Disabled = !feature.Feature.Value;
+					break;
+			}
+		}
+	}
+
+    public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
+
+		var result = ImmutableList<GameFeature>.Empty;
+		foreach (var feature in globals.Features)
+		{
+			feature.Add(this);
+			result = result.Add(feature);
+		}
+
+		globals.Features = result;
+		//globals.Features.ForEach(_ => _.Add(this));
 	}
 
 	public override void _Process(float delta)
@@ -57,7 +101,7 @@ public class UserInterface : Control
 				{
 					if (rootChild.GetType().ToString() == "Godot.Button")
 					{
-						((BaseButton)rootChild).Disabled = false;
+						//((BaseButton)rootChild).Disabled = false;
 					}
 
 					var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
@@ -103,7 +147,7 @@ public class UserInterface : Control
 					{
 						if (rootChild.GetType().ToString() == "Godot.Button")
 							{
-								((BaseButton)rootChild).Disabled = true;
+								//((BaseButton)rootChild).Disabled = true;
 							}
 					}
 				}
@@ -112,6 +156,8 @@ public class UserInterface : Control
 
 		_timeCounter += delta;
 
+
+		// Update our Info/Popup displays
 		if ( _timeCounter >= 1.0f )
 		{
 			var speed = globals.GameRunning == Globals.GameRunningType.Playing ?
@@ -282,7 +328,7 @@ $@"Information:
 
 	public void _on_SlowdownButton_pressed()
 	{
-		if (globals.Gamespeed >= Globals.GametimeType.Fast)
+		if (globals.Gamespeed > Globals.GametimeType.Normal)
 		{
 			globals.Gamespeed--;
 			((Button)GetNode("SlowdownButton")).Disabled = false;

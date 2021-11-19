@@ -135,6 +135,7 @@ margin_top = 47.9998
 margin_right = 98.0002
 margin_bottom = 86.9997
 rect_rotation = -89.9999
+disabled = true
 text = "Commercial"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -147,6 +148,7 @@ margin_top = -80.0002
 margin_right = 97.9997
 margin_bottom = -41.0002
 rect_rotation = -89.9999
+disabled = true
 text = "Industrial"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -159,6 +161,7 @@ margin_top = -208.0
 margin_right = 98.9992
 margin_bottom = -168.0
 rect_rotation = -89.9999
+disabled = true
 text = "Agricultural"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -171,6 +174,7 @@ margin_top = -336.0
 margin_right = 97.9988
 margin_bottom = -296.0
 rect_rotation = -89.9999
+disabled = true
 text = "Transportation"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -188,6 +192,7 @@ margin_right = 18.0005
 margin_bottom = -105.0
 rect_rotation = -89.9999
 rect_pivot_offset = Vector2( 136, 56 )
+disabled = true
 text = "Residential"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -212,6 +217,7 @@ margin_top = 47.9997
 margin_right = 194.0
 margin_bottom = 86.9997
 rect_rotation = -89.9999
+disabled = true
 text = "Delete"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -304,7 +310,7 @@ margin_left = 896.0
 margin_top = 16.0
 margin_right = 936.0
 margin_bottom = 48.0
-text = ">"
+text = "||"
 
 [node name="SpeedupButton" type="Button" parent="."]
 margin_left = 952.0

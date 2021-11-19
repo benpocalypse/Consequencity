@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Source/ThreeDTest.cs" type="Script" id=1]
 [ext_resource path="res://Components/UserInterface.tscn" type="PackedScene" id=2]
@@ -53,6 +53,17 @@ shader_param/blur = 3.64
 shader_param/intensity = 0.395
 shader_param/debug = false
 
+[sub_resource type="Curve3D" id=3]
+bake_interval = 0.01
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0.249878, -0.473328, 1.19939, 0, 0, 0, 0, 0, 0, -2.11784, 7.6909, -0.306877, 0, 0, 0, 0, 0, 0, -3.18845, 11.7393, -0.144234, 0, 0, 0, 0, 0, 0, -4.74709, 17.4325, -0.38224, 0, 0, 0, 0, 0, 0, -5.94115, 21.4226, -1.44248, 0, 0, 0, 0, 0, 0, -7.29626, 26.0064, -2.51476, 0, 0, 0, 0, 0, 0, -9.42395, 32.7702, -5.22261, 0, 0, 0, 0, 0, 0, -11.9403, 40.556, -8.93042, 0, 0, 0, 0, 0, 0, -14.1914, 47.2614, -12.8611, 0, 0, 0, 0, 0, 0, -16.6653, 54.5314, -17.4153, 0, 0, 0, 0, 0, 0, -19.6842, 63.5532, -22.617, 0, 0, 0, 0, 0, 0, -22.0587, 70.2004, -27.7706, 0, 0, 0, 0, 0, 0, -23.2817, 73.3731, -31.0175, 0, 0, 0, 0, 0, 0, -25.4382, 79.3196, -35.912, 0, 0, 0, 0, 0, 0, -26.6187, 81.9767, -40.0053, 0, 0, 0, 0, 0, 0, -29.0598, 88.4584, -46.1347, 0, 0, 0, 0, 0, 0, -31.1218, 93.6459, -51.993, 0, 0, 0, 0, 0, 0, -33.0845, 98.2105, -58.4507, 0, 0, 0, 0, 0, 0, -34.6488, 102.026, -63.1795, 0, 0, 0, 0, 0, 0, -35.9952, 105.14, -67.6493, 0, 0, 0, 0, 0, 0, -37.1902, 107.389, -72.8359, 0, 0, 0, 0, 0, 0, -38.8162, 111.175, -78.1762, 0, 0, 0, 0, 0, 0, -39.8925, 113.345, -82.5044, 0, 0, 0, 0, 0, 0, -40.7461, 114.951, -86.2092, 0, 0, 0, 0, 0, 0, -41.9931, 117.443, -91.2783, 0, 0, 0, 0, 0, 0, -43.2072, 119.146, -97.9227, 0, 0, 0, 0, 0, 0, -44.2315, 121.073, -102.368, 0, 0, 0, 0, 0, 0, -45.4456, 122.777, -109.013, 0, 0, 0, 0, 0, 0, -46.7544, 125.239, -114.693, 0, 0, 0, 0, 0, 0, -47.7362, 126.651, -119.986, 0, 0, 0, 0, 0, 0, -48.7941, 127.624, -126.982, 0, 0, 0, 0, 0, 0, -50.0275, 128.783, -135.085, 0, 0, 0, 0, 0, 0, -51.2417, 130.486, -141.729, 0, 0, 0, 0, 0, 0, -52.9023, 131.577, -153.747, 0, 0, 0, 0, 0, 0, -53.5523, 132.074, -158.286, 0, 0, 0, 0, 0, 0, -53.8994, 130.838, -164.259, 0, 0, 0, 0, 0, 0, -55.0103, 130.313, -175.264, 0, 0, 0, 0, 0, 0, -55.4664, 129.428, -181.367, 0, 0, 0, 0, 0, 0, -55.8087, 128.329, -186.975, 0, 0, 0, 0, 0, 0, -56.1606, 126.957, -193.312, 0, 0, 0, 0, 0, 0, -56.7497, 125.741, -201.366, 0, 0, 0, 0, 0, 0, -56.2578, 122.49, -204.727, 0, 0, 0, 0, 0, 0, -56.2827, 120.068, -210.676, 0, 0, 0, 0, 0, 0, -56.8342, 118.2, -219.941, 0, 0, 0, 0, 0, 0, -56.1107, 112.916, -226.076, 0, 0, 0, 0, 0, 0, -56.4057, 111.437, -232.166, 0, 0, 0, 0, 0, 0, -56.1847, 107.389, -239.796, 0, 0, 0, 0, 0, 0, -55.9829, 102.796, -248.883 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="CapsuleMesh" id=4]
+
+[sub_resource type="CapsuleMesh" id=5]
+
 [node name="Spatial" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00707543, 2.38419e-07, -0.00277948 )
 script = ExtResource( 1 )
@@ -90,10 +101,40 @@ transform = Transform( 0.838671, 0, 0.544639, 0, 1, 0, -0.544639, 0, 0.838671, 0
 [node name="Camera" type="Camera" parent="Cambase"]
 transform = Transform( -4.37114e-08, 0.5, -0.866026, 0, 0.866025, 0.5, 1, 2.18557e-08, -3.78552e-08, -10, 5, 0 )
 fov = 53.4375
+far = 2978.6
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.866025, 2.18557e-08, 0.5, -0.25, 0.866025, 0.433013, -0.433013, -0.5, 0.75, 168, 19.1497, 2.38046e-06 )
+[node name="Path" type="Path" parent="."]
+transform = Transform( 0.866025, -1.97526e-07, 0.5, -0.25, 0.866025, 0.433013, -0.433013, -0.5, 0.75, 168, 19.1497, 2.38046e-06 )
+visible = false
+curve = SubResource( 3 )
+
+[node name="PathFollow" type="PathFollow" parent="Path"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.249878, -0.473328, 1.19939 )
+visible = false
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Path/PathFollow"]
+transform = Transform( 1, 0, 0, 1.49012e-08, 1, 0, 0, -2.98023e-08, 1, 0, 0, 0 )
+visible = false
 shadow_enabled = true
+directional_shadow_blend_splits = true
+
+[node name="MeshInstance" type="MeshInstance" parent="Path/PathFollow/DirectionalLight"]
+transform = Transform( 1, -4.47035e-08, 0, -7.45058e-08, 1, 8.9407e-08, 0, 0, 1, -0.75, 2.59808, 1.29905 )
+visible = false
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="SunLight" type="DirectionalLight" parent="."]
+shadow_enabled = true
+shadow_bias = 0.01
+shadow_contact = 1.0
+directional_shadow_blend_splits = true
+
+[node name="MeshInstance" type="MeshInstance" parent="SunLight"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.72529e-09 )
+visible = false
+mesh = SubResource( 5 )
+material/0 = null
