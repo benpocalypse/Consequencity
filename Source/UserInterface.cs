@@ -37,30 +37,30 @@ public class UserInterface : Control, IObserver
 	{
 		if (observable is GameFeature feature)
 		{
-			switch (feature.Feature.Key)
+			switch (feature.BooleanFeature.Key)
 			{
 				case GameFeature.FeatureType.ResidentialZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Residential").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Residential").Disabled = !feature.BooleanFeature.Value;
 					break;
 
 				case GameFeature.FeatureType.CommercialZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial").Disabled = !feature.BooleanFeature.Value;
 					break;
 
 				case GameFeature.FeatureType.IndustrialZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial").Disabled = !feature.BooleanFeature.Value;
 					break;
 
 				case GameFeature.FeatureType.AgriculturalZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Agricultural").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Agricultural").Disabled = !feature.BooleanFeature.Value;
 					break;
 
 				case GameFeature.FeatureType.TransportationZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Transporation").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Path2D/PathFollow2D/Transporation").Disabled = !feature.BooleanFeature.Value;
 					break;
 
 				case GameFeature.FeatureType.DeleteZoning:
-					GetNode<Button>("Path2D/PathFollow2D/Delete").Disabled = !feature.Feature.Value;
+					GetNode<Button>("Path2D/PathFollow2D/Delete").Disabled = !feature.BooleanFeature.Value;
 					break;
 			}
 		}
@@ -70,15 +70,8 @@ public class UserInterface : Control, IObserver
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 
-		var result = ImmutableList<GameFeature>.Empty;
-		foreach (var feature in globals.Features)
-		{
-			feature.Add(this);
-			result = result.Add(feature);
-		}
-
-		globals.Features = result;
-		//globals.Features.ForEach(_ => _.Add(this));
+		// FIXME - in the future only have this watch the features it cares about, not all of them.
+		globals.Features.ForEach(_ => _.Add(this));
 	}
 
 	public override void _Process(float delta)
