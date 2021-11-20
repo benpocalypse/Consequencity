@@ -10,7 +10,8 @@ public sealed class GameFeature : IObservable
         IndustrialZoning,
         AgriculturalZoning,
         TransportationZoning,
-        DeleteZoning
+        DeleteZoning,
+        PopulationGrowthRate
     }
 
     private KeyValuePair<FeatureType, bool> _booleanFeature = new KeyValuePair<FeatureType, bool>();
@@ -43,21 +44,26 @@ public sealed class GameFeature : IObservable
 
     private ImmutableList<IObserver> _observers = ImmutableList<IObserver>.Empty;
 
-    public GameFeature(FeatureType feature, bool enabled)
+    public GameFeature(FeatureType feature, bool value)
     {
-        BooleanFeature = new KeyValuePair<FeatureType, bool>(feature, enabled);
+        BooleanFeature = new KeyValuePair<FeatureType, bool>(feature, value);
+    }
+
+    public GameFeature(FeatureType feature, float value)
+    {
+        FloatFeature = new KeyValuePair<FeatureType, float>(feature, value);
     }
 
     public GameFeature WithValue(bool value)
     {
-        this._booleanFeature = new KeyValuePair<FeatureType, bool>(_booleanFeature.Key, value);
+        BooleanFeature = new KeyValuePair<FeatureType, bool>(_booleanFeature.Key, value);
 
         return this;
     }
 
     public GameFeature WithValue(float value)
     {
-        this._floatFeature = new KeyValuePair<FeatureType, float>(_floatFeature, value);
+        FloatFeature = new KeyValuePair<FeatureType, float>(_floatFeature.Key, value);
 
         return this;
     }

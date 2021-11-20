@@ -77,7 +77,8 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.CommercialZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.IndustrialZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
-			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false));
+			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
+			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowth, 1.0f));
 
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;
@@ -191,8 +192,8 @@ public class Globals : Node
 		CurrentSceneFile = root.GetChild(root.GetChildCount() - 1);
 
 		instance = GetNode<Globals>("/root/ConsequencityGlobals");
-		Economy = new EconomicEngine();
 		Decisions =  new DecisionEngine();
+		Economy = new EconomicEngine(this.Features);
 	}
 
 	public override void _Notification(int notification)

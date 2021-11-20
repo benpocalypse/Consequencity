@@ -7,17 +7,17 @@ public class Land : Spatial
 
     public override void _Ready()
     {
-        
+
     }
 
-    public void SetPosition(Vector2 _position)
+    public void SetPosition(Vector2 position)
     {
-        Position = _position;
+        Position = position;
     }
 
-    public void SetLandType(Globals.LandSpaceType _type)
+    public void SetLandType(Globals.LandSpaceType type)
     {
-        switch (_type)
+        switch (type)
         {
             case Globals.LandSpaceType.Residential:
                 ((Spatial)GetNode("Residential")).Visible = true;
@@ -93,6 +93,6 @@ public class Land : Spatial
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
 //  {
-//      
+//
 //  }
 }

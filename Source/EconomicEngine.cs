@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Godot;
+using System.Collections.Immutable;
 
-public sealed class EconomicEngine
+public sealed class EconomicEngine : IObserver
 {
 	public Dictionary<Vector2, LandSpace> Map = new Dictionary<Vector2, LandSpace>();
 	public List<Agent> Agents = new List<Agent>();
@@ -54,12 +55,14 @@ public sealed class EconomicEngine
 		set => _selectedLandList =  value;
 	}
 
+	private float _populationGrowthRate = 1.0f;
+
 	private const int _mapWidth = 30;
 	private const int _mapHeight = 30;
 	private float _timeCounter = 0.0f;
 	private Random _random;
 
-	public EconomicEngine()
+	public EconomicEngine(ImmutableList<GameFeature> featuresToWatch)
 	{
 		_random = new Random();
 
@@ -76,20 +79,24 @@ public sealed class EconomicEngine
 		{
 			Agents.Add(new Agent());
 		}
+
+		featuresToWatch.ForEach(_ => _.Add(this));
 	}
 
 	public void Update(float timeStep)
 	{
 		_timeCounter += timeStep;
 
-		if ( _timeCounter >= 1.0f )
+		if ( (_timeCounter * _populationGrowthRate) >= 1.0f )
 		{
 			UpdateAgents();
 			UpdateDemand();
 			UpdateMap();
+		}
 
+		if ( _timeCounter >= 1.0f)
+		{
 			_date += new TimeSpan(1, 0, 0, 0);
-
 			_timeCounter = 0.0f;
 		}
 	}
@@ -161,4 +168,17 @@ public sealed class EconomicEngine
 		_demand[Globals.LandSpaceType.Industrial] = (int) ((agentsWithoutJobs / totalAgents) * 100);
 		_demand[Globals.LandSpaceType.Agricultural] = (int) ((agentsWithoutJobs / totalAgents) * 100);
 	}
+
+    public void PropertyChanged(IObservable observable)
+    {
+        if (observable is GameFeature feature)
+		{
+			switch (feature.FloatFeature.Key)
+			{
+				case GameFeature.FeatureType.PopulationGrowth:
+					_populationGrowthRate = feature.FloatFeature.Value;
+					break;
+			}
+		}
+    }
 }

@@ -42,8 +42,8 @@ public sealed class LandSpace
 	{
 	}
 
-	public LandSpace(Globals.LandSpaceType _type)
+	public LandSpace(Globals.LandSpaceType type)
 	{
-		Type = _type;
+		Type = type;
 	}
 }

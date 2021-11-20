@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 public sealed class BehaviorTree
 {
@@ -7,10 +9,9 @@ public sealed class BehaviorTree
 
     public void Update()
     {
-        foreach (var child in RootNode.Children)
-        {
-            child.Update();
-        }
+        ImmutableList<BehaviorNode> nodesToKeep = ImmutableList<BehaviorNode>.Empty;
+
+        RootNode.Children.ForEach(_ => _.Update());
     }
 }
 
@@ -21,53 +22,70 @@ public sealed class BehaviorNode
     public NodeTransitionCriteria EntranceCriteria = new NodeTransitionCriteria(null);
 
     private bool _actionsPerformed = false;
-    public bool ShouldEvaluate = true;
+    public bool EntranceCriteriaMet = false;
 
-    public BehaviorNode AddChild(BehaviorNode _child)
+    public BehaviorNode AddChild(BehaviorNode child)
     {
-        Children = Children.Add(_child);
+        Children = Children.Add(child);
 
         return this;
     }
 
-    public void AddChildren(ImmutableList<BehaviorNode> _children)
+    public void AddChildren(ImmutableList<BehaviorNode> children)
     {
-        Children = Children.AddRange(_children);
+        Children = Children.AddRange(children);
     }
 
-    public BehaviorNode(NodeTransitionCriteria _entranceCriteria)
+    public BehaviorNode(NodeTransitionCriteria entranceCriteria)
     {
-        EntranceCriteria = _entranceCriteria;
+        EntranceCriteria = entranceCriteria;
     }
 
-    public BehaviorNode(ImmutableList<Action> _actions)
+    public BehaviorNode(ImmutableList<Action> actions)
     {
-        ActionList = _actions;
+        ActionList = actions;
     }
 
-    public BehaviorNode(ImmutableList<Action> _actions, NodeTransitionCriteria _entranceCriteria)
+    public BehaviorNode(NodeTransitionCriteria entranceCriteria, ImmutableList<Action> actions)
     {
-        ActionList = _actions;
-        EntranceCriteria = _entranceCriteria;
+        EntranceCriteria = entranceCriteria;
+        ActionList = actions;
     }
 
     public void Update()
     {
-        if (ShouldEvaluate == true)
+        // If we perform this branch, we've alread evaluated this node.
+        if (_actionsPerformed == true)
         {
-            if (EntranceCriteria.Evaluate() == true && _actionsPerformed == false)
-            {
-                _actionsPerformed = true;
-
-                foreach (var nodeAction in ActionList)
-                {
-                    nodeAction();
-                }
-            }
+            var childCriteriaMet = false;
 
             foreach (var child in Children)
             {
                 child.Update();
+
+                // If one of our children has met it's entrance criteria, remove all the other children
+                // so that they don't respond to input as well.
+                if (child.EntranceCriteriaMet == true)
+                {
+                    childCriteriaMet = true;
+                }
+            }
+
+            if (childCriteriaMet == true)
+            {
+                Children = Children.RemoveAll(_ => _.EntranceCriteriaMet == false);
+            }
+        }
+
+        EntranceCriteriaMet = EntranceCriteria.Evaluate();
+
+        if (EntranceCriteriaMet == true && _actionsPerformed == false)
+        {
+            _actionsPerformed = true;
+
+            foreach (var nodeAction in ActionList)
+            {
+                nodeAction();
             }
         }
     }
