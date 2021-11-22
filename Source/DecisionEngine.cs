@@ -25,7 +25,7 @@ public sealed class DecisionEngine
                         ImmutableList<Action>.Empty
                             .Add(
                                 () => globals.PopupDialog(
-                                        _decisionText: "Now that you live here, other people have noticed and would like to join you. Will you let other people live on your island?",
+                                        _decisionText: "Now that you live here, other people have noticed and would like to join you. Will you let other people live on your island? Also did you know that there is a whole more bunch text that's going to be in this sentence? Yeah, there is, and it's going to go on for a good long time to see if wrapping works in my deicison dialgo.",
                                         _decisions: new List<string>() { "Yes", "No"})
                             )
                             .Add(
@@ -63,7 +63,7 @@ public sealed class DecisionEngine
                                     .Add(
                                         () =>
                                         {
-                                            var disablePopulationGrowth = globals.Features.First(_ => _.FloatFeature.Key == GameFeature.FeatureType.PopulationGrowth);
+                                            var disablePopulationGrowth = globals.Features.First(_ => _.FloatFeature.Key == GameFeature.FeatureType.PopulationGrowthRate);
                                             globals.Features = globals.Features.Remove(disablePopulationGrowth);
                                             globals.Features = globals.Features.Add(disablePopulationGrowth.WithValue(0.0f));
                                         }

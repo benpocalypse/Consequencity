@@ -1,0 +1,87 @@
+[gd_scene format=2]
+
+[node name="Notification" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1920.0
+margin_bottom = -1016.0
+rect_min_size = Vector2( 450, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="Popup" parent="."]
+visible = true
+margin_right = 71.0
+margin_bottom = 40.0
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+margin_right = 14.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 463.0
+margin_bottom = 72.0
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel2" type="Label" parent="Popup/PanelContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+text = "Icon goes here."
+align = 1
+valign = 1
+autowrap = true
+
+[node name="VSeparator" type="VSeparator" parent="Popup/PanelContainer/HBoxContainer"]
+margin_left = 69.0
+margin_right = 73.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 0, 64 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="Label" parent="Popup/PanelContainer/HBoxContainer"]
+margin_left = 78.0
+margin_right = 378.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+text = "This is a sample notification. Hopefully it shows up correclty."
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_editor_description_": "Q"
+}
+
+[node name="VSeparator2" type="VSeparator" parent="Popup/PanelContainer/HBoxContainer"]
+margin_left = 383.0
+margin_right = 387.0
+margin_bottom = 65.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel3" type="Label" parent="Popup/PanelContainer/HBoxContainer"]
+margin_left = 392.0
+margin_right = 456.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 64, 0 )
+text = "Close button goes here."
+valign = 1
+autowrap = true

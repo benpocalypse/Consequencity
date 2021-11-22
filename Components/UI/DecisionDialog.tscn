@@ -3,10 +3,9 @@
 [ext_resource path="res://Components/UI/DecisionDialog.cs" type="Script" id=1]
 
 [node name="PopupDialog" type="PopupDialog"]
-visible = true
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 300, 120 )
+rect_min_size = Vector2( 300, 175 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 popup_exclusive = true
 script = ExtResource( 1 )
 
@@ -23,15 +22,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DecisionText" type="RichTextLabel" parent="VBoxContainer"]
-margin_right = 260.0
-margin_bottom = 15.0
-fit_content_height = true
-scroll_active = false
+[node name="DecisionText" type="Label" parent="VBoxContainer"]
+rect_min_size = Vector2( 300, 100 )
+autowrap = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 35.0
 margin_right = 260.0
 margin_bottom = 35.0
 custom_constants/separation = 10
-alignment = 1

@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Source/UserInterface.cs" type="Script" id=1]
+[ext_resource path="res://Components/UI/Notification.tscn" type="PackedScene" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.419608, 0.788235, 0.423529, 1 )
@@ -251,38 +252,28 @@ margin_top = 7.0
 margin_right = 249.0
 margin_bottom = 79.0
 
-[node name="Gamespeed" type="RichTextLabel" parent="StatPanel/VBoxContainer"]
+[node name="Gamespeed" type="Label" parent="StatPanel/VBoxContainer"]
 margin_right = 242.0
-margin_bottom = 15.0
+margin_bottom = 14.0
 text = "Speed: "
-fit_content_height = true
 
-[node name="Date" type="RichTextLabel" parent="StatPanel/VBoxContainer"]
-margin_top = 19.0
+[node name="Date" type="Label" parent="StatPanel/VBoxContainer"]
+margin_top = 18.0
 margin_right = 242.0
-margin_bottom = 34.0
+margin_bottom = 32.0
 text = "Date:"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Population" type="RichTextLabel" parent="StatPanel/VBoxContainer"]
-margin_top = 38.0
+[node name="Population" type="Label" parent="StatPanel/VBoxContainer"]
+margin_top = 36.0
 margin_right = 242.0
-margin_bottom = 53.0
+margin_bottom = 50.0
 text = "Population: 0"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Funds" type="RichTextLabel" parent="StatPanel/VBoxContainer"]
-margin_top = 57.0
+[node name="Funds" type="Label" parent="StatPanel/VBoxContainer"]
+margin_top = 54.0
 margin_right = 242.0
-margin_bottom = 72.0
+margin_bottom = 68.0
 text = "Funds:"
-fit_content_height = true
 
 [node name="InfoPanel" type="PanelContainer" parent="."]
 visible = false
@@ -332,6 +323,12 @@ text = "<<"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Notification" parent="." instance=ExtResource( 2 )]
+margin_left = 688.0
+margin_top = 80.0
+margin_right = 688.0
+margin_bottom = 80.0
 
 [connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial" to="." method="_on_Industrial_pressed"]

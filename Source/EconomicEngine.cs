@@ -175,7 +175,7 @@ public sealed class EconomicEngine : IObserver
 		{
 			switch (feature.FloatFeature.Key)
 			{
-				case GameFeature.FeatureType.PopulationGrowth:
+				case GameFeature.FeatureType.PopulationGrowthRate:
 					_populationGrowthRate = feature.FloatFeature.Value;
 					break;
 			}

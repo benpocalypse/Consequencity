@@ -78,7 +78,7 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.IndustrialZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
-			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowth, 1.0f));
+			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 1.0f));
 
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;

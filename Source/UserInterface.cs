@@ -70,6 +70,11 @@ public class UserInterface : Control, IObserver
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 
+		var notification = ((Popup)GetNode("Notification/Popup"));
+		//notification.Popup_();
+		//notification.SetPosition(new Vector2((1920.0f-450.0f)/2.0f, 75.0f));
+
+
 		// FIXME - in the future only have this watch the features it cares about, not all of them.
 		globals.Features.ForEach(_ => _.Add(this));
 	}
@@ -156,10 +161,10 @@ public class UserInterface : Control, IObserver
 			var speed = globals.GameRunning == Globals.GameRunningType.Playing ?
 				globals.Gamespeed.ToString() :
 				"Paused";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Gamespeed")).Text = $"Speed: {speed}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Date")).Text = $"Date: {globals.Economy.Date.ToString("MMMM dd, yyyy")}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Population")).Text = $"Population: {globals.Economy.Population}";
-			((RichTextLabel)GetNode("StatPanel/VBoxContainer/Funds")).Text = $"Funds: {globals.Economy.Funds}";
+			GetNode<Label>("StatPanel/VBoxContainer/Gamespeed").Text = $"Speed: {speed}";
+			GetNode<Label>("StatPanel/VBoxContainer/Date").Text = $"Date: {globals.Economy.Date.ToString("MMMM dd, yyyy")}";
+			GetNode<Label>("StatPanel/VBoxContainer/Population").Text = $"Population: {globals.Economy.Population}";
+			GetNode<Label>("StatPanel/VBoxContainer/Funds").Text = $"Funds: {globals.Economy.Funds}";
 
 			// FIXME - Have this account for multi-select.
 			var infoType = globals.Economy.SelectedLandList.Count == 1 ?

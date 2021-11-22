@@ -12,13 +12,16 @@ public class DecisionDialog : PopupDialog
 
     public override void _Ready()
     {
-        GetNode<RichTextLabel>("VBoxContainer/DecisionText").Text = _decisionText;
+        var decisionText = GetNode<Label>("VBoxContainer/DecisionText");
+        decisionText.Text = _decisionText;
+        var blerpSize = decisionText.RectSize;
 
         foreach (var decision in _decisionButtonText)
         {
             var newButton = new Button();
             newButton.Text = decision;
             newButton.Connect("pressed", this, nameof(_on_DecisionButton_pressed), new Godot.Collections.Array { newButton.Text });
+            newButton.RectMinSize = new Vector2(72, 40);
             GetNode<HBoxContainer>("VBoxContainer/HBoxContainer").AddChild(newButton);
         }
     }
