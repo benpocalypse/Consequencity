@@ -117,8 +117,8 @@ public class Globals : Node
 		var decisionDialogScene = (PackedScene)ResourceLoader.Load("res://Components/UI/DecisionDialog.tscn");
 		var decisionDialog = (DecisionDialog)decisionDialogScene.Instance();
 		decisionDialog.New(
-			_decisionText: _decisionText,
-			_decisionButtonText: _decisions);
+			decisionText: _decisionText,
+			decisionButtonText: _decisions);
 
 		decisionDialog.Connect("DecisionMade", this, "_on_DecisionMade");
 

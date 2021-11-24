@@ -26,10 +26,10 @@ public class DecisionDialog : PopupDialog
         }
     }
 
-    public void New(string _decisionText, List<string> _decisionButtonText)
+    public void New(string decisionText, List<string> decisionButtonText)
     {
-        this._decisionText = _decisionText;
-        this._decisionButtonText = _decisionButtonText;
+        this._decisionText = decisionText;
+        this._decisionButtonText = decisionButtonText;
         this.Popup_();
     }
 
