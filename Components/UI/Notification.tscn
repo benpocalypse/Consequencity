@@ -13,14 +13,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="UiLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="UiLayer"]
 margin_right = 470.0
 margin_bottom = 79.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UiLayer/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 463.0
@@ -30,16 +33,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RichTextLabel2" type="Label" parent="PanelContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="UiLayer/PanelContainer/HBoxContainer"]
 margin_right = 64.0
-margin_bottom = 64.0
+margin_bottom = 65.0
 rect_min_size = Vector2( 64, 64 )
-text = "Icon goes here."
-align = 1
-valign = 1
-autowrap = true
 
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="UiLayer/PanelContainer/HBoxContainer"]
 margin_left = 69.0
 margin_right = 73.0
 margin_bottom = 65.0
@@ -48,21 +47,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RichTextLabel" type="Label" parent="PanelContainer/HBoxContainer"]
+[node name="NotificationText" type="Label" parent="UiLayer/PanelContainer/HBoxContainer"]
 margin_left = 78.0
 margin_right = 378.0
-margin_bottom = 31.0
+margin_bottom = 14.0
 rect_min_size = Vector2( 300, 0 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "This is a sample notification. Hopefully it shows up correctly."
 valign = 1
 autowrap = true
 __meta__ = {
 "_editor_description_": "Q"
 }
 
-[node name="VSeparator2" type="VSeparator" parent="PanelContainer/HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="UiLayer/PanelContainer/HBoxContainer"]
 margin_left = 383.0
 margin_right = 387.0
 margin_bottom = 65.0
@@ -70,11 +68,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RichTextLabel3" type="Label" parent="PanelContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="UiLayer/PanelContainer/HBoxContainer"]
 margin_left = 392.0
 margin_right = 456.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 64, 0 )
-text = "Close button goes here."
-valign = 1
-autowrap = true
+text = "X"

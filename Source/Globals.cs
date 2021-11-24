@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using static NotificationManager;
 
 public class Globals : Node
 {
@@ -69,6 +70,7 @@ public class Globals : Node
 
 	public EconomicEngine Economy;
 	public DecisionEngine Decisions;
+	public NotificationManager Notifications;
 	public PlacementModeType PlacementMode = PlacementModeType.None;
 	public InputModeType InputMode = InputModeType.None;
 
@@ -120,7 +122,7 @@ public class Globals : Node
 			decisionText: _decisionText,
 			decisionButtonText: _decisions);
 
-		decisionDialog.Connect("DecisionMade", this, "_on_DecisionMade");
+		decisionDialog.Connect("DecisionMade", this, nameof(_on_DecisionMade));
 
 		_gameRunning = GameRunningType.Paused;
 		this.AddChild(decisionDialog);
@@ -132,6 +134,16 @@ public class Globals : Node
 		GD.Print($"Decision: {decisionText}");
 		Decisions.DecisionMade(decisionText);
 		_gameRunning = GameRunningType.Playing;
+
+		Notifications.New(
+			type: NotificationType.Actionable,
+			icon: NotificationManager.NotificationIconType.None,
+			text: "This better work.");
+
+		Notifications.New(
+			type: NotificationType.Ephemeral,
+			icon: NotificationManager.NotificationIconType.None,
+			text: "But does this second one work?");
 	}
 
 	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementModeType _type)
@@ -194,6 +206,10 @@ public class Globals : Node
 		instance = GetNode<Globals>("/root/ConsequencityGlobals");
 		Decisions =  new DecisionEngine();
 		Economy = new EconomicEngine(this.Features);
+		Notifications = new NotificationManager();
+
+		//GetTree().CurrentScene.AddChild(Notifications);
+		this.AddChild(Notifications);
 	}
 
 	public override void _Notification(int notification)

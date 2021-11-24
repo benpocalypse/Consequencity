@@ -70,11 +70,6 @@ public class UserInterface : Control, IObserver
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 
-		var notification = (PackedScene)ResourceLoader.Load("res://Components/UI/Notification.tscn");
-		Notification newNotification = (Notification)notification.Instance();
-		((Control)newNotification).SetPosition(new Vector2((1920-470)/2, 75));
-		AddChild(newNotification);
-
 		// FIXME - in the future only have this watch the features it cares about, not all the features.
 		globals.Features.ForEach(_ => _.Add(this));
 	}
