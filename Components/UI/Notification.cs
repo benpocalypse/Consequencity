@@ -21,21 +21,26 @@ public class Notification : Control
         set => _ephemeralTime = value;
     }
 
+    public override void _Process(float delta)
+    {
+    }
+
     public override void _Ready()
     {
         _isReady = true;
 
         if (_notificationText != string.Empty)
         {
-             var labelText = GetNode<Label>("UiLayer/PanelContainer/HBoxContainer/NotificationText");
+             var labelText = GetNode<Label>("PanelContainer/HBoxContainer/NotificationText");
             labelText.Text = _notificationText;
 
-            var button = GetNode<Button>("UiLayer/PanelContainer/HBoxContainer/Button");
+            var button = GetNode<Button>("PanelContainer/HBoxContainer/Button");
             switch (_type)
             {
                 case NotificationType.Actionable:
                     button.Connect("pressed", this, nameof(_on_Button_pressed));
                     button.Visible = true;
+                    GetNode<VSeparator>("PanelContainer/HBoxContainer/VSeparator2").Visible = true;
                     break;
 
                 case NotificationType.Ephemeral:
@@ -47,15 +52,14 @@ public class Notification : Control
                     button.Visible = false;
                     break;
             }
-        }
-    }
 
+            // FIXME - finish handling Notification Icons.
+            if (_icon != NotificationIconType.None)
+            {
+                GetNode<VSeparator>("PanelContainer/HBoxContainer/VSeparator").Visible = true;
+            }
 
-    public void _on_Button_pressed()
-    {
-        if (_type == NotificationType.Actionable)
-        {
-            EmitSignal(nameof(Acknowledged), this);
+            GetNode<AnimationPlayer>("AnimationPlayer").Play("Grow");
         }
     }
 
@@ -63,15 +67,16 @@ public class Notification : Control
     {
         if (_isReady)
         {
-            var labelText = GetNode<Label>("UiLayer/PanelContainer/HBoxContainer/NotificationText");
+            var labelText = GetNode<Label>("PanelContainer/HBoxContainer/NotificationText");
             labelText.Text = text;
 
-            var button = GetNode<Button>("UiLayer/PanelContainer/HBoxContainer/Button");
+            var button = GetNode<Button>("PanelContainer/HBoxContainer/Button");
             switch (type)
             {
                 case NotificationType.Actionable:
-                button.Connect("pressed", this, nameof(_on_Button_pressed));
+                    button.Connect("pressed", this, nameof(_on_Button_pressed));
                     button.Visible = true;
+                    GetNode<VSeparator>("PanelContainer/HBoxContainer/VSeparator2").Visible = true;
                     break;
 
                 case NotificationType.Ephemeral:
@@ -83,12 +88,35 @@ public class Notification : Control
                     button.Visible = false;
                     break;
             }
+
+            GetNode<AnimationPlayer>("AnimationPlayer").Play("Grow");
         }
         else
         {
             _notificationText = text;
             _type = type;
             _icon = icon;
+        }
+    }
+
+    public void Dismiss()
+    {
+        GetNode<AnimationPlayer>("AnimationPlayer").Play("Shrink");
+    }
+
+    public void _on_AnimationPlayer_animation_finished(string animationFinished)
+    {
+        if (animationFinished == "Shrink")
+        {
+            this.QueueFree();
+        }
+    }
+
+    public void _on_Button_pressed()
+    {
+        if (_type == NotificationType.Actionable)
+        {
+            EmitSignal(nameof(Acknowledged), this);
         }
     }
 }

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 
 public sealed class NotificationManager : Node
 {
@@ -47,6 +48,16 @@ public sealed class NotificationManager : Node
                     if (notify.EphemeralTime == new TimeSpan(0,0,0))
                     {
                         notificationsToRemove = notificationsToRemove.Add(notify);
+
+                        New(
+                            type: NotificationType.Ephemeral,
+                            icon: NotificationManager.NotificationIconType.None,
+                            text: "But now this one...");
+
+                        New(
+                            type: NotificationType.Ephemeral,
+                            icon: NotificationManager.NotificationIconType.None,
+                            text: "and this one will appear!");
                     }
                 }
             }
@@ -54,7 +65,7 @@ public sealed class NotificationManager : Node
             foreach (var notify in notificationsToRemove)
             {
                 _notificationList = _notificationList.Remove(notify);
-                notify.QueueFree();
+                notify.Dismiss();
             }
         }
     }
@@ -66,7 +77,7 @@ public sealed class NotificationManager : Node
             var notification = (PackedScene)ResourceLoader.Load("res://Components/UI/Notification.tscn");
 
             Notification newNotification = (Notification)notification.Instance();
-            newNotification.GetNode<CanvasLayer>("UiLayer").Offset = new Vector2((1920-470)/2, 75 + (90 * _notificationList.Count));
+
             newNotification.Connect("Acknowledged", this, nameof(Notification_Acknowledged));
             newNotification.New(
                 type: type,
@@ -74,15 +85,20 @@ public sealed class NotificationManager : Node
                 text: text
             );
 
+            VBoxContainer vbox = GetNode<VBoxContainer>("UiLayer/VBoxContainer");
+            vbox.AddChild(newNotification);
             _notificationList = _notificationList.Add(newNotification);
-
-            AddChild(newNotification);
         }
     }
 
     public void Notification_Acknowledged(Notification acknowledgedNotification)
     {
         _notificationList = _notificationList.Remove(acknowledgedNotification);
-        acknowledgedNotification.QueueFree();
+        acknowledgedNotification.Dismiss();
+
+        New(
+            type: NotificationType.Ephemeral,
+            icon: NotificationManager.NotificationIconType.None,
+            text: "This notification will disappear in roughly 5 seconds.");
     }
 }

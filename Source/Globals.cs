@@ -135,15 +135,15 @@ public class Globals : Node
 		Decisions.DecisionMade(decisionText);
 		_gameRunning = GameRunningType.Playing;
 
-		Notifications.New(
-			type: NotificationType.Actionable,
-			icon: NotificationManager.NotificationIconType.None,
-			text: "This better work.");
+		Notifications = GetTree().CurrentScene.GetNode<NotificationManager>("UiLayer/UserInterface/NotificationManager");
 
-		Notifications.New(
-			type: NotificationType.Ephemeral,
-			icon: NotificationManager.NotificationIconType.None,
-			text: "But does this second one work?");
+		if (Notifications != null)
+		{
+			Notifications.New(
+				type: NotificationType.Actionable,
+				icon: NotificationManager.NotificationIconType.Question,
+				text: $"You chose {decisionText} to letting people live on the island.");
+		}
 	}
 
 	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementModeType _type)
@@ -206,10 +206,10 @@ public class Globals : Node
 		instance = GetNode<Globals>("/root/ConsequencityGlobals");
 		Decisions =  new DecisionEngine();
 		Economy = new EconomicEngine(this.Features);
-		Notifications = new NotificationManager();
+		//Notifications = new NotificationManager();
 
 		//GetTree().CurrentScene.AddChild(Notifications);
-		this.AddChild(Notifications);
+		//this.AddChild(Notifications);
 	}
 
 	public override void _Notification(int notification)

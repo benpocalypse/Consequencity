@@ -25,7 +25,7 @@ public sealed class DecisionEngine
                         ImmutableList<Action>.Empty
                             .Add(
                                 () => globals.PopupDialog(
-                                        _decisionText: "Now that you live here, other people have noticed and would like to join you. Will you let other people live on your island? Also did you know that there is a whole more bunch text that's going to be in this sentence? Yeah, there is, and it's going to go on for a good long time to see if wrapping works in my deicison dialgo.",
+                                        _decisionText: "Now that you live here, other people have noticed and would like to join you. Will you let other people live on your island?",
                                         _decisions: new List<string>() { "Yes", "No"})
                             )
                             .Add(

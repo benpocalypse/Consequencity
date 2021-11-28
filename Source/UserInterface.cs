@@ -161,7 +161,6 @@ public class UserInterface : Control, IObserver
 			GetNode<Label>("StatPanel/VBoxContainer/Population").Text = $"Population: {globals.Economy.Population}";
 			GetNode<Label>("StatPanel/VBoxContainer/Funds").Text = $"Funds: {globals.Economy.Funds}";
 
-			// FIXME - Have this account for multi-select.
 			var infoType = globals.Economy.SelectedLandList.Count == 1 ?
 				globals.Economy.SelectedLandList[0].Type.ToString() :
 				globals.Economy.SelectedLandList.Count == 0 ?

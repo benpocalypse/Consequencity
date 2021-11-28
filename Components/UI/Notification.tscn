@@ -1,57 +1,100 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Components/UI/Notification.cs" type="Script" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Grow"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("PanelContainer:rect_scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("PanelContainer:rect_pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 235, 40 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Shrink"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("PanelContainer:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.1, 1.1 ), Vector2( 1e-05, 1e-05 ) ]
+}
 
 [node name="Notification" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -1920.0
-margin_bottom = -1016.0
-rect_min_size = Vector2( 450, 0 )
+rect_min_size = Vector2( 450, 80 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="UiLayer" type="CanvasLayer" parent="."]
-layer = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="UiLayer"]
-margin_right = 470.0
-margin_bottom = 79.0
+[node name="PanelContainer" type="PanelContainer" parent="."]
+rect_min_size = Vector2( 470, 75 )
+rect_scale = Vector2( 1.2, 1.2 )
+rect_pivot_offset = Vector2( 235, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UiLayer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 463.0
-margin_bottom = 72.0
+margin_bottom = 77.0
+rect_min_size = Vector2( 0, 70 )
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Icon" type="TextureRect" parent="UiLayer/PanelContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+visible = false
 margin_right = 64.0
-margin_bottom = 65.0
+margin_bottom = 70.0
 rect_min_size = Vector2( 64, 64 )
 
-[node name="VSeparator" type="VSeparator" parent="UiLayer/PanelContainer/HBoxContainer"]
-margin_left = 69.0
-margin_right = 73.0
-margin_bottom = 65.0
-rect_min_size = Vector2( 0, 64 )
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer"]
+visible = false
+margin_right = 4.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NotificationText" type="Label" parent="UiLayer/PanelContainer/HBoxContainer"]
-margin_left = 78.0
-margin_right = 378.0
-margin_bottom = 14.0
-rect_min_size = Vector2( 300, 0 )
+[node name="NotificationText" type="Label" parent="PanelContainer/HBoxContainer"]
+margin_right = 300.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 300, 70 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 valign = 1
@@ -60,17 +103,26 @@ __meta__ = {
 "_editor_description_": "Q"
 }
 
-[node name="VSeparator2" type="VSeparator" parent="UiLayer/PanelContainer/HBoxContainer"]
-margin_left = 383.0
-margin_right = 387.0
-margin_bottom = 65.0
+[node name="VSeparator2" type="VSeparator" parent="PanelContainer/HBoxContainer"]
+visible = false
+margin_left = 410.0
+margin_right = 414.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="UiLayer/PanelContainer/HBoxContainer"]
-margin_left = 392.0
+[node name="Button" type="Button" parent="PanelContainer/HBoxContainer"]
+visible = false
+margin_left = 419.0
 margin_right = 456.0
-margin_bottom = 65.0
-rect_min_size = Vector2( 64, 0 )
+margin_bottom = 70.0
+rect_min_size = Vector2( 37, 37 )
 text = "X"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Grow = SubResource( 1 )
+anims/Shrink = SubResource( 2 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
