@@ -16,7 +16,8 @@ public sealed class NotificationManager : Node
     {
         None = 0,
         Warning,
-        Question
+        Question,
+        Information
     }
 
     private bool _isReady = false;

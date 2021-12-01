@@ -55,11 +55,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UiLayer" type="CanvasLayer" parent="."]
-
 [node name="PanelContainer" type="PanelContainer" parent="."]
-rect_min_size = Vector2( 470, 75 )
-rect_scale = Vector2( 1.2, 1.2 )
+rect_min_size = Vector2( 470, 45 )
 rect_pivot_offset = Vector2( 235, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -69,8 +66,8 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 463.0
-margin_bottom = 77.0
-rect_min_size = Vector2( 0, 70 )
+margin_bottom = 47.0
+rect_min_size = Vector2( 0, 40 )
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
@@ -78,23 +75,23 @@ __meta__ = {
 
 [node name="Icon" type="TextureRect" parent="PanelContainer/HBoxContainer"]
 visible = false
-margin_right = 64.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 64, 64 )
+margin_right = 32.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 32, 32 )
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer"]
 visible = false
 margin_right = 4.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 0, 70 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="NotificationText" type="Label" parent="PanelContainer/HBoxContainer"]
 margin_right = 300.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 300, 70 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 300, 40 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 valign = 1
@@ -107,8 +104,8 @@ __meta__ = {
 visible = false
 margin_left = 410.0
 margin_right = 414.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 0, 70 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -117,7 +114,7 @@ __meta__ = {
 visible = false
 margin_left = 419.0
 margin_right = 456.0
-margin_bottom = 70.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 37, 37 )
 text = "X"
 

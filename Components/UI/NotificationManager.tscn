@@ -21,8 +21,8 @@ __meta__ = {
 margin_left = 712.0
 margin_top = 88.0
 margin_right = 1182.0
-margin_bottom = 488.0
 rect_min_size = Vector2( 470, 400 )
+custom_constants/separation = -20
 __meta__ = {
 "_edit_use_anchors_": false
 }
