@@ -72,6 +72,20 @@ public class UserInterface : Control, IObserver
 
 		// FIXME - in the future only have this watch the features it cares about, not all the features.
 		globals.Features.ForEach(_ => _.Add(this));
+
+		var rootMenuButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
+		MenuButton rootMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		rootMenuButton.Translate(new Vector2(100, 100));
+		rootMenuButton.ButtonText = "Root Button";
+
+		MenuButton childMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		childMenuButton.Translate(new Vector2(100, 150));
+		childMenuButton.ButtonText = "Child Button";
+
+		rootMenuButton.Below = childMenuButton;
+
+		AddChild(rootMenuButton);
+		AddChild(childMenuButton);
 	}
 
 	public override void _Process(float delta)

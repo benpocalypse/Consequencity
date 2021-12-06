@@ -1,7 +1,19 @@
+using Godot;
 using System;
 
-public sealed class MenuItem
+public class MenuButton : Node2D
 {
+    private string _text = string.Empty;
+    public string ButtonText
+    {
+        get => _text;
+        set
+        {
+            _text = value;
+            GetNode<Button>("Button").Text = _text;
+        }
+    }
+
     private bool _isEnabled = false;
     public bool IsEnabled
     {
@@ -9,6 +21,7 @@ public sealed class MenuItem
         set => _isEnabled = value;
     }
 
+    // FIXME - abandon using non-godot stuff to make all this work. Just glue on to godot where I can.
     private bool _isVisible = false;
     public bool IsVisible
     {
@@ -16,45 +29,37 @@ public sealed class MenuItem
         set => _isVisible = value;
     }
 
+
     private bool _isPressed = false;
     public bool IsPressed
     {
         get => _isPressed;
-        set => _isPressed = value;
+        set
+        {
+            _isPressed = value;
+            GetNode<ButtonText>("Button").Pressed = _isPressed;
+        }
     }
 
-    private MenuItem _left = null;
-    public MenuItem Left
+    private MenuButton _left = null;
+    public MenuButton Left
     {
         get => _left;
         set => _left = value;
     }
 
-    private MenuItem _right = null;
-    public MenuItem Right
+    private MenuButton _right = null;
+    public MenuButton Right
     {
         get => _right;
         set => _right = value;
     }
 
-    private MenuItem _below = null;
-    public MenuItem Below
+    private MenuButton _below = null;
+    public MenuButton Below
     {
         get => _below;
         set => _below = value;
-    }
-
-    // FIXME - maybe remove this?
-    public MenuItem(MenuItem below)
-    {
-        _below = below;
-    }
-
-    public MenuItem(MenuItem left = null, MenuItem right = null, MenuItem below = null)
-    {
-        _left = left;
-        _right = right;
-        _below = below;
     }
 
     public void Pressed()
@@ -80,5 +85,20 @@ public sealed class MenuItem
         _right?.ParentPressed();
         _left?.ParentPressed();
         _below?.ParentPressed();
+    }
+    public override void _Ready()
+    {
+
+    }
+
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//
+//  }
+
+    public void _on_Button_pressed()
+    {
+        this.Pressed();
     }
 }
