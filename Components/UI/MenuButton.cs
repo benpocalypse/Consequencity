@@ -3,6 +3,15 @@ using System;
 
 public class MenuButton : Node2D
 {
+
+    public enum ButtonParentDirection
+    {
+        left,
+        right,
+        above,
+        below
+    };
+
     private string _text = string.Empty;
     public string ButtonText
     {
@@ -19,26 +28,6 @@ public class MenuButton : Node2D
     {
         get => _isEnabled;
         set => _isEnabled = value;
-    }
-
-    // FIXME - abandon using non-godot stuff to make all this work. Just glue on to godot where I can.
-    private bool _isVisible = false;
-    public bool IsVisible
-    {
-        get => _isVisible;
-        set => _isVisible = value;
-    }
-
-
-    private bool _isPressed = false;
-    public bool IsPressed
-    {
-        get => _isPressed;
-        set
-        {
-            _isPressed = value;
-            GetNode<ButtonText>("Button").Pressed = _isPressed;
-        }
     }
 
     private MenuButton _left = null;
@@ -62,30 +51,59 @@ public class MenuButton : Node2D
         set => _below = value;
     }
 
-    public void Pressed()
+    public void ButtonPressed()
     {
-        if ( _isEnabled && _isVisible )
+        if ( _isEnabled && Visible )
         {
-            _isPressed = !_isPressed;
-        }
+            var pressed = GetNode<Button>("Button").Pressed;
 
-        _right?.ParentPressed();
-        _left?.ParentPressed();
-        _below?.ParentPressed();
+            if (_right == null && _left == null )
+            {
+                _below?.ParentPressed(ButtonParentDirection.above, pressed);
+            }
+            else
+            {
+                _right?.ParentPressed(ButtonParentDirection.left, pressed);
+                _left?.ParentPressed(ButtonParentDirection.right, pressed);
+            }
+        }
     }
 
-    public void ParentPressed()
+    public void ParentPressed(ButtonParentDirection parentDirection, bool parentPressed)
     {
         // FIXME - move into position?
         if (_isEnabled)
         {
-            _isVisible = !_isVisible;
+            Visible = !Visible;
         }
 
-        _right?.ParentPressed();
-        _left?.ParentPressed();
-        _below?.ParentPressed();
+        if (parentPressed == false)
+        {
+            Visible = false;
+        }
+
+        var pressed = GetNode<Button>("Button").Pressed;
+
+        switch (parentDirection)
+        {
+            case ButtonParentDirection.above:
+                _below?.ParentPressed(ButtonParentDirection.above, parentPressed);
+                break;
+
+            case ButtonParentDirection.below:
+                // FIXME - I don't think this can happen.
+                break;
+
+            case ButtonParentDirection.left:
+                _right?.ParentPressed(ButtonParentDirection.left, parentPressed);
+                break;
+
+            case ButtonParentDirection.right:
+                _left?.ParentPressed(ButtonParentDirection.right, parentPressed);
+                break;
+        }
     }
+
     public override void _Ready()
     {
 
@@ -99,6 +117,6 @@ public class MenuButton : Node2D
 
     public void _on_Button_pressed()
     {
-        this.Pressed();
+        this.ButtonPressed();
     }
 }

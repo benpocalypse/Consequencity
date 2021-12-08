@@ -76,16 +76,43 @@ public class UserInterface : Control, IObserver
 		var rootMenuButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
 		MenuButton rootMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		rootMenuButton.Translate(new Vector2(100, 100));
+		rootMenuButton.IsEnabled = true;
 		rootMenuButton.ButtonText = "Root Button";
 
-		MenuButton childMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		childMenuButton.Translate(new Vector2(100, 150));
-		childMenuButton.ButtonText = "Child Button";
+		MenuButton firstChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		firstChildMenuButton.Translate(new Vector2(100, 150));
+		firstChildMenuButton.ButtonText = "Child Button";
+		firstChildMenuButton.Visible = false;
+		firstChildMenuButton.IsEnabled = true;
 
-		rootMenuButton.Below = childMenuButton;
+		MenuButton anotherChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		anotherChildMenuButton.Translate(new Vector2(100, 200));
+		anotherChildMenuButton.ButtonText = "Lower Child";
+		anotherChildMenuButton.Visible = false;
+		anotherChildMenuButton.IsEnabled = true;
+
+		MenuButton rightChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		rightChildMenuButton.Translate(new Vector2(200, 150));
+		rightChildMenuButton.ButtonText = "Right Button";
+		rightChildMenuButton.Visible = false;
+		rightChildMenuButton.IsEnabled = true;
+
+		MenuButton rightChildChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
+		rightChildChildMenuButton.Translate(new Vector2(200, 200));
+		rightChildChildMenuButton.ButtonText = "Right Child";
+		rightChildChildMenuButton.Visible = false;
+		rightChildChildMenuButton.IsEnabled = true;
+
+		rootMenuButton.Below = firstChildMenuButton;
+		firstChildMenuButton.Below = anotherChildMenuButton;
+		firstChildMenuButton.Right = rightChildMenuButton;
+		rightChildMenuButton.Below = rightChildChildMenuButton;
 
 		AddChild(rootMenuButton);
-		AddChild(childMenuButton);
+		AddChild(firstChildMenuButton);
+		AddChild(anotherChildMenuButton);
+		AddChild(rightChildMenuButton);
+		AddChild(rightChildChildMenuButton);
 	}
 
 	public override void _Process(float delta)
