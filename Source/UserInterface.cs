@@ -77,29 +77,30 @@ public class UserInterface : Control, IObserver
 		MenuButton rootMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		rootMenuButton.Translate(new Vector2(100, 100));
 		rootMenuButton.IsEnabled = true;
-		rootMenuButton.ButtonText = "Root Button";
+		rootMenuButton.UnpressedText = ">";
+		rootMenuButton.PressedText = "^";
 
 		MenuButton firstChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		firstChildMenuButton.Translate(new Vector2(100, 150));
-		firstChildMenuButton.ButtonText = "Child Button";
+		firstChildMenuButton.UnpressedText = "Child Button";
 		firstChildMenuButton.Visible = false;
 		firstChildMenuButton.IsEnabled = true;
 
 		MenuButton anotherChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		anotherChildMenuButton.Translate(new Vector2(100, 200));
-		anotherChildMenuButton.ButtonText = "Lower Child";
+		anotherChildMenuButton.UnpressedText = "Lower Child";
 		anotherChildMenuButton.Visible = false;
 		anotherChildMenuButton.IsEnabled = true;
 
 		MenuButton rightChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		rightChildMenuButton.Translate(new Vector2(200, 150));
-		rightChildMenuButton.ButtonText = "Right Button";
+		rightChildMenuButton.UnpressedText = "Right Button";
 		rightChildMenuButton.Visible = false;
 		rightChildMenuButton.IsEnabled = true;
 
 		MenuButton rightChildChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		rightChildChildMenuButton.Translate(new Vector2(200, 200));
-		rightChildChildMenuButton.ButtonText = "Right Child";
+		rightChildChildMenuButton.UnpressedText = "Right Child";
 		rightChildChildMenuButton.Visible = false;
 		rightChildChildMenuButton.IsEnabled = true;
 

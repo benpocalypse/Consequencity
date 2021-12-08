@@ -3,23 +3,30 @@ using System;
 
 public class MenuButton : Node2D
 {
-
     public enum ButtonParentDirection
     {
-        left,
-        right,
-        above,
-        below
+        Left,
+        Right,
+        Above,
+        Below
     };
 
-    private string _text = string.Empty;
-    public string ButtonText
+    private string _unpressedText = string.Empty;
+    public string UnpressedText
     {
-        get => _text;
+        get => _unpressedText;
         set
         {
-            _text = value;
-            GetNode<Button>("Button").Text = _text;
+            _unpressedText = value;
+        }
+    }
+
+    private string _pressedText = string.Empty;
+    public string PressedText{
+        get => _pressedText;
+        set
+        {
+            _pressedText = value;
         }
     }
 
@@ -57,14 +64,19 @@ public class MenuButton : Node2D
         {
             var pressed = GetNode<Button>("Button").Pressed;
 
+            GetNode<Button>("Button").Text = !pressed ? _unpressedText :
+                _pressedText == string.Empty ?
+                    _unpressedText :
+                    _pressedText;
+
             if (_right == null && _left == null )
             {
-                _below?.ParentPressed(ButtonParentDirection.above, pressed);
+                _below?.ParentPressed(ButtonParentDirection.Above, pressed);
             }
             else
             {
-                _right?.ParentPressed(ButtonParentDirection.left, pressed);
-                _left?.ParentPressed(ButtonParentDirection.right, pressed);
+                _right?.ParentPressed(ButtonParentDirection.Left, pressed);
+                _left?.ParentPressed(ButtonParentDirection.Right, pressed);
             }
         }
     }
@@ -80,33 +92,31 @@ public class MenuButton : Node2D
         if (parentPressed == false)
         {
             Visible = false;
+            GetNode<Button>("Button").Pressed = false;
+            _below?.ParentPressed(ButtonParentDirection.Above, parentPressed);
+            _right?.ParentPressed(ButtonParentDirection.Left, parentPressed);
+            _left?.ParentPressed(ButtonParentDirection.Right, parentPressed);
         }
-
-        var pressed = GetNode<Button>("Button").Pressed;
 
         switch (parentDirection)
         {
-            case ButtonParentDirection.above:
-                _below?.ParentPressed(ButtonParentDirection.above, parentPressed);
+            case ButtonParentDirection.Above:
+                _below?.ParentPressed(ButtonParentDirection.Above, parentPressed);
                 break;
 
-            case ButtonParentDirection.below:
-                // FIXME - I don't think this can happen.
+            case ButtonParentDirection.Left:
+                _right?.ParentPressed(ButtonParentDirection.Left, parentPressed);
                 break;
 
-            case ButtonParentDirection.left:
-                _right?.ParentPressed(ButtonParentDirection.left, parentPressed);
-                break;
-
-            case ButtonParentDirection.right:
-                _left?.ParentPressed(ButtonParentDirection.right, parentPressed);
+            case ButtonParentDirection.Right:
+                _left?.ParentPressed(ButtonParentDirection.Right, parentPressed);
                 break;
         }
     }
 
     public override void _Ready()
     {
-
+        GetNode<Button>("Button").Text = _unpressedText;
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
