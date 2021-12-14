@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Source/UserInterface.cs" type="Script" id=1]
 [ext_resource path="res://Components/UI/NotificationManager.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Components/UI/MenuTree.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.419608, 0.788235, 0.423529, 1 )
@@ -325,6 +326,9 @@ __meta__ = {
 }
 
 [node name="NotificationManager" parent="." instance=ExtResource( 2 )]
+
+[node name="MenuTree" parent="." instance=ExtResource( 3 )]
+position = Vector2( 192, 128 )
 
 [connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial" to="." method="_on_Commercial_pressed"]
 [connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial" to="." method="_on_Industrial_pressed"]

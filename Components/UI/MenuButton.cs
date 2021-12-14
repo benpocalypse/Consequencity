@@ -3,7 +3,7 @@ using System;
 
 public class MenuButton : Node2D
 {
-    public enum ButtonParentDirection
+    public enum ButtonDirection
     {
         Left,
         Right,
@@ -58,6 +58,37 @@ public class MenuButton : Node2D
         set => _below = value;
     }
 
+    private ButtonDirection _direction = ButtonDirection.Below;
+    public ButtonDirection Direction
+    {
+        get => _direction;
+        set =>  _direction = value;
+    }
+
+    public void AddChild(MenuButton child)
+    {
+        switch (child.Direction)
+        {
+            case ButtonDirection.Left:
+                _left = child;
+                AddChild(Left);
+                break;
+
+            case ButtonDirection.Right:
+                _right = child;
+                AddChild(Right);
+                break;
+
+            case ButtonDirection.Below:
+                _below = child;
+                AddChild(Below);
+                break;
+
+            case ButtonDirection.Above:
+                break;
+        }
+    }
+
     public void ButtonPressed()
     {
         if ( _isEnabled && Visible )
@@ -71,17 +102,17 @@ public class MenuButton : Node2D
 
             if (_right == null && _left == null )
             {
-                _below?.ParentPressed(ButtonParentDirection.Above, pressed);
+                _below?.ParentPressed(ButtonDirection.Above, pressed);
             }
             else
             {
-                _right?.ParentPressed(ButtonParentDirection.Left, pressed);
-                _left?.ParentPressed(ButtonParentDirection.Right, pressed);
+                _right?.ParentPressed(ButtonDirection.Left, pressed);
+                _left?.ParentPressed(ButtonDirection.Right, pressed);
             }
         }
     }
 
-    public void ParentPressed(ButtonParentDirection parentDirection, bool parentPressed)
+    public void ParentPressed(ButtonDirection parentDirection, bool parentPressed)
     {
         // FIXME - move into position?
         if (_isEnabled)
@@ -93,23 +124,23 @@ public class MenuButton : Node2D
         {
             Visible = false;
             GetNode<Button>("Button").Pressed = false;
-            _below?.ParentPressed(ButtonParentDirection.Above, parentPressed);
-            _right?.ParentPressed(ButtonParentDirection.Left, parentPressed);
-            _left?.ParentPressed(ButtonParentDirection.Right, parentPressed);
+            _below?.ParentPressed(ButtonDirection.Above, parentPressed);
+            _right?.ParentPressed(ButtonDirection.Left, parentPressed);
+            _left?.ParentPressed(ButtonDirection.Right, parentPressed);
         }
 
         switch (parentDirection)
         {
-            case ButtonParentDirection.Above:
-                _below?.ParentPressed(ButtonParentDirection.Above, parentPressed);
+            case ButtonDirection.Above:
+                _below?.ParentPressed(ButtonDirection.Above, parentPressed);
                 break;
 
-            case ButtonParentDirection.Left:
-                _right?.ParentPressed(ButtonParentDirection.Left, parentPressed);
+            case ButtonDirection.Left:
+                _right?.ParentPressed(ButtonDirection.Left, parentPressed);
                 break;
 
-            case ButtonParentDirection.Right:
-                _left?.ParentPressed(ButtonParentDirection.Right, parentPressed);
+            case ButtonDirection.Right:
+                _left?.ParentPressed(ButtonDirection.Right, parentPressed);
                 break;
         }
     }
@@ -118,12 +149,6 @@ public class MenuButton : Node2D
     {
         GetNode<Button>("Button").Text = _unpressedText;
     }
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//
-//  }
 
     public void _on_Button_pressed()
     {

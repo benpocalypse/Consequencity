@@ -73,6 +73,14 @@ public class UserInterface : Control, IObserver
 		// FIXME - in the future only have this watch the features it cares about, not all the features.
 		globals.Features.ForEach(_ => _.Add(this));
 
+		var menuTree = GetNode<MenuTree>("MenuTree");
+		menuTree.New(">", "^");
+		menuTree.RootButton.AddChild(
+			// FIXME - need a .New factory method I think.
+			new MenuButton()
+		)
+
+/*
 		var rootMenuButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
 		MenuButton rootMenuButton = (MenuButton)rootMenuButtonScene.Instance();
 		rootMenuButton.Translate(new Vector2(100, 100));
@@ -114,6 +122,7 @@ public class UserInterface : Control, IObserver
 		AddChild(anotherChildMenuButton);
 		AddChild(rightChildMenuButton);
 		AddChild(rightChildChildMenuButton);
+		*/
 	}
 
 	public override void _Process(float delta)

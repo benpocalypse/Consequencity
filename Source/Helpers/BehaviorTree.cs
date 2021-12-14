@@ -7,12 +7,7 @@ public sealed class BehaviorTree
 {
     public BehaviorNode RootNode = new BehaviorNode(ImmutableList<Action>.Empty);
 
-    public void Update()
-    {
-        ImmutableList<BehaviorNode> nodesToKeep = ImmutableList<BehaviorNode>.Empty;
-
-        RootNode.Children.ForEach(_ => _.Update());
-    }
+    public void Update() => RootNode.Children.ForEach(_ => _.Update());
 }
 
 public sealed class BehaviorNode
@@ -79,6 +74,7 @@ public sealed class BehaviorNode
 
         EntranceCriteriaMet = EntranceCriteria.Evaluate();
 
+        // If we've met our entrance criteria, but haven't performed our actions, do so now.
         if (EntranceCriteriaMet == true && _actionsPerformed == false)
         {
             _actionsPerformed = true;
