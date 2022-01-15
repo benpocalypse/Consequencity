@@ -30,6 +30,13 @@ public class MenuButton : Node2D
         }
     }
 
+    private bool _isRoot = false;
+    public bool IsRoot
+    {
+        get => _isRoot;
+        set => _isRoot = value;
+    }
+
     private bool _isEnabled = false;
     public bool IsEnabled
     {
@@ -65,28 +72,33 @@ public class MenuButton : Node2D
         set =>  _direction = value;
     }
 
-    public void AddChild(MenuButton child)
+    public MenuButton AddChildButton(MenuButton child)
     {
         switch (child.Direction)
         {
             case ButtonDirection.Left:
                 _left = child;
+                _left.Translate(new Vector2(-100, 0));
                 AddChild(Left);
                 break;
 
             case ButtonDirection.Right:
                 _right = child;
+                _right.Translate(new Vector2(100, 0));
                 AddChild(Right);
                 break;
 
             case ButtonDirection.Below:
                 _below = child;
+                _below.Translate(new Vector2(0, 50));
                 AddChild(Below);
                 break;
 
             case ButtonDirection.Above:
                 break;
         }
+
+        return this;
     }
 
     public void ButtonPressed()
@@ -149,6 +161,19 @@ public class MenuButton : Node2D
     {
         GetNode<Button>("Button").Text = _unpressedText;
     }
+
+    public static MenuButton New(string unpressedText, string pressedText)
+    {
+        var buttonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
+
+        var btn = (MenuButton)buttonScene.Instance();
+
+        btn.UnpressedText = unpressedText;
+        btn.PressedText = pressedText;
+
+        return btn;
+    }
+
 
     public void _on_Button_pressed()
     {

@@ -74,11 +74,20 @@ public class UserInterface : Control, IObserver
 		globals.Features.ForEach(_ => _.Add(this));
 
 		var menuTree = GetNode<MenuTree>("MenuTree");
-		menuTree.New(">", "^");
-		menuTree.RootButton.AddChild(
-			// FIXME - need a .New factory method I think.
-			new MenuButton()
-		)
+		menuTree.New("^", ">");
+		menuTree
+			.RootButton
+				.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Below, "I'm below!", "I'm pressed!"))
+					.Below
+					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Below, "I'm below!", "I'm pressed!"))
+					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Right, "I'm Right!", "I'm pressed!"))
+					.Right
+					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Right, "Further Right!", "I'm pressed!"));
+		/*
+		menuTree.RootButton.AddChildButton(
+			MenuButton.New("Please Work", "It worked!").Left.AddChildButton(MenuButton.New("Blerp", "Bling"))
+		);
+		*/
 
 /*
 		var rootMenuButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
