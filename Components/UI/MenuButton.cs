@@ -7,7 +7,6 @@ public class MenuButton : Node2D
     {
         Left,
         Right,
-        Above,
         Below
     };
 
@@ -30,11 +29,18 @@ public class MenuButton : Node2D
         }
     }
 
-    private bool _isRoot = false;
-    public bool IsRoot
+    private bool _isRootNode = false;
+    public bool IsRootNode
     {
-        get => _isRoot;
-        set => _isRoot = value;
+        get => _isRootNode;
+        set => _isRootNode = value;
+    }
+
+    private int _rootParentId = 0;
+    public int RootParentId
+    {
+        get => _rootParentId;
+        set => _rootParentId = value;
     }
 
     private bool _isEnabled = false;
@@ -93,9 +99,6 @@ public class MenuButton : Node2D
                 _below.Translate(new Vector2(0, 50));
                 AddChild(Below);
                 break;
-
-            case ButtonDirection.Above:
-                break;
         }
 
         return this;
@@ -105,55 +108,41 @@ public class MenuButton : Node2D
     {
         if ( _isEnabled && Visible )
         {
-            var pressed = GetNode<Button>("Button").Pressed;
+            var button = GetNode<Button>("Button");
 
-            GetNode<Button>("Button").Text = !pressed ? _unpressedText :
+            button.Text = !button.Pressed ? _unpressedText :
                 _pressedText == string.Empty ?
                     _unpressedText :
                     _pressedText;
 
-            if (_right == null && _left == null )
-            {
-                _below?.ParentPressed(ButtonDirection.Above, pressed);
-            }
-            else
-            {
-                _right?.ParentPressed(ButtonDirection.Left, pressed);
-                _left?.ParentPressed(ButtonDirection.Right, pressed);
-            }
+            _left?.ParentPressed(ButtonDirection.Left, IsRootNode, RootParentId, button.Pressed);
+            _right?.ParentPressed(ButtonDirection.Right, IsRootNode, RootParentId, button.Pressed);
+            _below?.ParentPressed(ButtonDirection.Below, IsRootNode, RootParentId, button.Pressed);
         }
     }
 
-    public void ParentPressed(ButtonDirection parentDirection, bool parentPressed)
+    public void ParentPressed(ButtonDirection parentDirection, bool isRooteNode, int rootPressedId, bool parentPressed)
     {
         // FIXME - move into position?
-        if (_isEnabled)
+        if (_isEnabled && (rootPressedId <= RootParentId || rootPressedId == 0) && isRooteNode == true)
         {
-            Visible = !Visible;
-        }
+            switch (parentDirection)
+            {
+                case ButtonDirection.Below:
+                    _below?.ParentPressed(ButtonDirection.Below, isRooteNode, rootPressedId, parentPressed);
+                    Visible = !Visible;
+                    break;
 
-        if (parentPressed == false)
-        {
-            Visible = false;
-            GetNode<Button>("Button").Pressed = false;
-            _below?.ParentPressed(ButtonDirection.Above, parentPressed);
-            _right?.ParentPressed(ButtonDirection.Left, parentPressed);
-            _left?.ParentPressed(ButtonDirection.Right, parentPressed);
-        }
+                case ButtonDirection.Left:
+                    _left?.ParentPressed(ButtonDirection.Left, isRooteNode, rootPressedId, parentPressed);
+                    Visible = !Visible;
+                    break;
 
-        switch (parentDirection)
-        {
-            case ButtonDirection.Above:
-                _below?.ParentPressed(ButtonDirection.Above, parentPressed);
-                break;
-
-            case ButtonDirection.Left:
-                _right?.ParentPressed(ButtonDirection.Left, parentPressed);
-                break;
-
-            case ButtonDirection.Right:
-                _left?.ParentPressed(ButtonDirection.Right, parentPressed);
-                break;
+                case ButtonDirection.Right:
+                    _right?.ParentPressed(ButtonDirection.Right, isRooteNode, rootPressedId, parentPressed);
+                    Visible = !Visible;
+                    break;
+            }
         }
     }
 
@@ -162,18 +151,11 @@ public class MenuButton : Node2D
         GetNode<Button>("Button").Text = _unpressedText;
     }
 
-    public static MenuButton New(string unpressedText, string pressedText)
+    public MenuButton WithVisibility(bool visibility)
     {
-        var buttonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
-
-        var btn = (MenuButton)buttonScene.Instance();
-
-        btn.UnpressedText = unpressedText;
-        btn.PressedText = pressedText;
-
-        return btn;
+        Visible = visibility;
+        return this;
     }
-
 
     public void _on_Button_pressed()
     {

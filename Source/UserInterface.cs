@@ -74,64 +74,57 @@ public class UserInterface : Control, IObserver
 		globals.Features.ForEach(_ => _.Add(this));
 
 		var menuTree = GetNode<MenuTree>("MenuTree");
-		menuTree.New("^", ">");
+		menuTree.New(">", "^");
 		menuTree
 			.RootButton
-				.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Below, "I'm below!", "I'm pressed!"))
-					.Below
-					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Below, "I'm below!", "I'm pressed!"))
-					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Right, "I'm Right!", "I'm pressed!"))
-					.Right
-					.AddChildButton(menuTree.NewButton(MenuButton.ButtonDirection.Right, "Further Right!", "I'm pressed!"));
-		/*
-		menuTree.RootButton.AddChildButton(
-			MenuButton.New("Please Work", "It worked!").Left.AddChildButton(MenuButton.New("Blerp", "Bling"))
-		);
-		*/
-
-/*
-		var rootMenuButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
-		MenuButton rootMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		rootMenuButton.Translate(new Vector2(100, 100));
-		rootMenuButton.IsEnabled = true;
-		rootMenuButton.UnpressedText = ">";
-		rootMenuButton.PressedText = "^";
-
-		MenuButton firstChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		firstChildMenuButton.Translate(new Vector2(100, 150));
-		firstChildMenuButton.UnpressedText = "Child Button";
-		firstChildMenuButton.Visible = false;
-		firstChildMenuButton.IsEnabled = true;
-
-		MenuButton anotherChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		anotherChildMenuButton.Translate(new Vector2(100, 200));
-		anotherChildMenuButton.UnpressedText = "Lower Child";
-		anotherChildMenuButton.Visible = false;
-		anotherChildMenuButton.IsEnabled = true;
-
-		MenuButton rightChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		rightChildMenuButton.Translate(new Vector2(200, 150));
-		rightChildMenuButton.UnpressedText = "Right Button";
-		rightChildMenuButton.Visible = false;
-		rightChildMenuButton.IsEnabled = true;
-
-		MenuButton rightChildChildMenuButton = (MenuButton)rootMenuButtonScene.Instance();
-		rightChildChildMenuButton.Translate(new Vector2(200, 200));
-		rightChildChildMenuButton.UnpressedText = "Right Child";
-		rightChildChildMenuButton.Visible = false;
-		rightChildChildMenuButton.IsEnabled = true;
-
-		rootMenuButton.Below = firstChildMenuButton;
-		firstChildMenuButton.Below = anotherChildMenuButton;
-		firstChildMenuButton.Right = rightChildMenuButton;
-		rightChildMenuButton.Below = rightChildChildMenuButton;
-
-		AddChild(rootMenuButton);
-		AddChild(firstChildMenuButton);
-		AddChild(anotherChildMenuButton);
-		AddChild(rightChildMenuButton);
-		AddChild(rightChildChildMenuButton);
-		*/
+				.AddChildButton(
+					menuTree.NewButton(
+						direction: MenuButton.ButtonDirection.Below,
+						unpressedText: "I'm below1_1!",
+						pressedText: "I'm pressed!",
+						isRootNode: false,
+						rootParentId: 1)
+						)
+					.Below.AddChildButton(
+						menuTree.NewButton(
+							direction: MenuButton.ButtonDirection.Below,
+							unpressedText: "I'm below2_2!",
+							pressedText: "I'm pressed!",
+							isRootNode: true,
+							rootParentId: 2)
+							)
+					.Below.AddChildButton(
+						menuTree.NewButton(
+							direction: MenuButton.ButtonDirection.Below,
+							unpressedText: "I'm below3_1",
+							pressedText: "I'm pressed!",
+							isRootNode: false,
+							rootParentId: 1)
+							)
+					.AddChildButton(
+						menuTree.NewButton(
+							direction: MenuButton.ButtonDirection.Right,
+							unpressedText: "I'm Right!_2",
+							pressedText: "I'm pressed!",
+							isRootNode: false,
+							rootParentId: 2)
+							)
+						.Right.AddChildButton(
+							menuTree.NewButton(
+								direction: MenuButton.ButtonDirection.Right,
+								unpressedText: "Further Right!_2",
+								pressedText: "I'm pressed!",
+								isRootNode: true,
+								rootParentId: 2)
+								.AddChildButton(
+									menuTree.NewButton(
+										direction: MenuButton.ButtonDirection.Below,
+										unpressedText: "Further Below!_3",
+										pressedText: "I'm pressed!",
+										isRootNode: false,
+										rootParentId: 3)
+								)
+							);
 	}
 
 	public override void _Process(float delta)
