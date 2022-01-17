@@ -108,7 +108,7 @@ public class MenuButton : Node2D
     {
         if ( _isEnabled && Visible )
         {
-            var button = GetNode<Button>("Button");
+            var button = GetNode<Button>("Path2D/PathFollow2D/Button");
 
             button.Text = !button.Pressed ? _unpressedText :
                 _pressedText == string.Empty ?
@@ -148,7 +148,8 @@ public class MenuButton : Node2D
 
     public override void _Ready()
     {
-        GetNode<Button>("Button").Text = _unpressedText;
+        GetNode<Button>("Path2D/PathFollow2D/Button").Text = _unpressedText;
+        GetNode<Path2D>("Path2D").Curve.AddPoint(new Vector2(0,0));
     }
 
     public MenuButton WithVisibility(bool visibility)

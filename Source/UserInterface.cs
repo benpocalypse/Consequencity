@@ -145,11 +145,6 @@ public class UserInterface : Control, IObserver
 
 				if (rootPathFollow2d.Offset >= 47)
 				{
-					if (rootChild.GetType().ToString() == "Godot.Button")
-					{
-						//((BaseButton)rootChild).Disabled = false;
-					}
-
 					var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
 					childPathFollow2d.Offset += 150 * delta;
 
