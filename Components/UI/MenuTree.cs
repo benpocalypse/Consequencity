@@ -39,6 +39,25 @@ public class MenuTree : Node2D
         newButton.RootParentId = rootParentId;
         newButton.PressedText = pressedText;
 
+        var curve = newButton.GetNode<Path2D>("Path2D").Curve;
+        curve.ClearPoints();
+        curve.AddPoint(new Vector2(0,0));
+
+        switch (direction)
+        {
+            case MenuButton.ButtonDirection.Left:
+                curve.AddPoint(new Vector2(-100,0));
+                break;
+
+            case MenuButton.ButtonDirection.Right:
+                curve.AddPoint(new Vector2(100, 0));
+                break;
+
+            case MenuButton.ButtonDirection.Below:
+                curve.AddPoint(new Vector2(0, 50));
+                break;
+        }
+
         return newButton;
     }
 

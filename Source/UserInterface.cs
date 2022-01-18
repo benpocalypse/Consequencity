@@ -71,7 +71,7 @@ public class UserInterface : Control, IObserver
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 
 		// FIXME - in the future only have this watch the features it cares about, not all the features.
-		globals.Features.ForEach(_ => _.Add(this));
+		globals.Features.ForEach(feature => feature.Add(this));
 
 		var menuTree = GetNode<MenuTree>("MenuTree");
 		menuTree.New(">", "^");

@@ -148,14 +148,16 @@ public class MenuButton : Node2D
 
     public override void _Ready()
     {
-        GetNode<Button>("Path2D/PathFollow2D/Button").Text = _unpressedText;
-        GetNode<Path2D>("Path2D").Curve.AddPoint(new Vector2(0,0));
+        this.GetNode<Button>("Path2D/PathFollow2D/Button").Text = _unpressedText;
     }
 
-    public MenuButton WithVisibility(bool visibility)
+    public override void _Process(float delta)
     {
-        Visible = visibility;
-        return this;
+        if (Visible == true)
+        {
+            var rootPathFollow2d = GetNode<PathFollow2D>("Path2D/PathFollow2D");
+            rootPathFollow2d.Offset += 150 * delta;
+        }
     }
 
     public void _on_Button_pressed()
