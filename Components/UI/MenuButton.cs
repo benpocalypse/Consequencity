@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public class MenuButton : Node2D
 {
@@ -84,22 +85,24 @@ public class MenuButton : Node2D
         {
             case ButtonDirection.Left:
                 _left = child;
-                _left.Translate(new Vector2(-100, 0));
-                AddChild(Left);
+                //_left.Translate(new Vector2(-100, 0));
+                //AddChild(Left);
                 break;
 
             case ButtonDirection.Right:
                 _right = child;
-                _right.Translate(new Vector2(100, 0));
-                AddChild(Right);
+                //_right.Translate(new Vector2(100, 0));
+                //AddChild(Right);
                 break;
 
             case ButtonDirection.Below:
                 _below = child;
-                _below.Translate(new Vector2(0, 50));
-                AddChild(Below);
+                //_below.Translate(new Vector2(0, 50));
+                //AddChild(Below);
                 break;
         }
+
+        AddChild(child);
 
         return this;
     }
@@ -155,8 +158,15 @@ public class MenuButton : Node2D
     {
         if (Visible == true)
         {
-            var rootPathFollow2d = GetNode<PathFollow2D>("Path2D/PathFollow2D");
+            if (Direction == ButtonDirection.Right)
+            {
+                Debugger.Break();
+            }
+            var rootPathFollow2d = this.GetNode<PathFollow2D>("Path2D/PathFollow2D");
             rootPathFollow2d.Offset += 150 * delta;
+            var curve = this.GetNode<Path2D>("Path2D").Curve;
+            var test = curve.GetPointCount();
+            GD.Print($"Button = {this.GetNode<Button>("Path2D/PathFollow2D/Button").Text} = {Direction}");
         }
     }
 

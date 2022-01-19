@@ -23,6 +23,10 @@ public class MenuTree : Node2D
             RootButton.UnpressedText = unpressedText;
             RootButton.PressedText = pressedText;
             RootButton.RootParentId = 0;
+
+            var curve = RootButton.GetNode<Path2D>("Path2D").Curve;
+            curve.ClearPoints();
+
             AddChild(RootButton);
         }
     }
@@ -31,6 +35,7 @@ public class MenuTree : Node2D
     {
         var newButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
         var newButton = (MenuButton)newButtonScene.Instance();
+        GD.Print($"newButton.Id = {newButton.NativeInstance}");
         newButton.Direction = direction;
         newButton.IsEnabled = true;
         newButton.Visible = false;
@@ -47,16 +52,21 @@ public class MenuTree : Node2D
         {
             case MenuButton.ButtonDirection.Left:
                 curve.AddPoint(new Vector2(-100,0));
+                newButton.Translate(new Vector2(-100, 0));
                 break;
 
             case MenuButton.ButtonDirection.Right:
                 curve.AddPoint(new Vector2(100, 0));
+                newButton.Translate(new Vector2(100, 0));
                 break;
 
             case MenuButton.ButtonDirection.Below:
                 curve.AddPoint(new Vector2(0, 50));
+                newButton.Translate(new Vector2(0, 50));
                 break;
         }
+
+        AddChild(newButton);
 
         return newButton;
     }
