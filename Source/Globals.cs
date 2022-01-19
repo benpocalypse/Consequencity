@@ -142,7 +142,7 @@ public class Globals : Node
 			Notifications.New(
 				type: NotificationType.Actionable,
 				icon: NotificationManager.NotificationIconType.Question,
-				text: $"You chose {decisionText} to letting people live on the island.");
+				text: $"You chose {decisionText.ToLower()} to letting people live on the island.");
 		}
 	}
 

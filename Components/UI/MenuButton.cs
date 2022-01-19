@@ -1,8 +1,7 @@
-using Godot;
 using System;
 using System.Diagnostics;
 
-public class MenuButton : Node2D
+public class MenuButton
 {
     public enum ButtonDirection
     {
@@ -29,6 +28,11 @@ public class MenuButton : Node2D
             _pressedText = value;
         }
     }
+
+    // FIXME - Godot overrides.
+    public bool Visible = true;
+    public bool Pressed = false;
+    public string Text = string.Empty;
 
     private bool _isRootNode = false;
     public bool IsRootNode
@@ -79,6 +83,15 @@ public class MenuButton : Node2D
         set =>  _direction = value;
     }
 
+    public MenuButton(ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
+    {
+        _direction = direction;
+        _unpressedText = unpressedText;
+        _pressedText = pressedText;
+        _isRootNode = isRootNode;
+        _rootParentId = rootParentId;
+    }
+
     public MenuButton AddChildButton(MenuButton child)
     {
         switch (child.Direction)
@@ -102,7 +115,7 @@ public class MenuButton : Node2D
                 break;
         }
 
-        AddChild(child);
+        //AddChild(child);
 
         return this;
     }
@@ -111,16 +124,14 @@ public class MenuButton : Node2D
     {
         if ( _isEnabled && Visible )
         {
-            var button = GetNode<Button>("Path2D/PathFollow2D/Button");
-
-            button.Text = !button.Pressed ? _unpressedText :
+            Text = !Pressed ? _unpressedText :
                 _pressedText == string.Empty ?
                     _unpressedText :
                     _pressedText;
 
-            _left?.ParentPressed(ButtonDirection.Left, IsRootNode, RootParentId, button.Pressed);
-            _right?.ParentPressed(ButtonDirection.Right, IsRootNode, RootParentId, button.Pressed);
-            _below?.ParentPressed(ButtonDirection.Below, IsRootNode, RootParentId, button.Pressed);
+            _left?.ParentPressed(ButtonDirection.Left, IsRootNode, RootParentId, Pressed);
+            _right?.ParentPressed(ButtonDirection.Right, IsRootNode, RootParentId, Pressed);
+            _below?.ParentPressed(ButtonDirection.Below, IsRootNode, RootParentId, Pressed);
         }
     }
 
@@ -146,27 +157,6 @@ public class MenuButton : Node2D
                     Visible = !Visible;
                     break;
             }
-        }
-    }
-
-    public override void _Ready()
-    {
-        this.GetNode<Button>("Path2D/PathFollow2D/Button").Text = _unpressedText;
-    }
-
-    public override void _Process(float delta)
-    {
-        if (Visible == true)
-        {
-            if (Direction == ButtonDirection.Right)
-            {
-                Debugger.Break();
-            }
-            var rootPathFollow2d = this.GetNode<PathFollow2D>("Path2D/PathFollow2D");
-            rootPathFollow2d.Offset += 150 * delta;
-            var curve = this.GetNode<Path2D>("Path2D").Curve;
-            var test = curve.GetPointCount();
-            GD.Print($"Button = {this.GetNode<Button>("Path2D/PathFollow2D/Button").Text} = {Direction}");
         }
     }
 

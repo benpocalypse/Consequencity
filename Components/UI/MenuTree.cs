@@ -3,6 +3,9 @@ using System;
 
 public class MenuTree : Node2D
 {
+    private int _numVertical = 1;
+    private int _numHorizontal = 1;
+
     private bool _isReady = false;
     public MenuButton RootButton;
 
@@ -52,17 +55,19 @@ public class MenuTree : Node2D
         {
             case MenuButton.ButtonDirection.Left:
                 curve.AddPoint(new Vector2(-100,0));
-                newButton.Translate(new Vector2(-100, 0));
+                newButton.Translate(new Vector2(-100, 50 * _numVertical));
                 break;
 
             case MenuButton.ButtonDirection.Right:
                 curve.AddPoint(new Vector2(100, 0));
-                newButton.Translate(new Vector2(100, 0));
+                newButton.Translate(new Vector2(100 * _numHorizontal, 50 * _numVertical));
+                _numHorizontal += 1;
                 break;
 
             case MenuButton.ButtonDirection.Below:
                 curve.AddPoint(new Vector2(0, 50));
-                newButton.Translate(new Vector2(0, 50));
+                newButton.Translate(new Vector2(0, 50 * _numVertical));
+                _numVertical += 1;
                 break;
         }
 

@@ -76,6 +76,7 @@ public class UserInterface : Control, IObserver
 		var menuTree = GetNode<MenuTree>("MenuTree");
 		menuTree.New(">", "^");
 
+	/*
 		var childButton = menuTree.NewButton(
 			direction: MenuButton.ButtonDirection.Below,
 			unpressedText: "I'm below1_1!",
@@ -92,8 +93,9 @@ public class UserInterface : Control, IObserver
 			rootParentId: 2);
 
 		menuTree.RootButton.Below.AddChildButton(childButton);
+		*/
 
-		/*
+
 		menuTree
 			.RootButton
 				.AddChildButton(
@@ -145,7 +147,7 @@ public class UserInterface : Control, IObserver
 								)
 							);
 
-							*/
+
 	}
 
 	public override void _Process(float delta)
