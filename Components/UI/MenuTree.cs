@@ -16,6 +16,15 @@ public class MenuTree : Node2D
 
     public void New(string unpressedText, string pressedText)
     {
+        RootButton = new MenuButton(
+            direction: MenuButton.ButtonDirection.Below,
+            unpressedText: unpressedText,
+            pressedText: pressedText,
+            isRootNode: true,
+            rootParentId: 0
+        );
+
+        /*
         if (_isReady)
         {
             var rootButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
@@ -32,8 +41,10 @@ public class MenuTree : Node2D
 
             AddChild(RootButton);
         }
+        */
     }
 
+/*
     public MenuButton NewButton(MenuButton.ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
     {
         var newButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
@@ -75,6 +86,7 @@ public class MenuTree : Node2D
 
         return newButton;
     }
+*/
 
 //  public override void _Process(float delta)
 //  {

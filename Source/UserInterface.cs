@@ -99,7 +99,7 @@ public class UserInterface : Control, IObserver
 		menuTree
 			.RootButton
 				.AddChildButton(
-					menuTree.NewButton(
+					new MenuButton(
 						direction: MenuButton.ButtonDirection.Below,
 						unpressedText: "I'm below1_1!",
 						pressedText: "I'm pressed!",
@@ -107,7 +107,7 @@ public class UserInterface : Control, IObserver
 						rootParentId: 1)
 						)
 					.Below.AddChildButton(
-						menuTree.NewButton(
+						new MenuButton(
 							direction: MenuButton.ButtonDirection.Below,
 							unpressedText: "I'm below2_2!",
 							pressedText: "I'm pressed!",
@@ -115,7 +115,7 @@ public class UserInterface : Control, IObserver
 							rootParentId: 2)
 							)
 					.Below.AddChildButton(
-						menuTree.NewButton(
+						new MenuButton(
 							direction: MenuButton.ButtonDirection.Below,
 							unpressedText: "I'm below3_1",
 							pressedText: "I'm pressed!",
@@ -123,7 +123,7 @@ public class UserInterface : Control, IObserver
 							rootParentId: 1)
 							)
 					.AddChildButton(
-						menuTree.NewButton(
+						new MenuButton(
 							direction: MenuButton.ButtonDirection.Right,
 							unpressedText: "I'm Right!_2",
 							pressedText: "I'm pressed!",
@@ -131,14 +131,14 @@ public class UserInterface : Control, IObserver
 							rootParentId: 2)
 							)
 						.Right.AddChildButton(
-							menuTree.NewButton(
+							new MenuButton(
 								direction: MenuButton.ButtonDirection.Right,
 								unpressedText: "Further Right!_2",
 								pressedText: "I'm pressed!",
 								isRootNode: true,
 								rootParentId: 2)
 								.AddChildButton(
-									menuTree.NewButton(
+									new MenuButton(
 										direction: MenuButton.ButtonDirection.Below,
 										unpressedText: "Further Below!_3",
 										pressedText: "I'm pressed!",

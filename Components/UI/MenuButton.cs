@@ -83,6 +83,7 @@ public class MenuButton
         set =>  _direction = value;
     }
 
+    public delegate void ButtonCreated();
     public MenuButton(ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
     {
         _direction = direction;
@@ -90,6 +91,8 @@ public class MenuButton
         _pressedText = pressedText;
         _isRootNode = isRootNode;
         _rootParentId = rootParentId;
+
+        this?.ButtonCreated();
     }
 
     public MenuButton AddChildButton(MenuButton child)
