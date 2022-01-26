@@ -3,9 +3,6 @@ using System;
 
 public class MenuTree : Node2D
 {
-    private int _numVertical = 1;
-    private int _numHorizontal = 1;
-
     private bool _isReady = false;
     public MenuButton RootButton;
 
@@ -42,6 +39,45 @@ public class MenuTree : Node2D
             AddChild(RootButton);
         }
         */
+    }
+
+    public void Visualize(MenuButton node, int xOffset, int yOffset)
+    {
+        var visualButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButtonVisual.tscn");
+        var newButton = (MenuButtonVisual)visualButtonScene.Instance();
+        newButton.Translate(new Vector2(xOffset, yOffset));
+        AddChild(newButton);
+
+        int numChildren = 3;
+        while (numChildren > 0)
+        {
+            if (node.Left != null)
+            {
+                Visualize(node.Left, xOffset - 100, yOffset + 0);
+            }
+            else
+            {
+                numChildren = 2;
+            }
+
+            if (node.Right != null)
+            {
+                Visualize(node.Right, xOffset + 100, yOffset + 0);
+            }
+            else
+            {
+                numChildren = 1;
+            }
+
+            if (node.Below != null)
+            {
+                Visualize(node.Below, xOffset + 0, yOffset + 50);
+            }
+            else
+            {
+                numChildren = 0;
+            }
+        }
     }
 
 /*

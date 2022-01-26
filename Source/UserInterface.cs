@@ -147,7 +147,7 @@ public class UserInterface : Control, IObserver
 								)
 							);
 
-
+		menuTree.Visualize(menuTree.RootButton, 0, 0);
 	}
 
 	public override void _Process(float delta)

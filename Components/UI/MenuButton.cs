@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
-public class MenuButton
+public class MenuButton : IObservable, IObserver
 {
     public enum ButtonDirection
     {
@@ -83,7 +85,6 @@ public class MenuButton
         set =>  _direction = value;
     }
 
-    public delegate void ButtonCreated();
     public MenuButton(ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
     {
         _direction = direction;
@@ -91,8 +92,6 @@ public class MenuButton
         _pressedText = pressedText;
         _isRootNode = isRootNode;
         _rootParentId = rootParentId;
-
-        this?.ButtonCreated();
     }
 
     public MenuButton AddChildButton(MenuButton child)
@@ -166,5 +165,28 @@ public class MenuButton
     public void _on_Button_pressed()
     {
         this.ButtonPressed();
+    }
+
+    // Observable
+    private ImmutableList<IObserver> _observers = ImmutableList<IObserver>.Empty;
+    public void Add(IObserver observer)
+    {
+        _observers = _observers.Add(observer);
+    }
+
+    public void Remove(IObserver observer)
+    {
+        _observers = _observers.Remove(observer);
+    }
+
+    public void Notify()
+    {
+        _observers.ForEach(obs => obs.PropertyChanged(this));
+    }
+
+    // Observer
+    public void PropertyChanged(IObservable observable)
+    {
+
     }
 }
