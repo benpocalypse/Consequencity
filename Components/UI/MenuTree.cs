@@ -45,38 +45,27 @@ public class MenuTree : Node2D
     {
         var visualButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButtonVisual.tscn");
         var newButton = (MenuButtonVisual)visualButtonScene.Instance();
+
+        // FIXME - move this concern into the MenuButtonVisual node
+        var button = newButton.GetNode<Button>("Path2D/PathFollow2D/Button");
+        button.Text = node.UnpressedText;
+
         newButton.Translate(new Vector2(xOffset, yOffset));
         AddChild(newButton);
 
-        int numChildren = 3;
-        while (numChildren > 0)
+        if (node.Left != null)
         {
-            if (node.Left != null)
-            {
-                Visualize(node.Left, xOffset - 100, yOffset + 0);
-            }
-            else
-            {
-                numChildren = 2;
-            }
+            Visualize(node.Left, xOffset - 100, yOffset + 0);
+        }
 
-            if (node.Right != null)
-            {
-                Visualize(node.Right, xOffset + 100, yOffset + 0);
-            }
-            else
-            {
-                numChildren = 1;
-            }
+        if (node.Right != null)
+        {
+            Visualize(node.Right, xOffset + 100, yOffset + 0);
+        }
 
-            if (node.Below != null)
-            {
-                Visualize(node.Below, xOffset + 0, yOffset + 50);
-            }
-            else
-            {
-                numChildren = 0;
-            }
+        if (node.Below != null)
+        {
+            Visualize(node.Below, xOffset + 0, yOffset + 50);
         }
     }
 
