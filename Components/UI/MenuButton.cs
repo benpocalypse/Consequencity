@@ -85,6 +85,13 @@ public class MenuButton : IObservable, IObserver
         set =>  _direction = value;
     }
 
+    private Action _actionToPeform = null;
+    public Action ActionToPerform
+    {
+        get => _actionToPeform;
+        set => _actionToPeform = value;
+    }
+
     public MenuButton(ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
     {
         _direction = direction;
@@ -92,6 +99,28 @@ public class MenuButton : IObservable, IObserver
         _pressedText = pressedText;
         _isRootNode = isRootNode;
         _rootParentId = rootParentId;
+    }
+
+    public MenuButton(ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId, Action newAction)
+    {
+        _direction = direction;
+        _unpressedText = unpressedText;
+        _pressedText = pressedText;
+        _isRootNode = isRootNode;
+        _rootParentId = rootParentId;
+        _actionToPeform = newAction;
+    }
+
+    public MenuButton WithAction(Action newAction)
+    {
+        this._actionToPeform = newAction;
+        return this;
+    }
+
+    public MenuButton WithIsEnabled(bool enabled)
+    {
+        this._isEnabled = enabled;
+        return this;
     }
 
     public MenuButton AddChildButton(MenuButton child)
@@ -116,7 +145,8 @@ public class MenuButton : IObservable, IObserver
 
     public void ButtonPressed()
     {
-        if ( _isEnabled && Visible )
+        //if ( _isEnabled && Visible )
+        if (Visible)
         {
             Pressed = !Pressed;
             Text = !Pressed ? _unpressedText :
@@ -134,8 +164,8 @@ public class MenuButton : IObservable, IObserver
 
     public void ParentPressed(ButtonDirection parentDirection, bool isRooteNode, int rootPressedId)
     {
-        // FIXME - move into position?
-        if (_isEnabled && (rootPressedId <= RootParentId || rootPressedId == 0) && isRooteNode == true)
+        //if (_isEnabled && (rootPressedId <= RootParentId || rootPressedId == 0) && isRooteNode == true)
+        if ((rootPressedId <= RootParentId || rootPressedId == 0) && isRooteNode == true)
         {
             switch (parentDirection)
             {
@@ -180,6 +210,14 @@ public class MenuButton : IObservable, IObserver
     // Observer
     public void PropertyChanged(IObservable observable)
     {
-        ButtonPressed();
+        // FIXME - Buttons will also need to watch for when GameFeatures change to enable/disable themselves.
+        if (observable is GameFeature feature)
+        {
+
+        }
+        else
+        {
+            ButtonPressed();
+        }
     }
 }

@@ -84,10 +84,51 @@ public class UserInterface : Control, IObserver
 				.AddChildButton(
 					new MenuButton(
 						direction: MenuButton.ButtonDirection.Below,
-						unpressedText: "I'm below1_1!",
-						pressedText: "I'm pressed!",
-						isRootNode: false,
-						rootParentId: 1)
+						unpressedText: "Zone",
+						pressedText: "Zone",
+						isRootNode: true,
+						rootParentId: 2)
+						.AddChildButton(
+							new MenuButton(
+								direction: MenuButton.ButtonDirection.Right,
+								unpressedText: "Residential",
+								pressedText: "Residential",
+								isRootNode: true,
+								rootParentId: 4)
+								.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning).BooleanFeature.Value)
+								.AddChildButton(
+									new MenuButton(
+										direction: MenuButton.ButtonDirection.Right,
+										unpressedText: "Agricultural",
+										pressedText: "Agricultural",
+										isRootNode: false,
+										rootParentId: 3)
+										.AddChildButton(
+											new MenuButton(
+												direction: MenuButton.ButtonDirection.Right,
+												unpressedText: "Commercial",
+												pressedText: "Commercial",
+												isRootNode: false,
+												rootParentId: 3)
+												.AddChildButton(
+												new MenuButton(
+													direction: MenuButton.ButtonDirection.Right,
+													unpressedText: "Industrial",
+													pressedText: "Industrial",
+													isRootNode: false,
+													rootParentId: 3)
+											)
+										)
+								)
+								/*.AddChildButton(
+									new MenuButton(
+										direction: MenuButton.ButtonDirection.Below,
+										unpressedText: "Low",
+										pressedText: "Low",
+										isRootNode: false,
+										rootParentId: 5)
+								)*/
+							)
 						)
 					.Below.AddChildButton(
 						new MenuButton(
@@ -95,7 +136,7 @@ public class UserInterface : Control, IObserver
 							unpressedText: "I'm below2_2!",
 							pressedText: "I'm pressed!",
 							isRootNode: true,
-							rootParentId: 2)
+							rootParentId: 1)
 							)
 					.Below.AddChildButton(
 						new MenuButton(

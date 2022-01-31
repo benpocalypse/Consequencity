@@ -4,45 +4,6 @@ using System.Collections.Immutable;
 
 public class MenuButtonVisual : Node2D, IObserver, IObservable
 {
-    // Observable
-    private ImmutableList<IObserver> _observers = ImmutableList<IObserver>.Empty;
-    public void AddObserver(IObserver observer)
-    {
-        _observers = _observers.Add(observer);
-    }
-
-    public void RemoveObserver(IObserver observer)
-    {
-        _observers = _observers.Remove(observer);
-    }
-
-    public void Notify()
-    {
-        _observers.ForEach(obs => obs.PropertyChanged(null));
-    }
-
-    // Observer
-    public void PropertyChanged(IObservable observable)
-    {
-        if (observable is MenuButton button)
-        {
-            var godotButton = this.GetNode<Button>("Path2D/PathFollow2D/Button");
-
-            if (button.Visible == false)
-            {
-                SlidingIn = false;
-                SlidingOut = true;
-            }
-            else
-            {
-                godotButton.Visible = button.Visible;
-            }
-            godotButton.Text = button.Pressed ?
-                                button.PressedText :
-                                button.UnpressedText;
-        }
-    }
-
     public bool SlidingIn = true;
     public bool SlidingOut = false;
 
@@ -85,6 +46,48 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
                 SlidingOut = false;
                 SlidingIn = true;
             }
+        }
+    }
+
+    // Observable
+    private ImmutableList<IObserver> _observers = ImmutableList<IObserver>.Empty;
+    public void AddObserver(IObserver observer)
+    {
+        _observers = _observers.Add(observer);
+    }
+
+    public void RemoveObserver(IObserver observer)
+    {
+        _observers = _observers.Remove(observer);
+    }
+
+    public void Notify()
+    {
+        _observers.ForEach(obs => obs.PropertyChanged(null));
+    }
+
+    // Observer
+    public void PropertyChanged(IObservable observable)
+    {
+        if (observable is MenuButton button)
+        {
+            var godotButton = this.GetNode<Button>("Path2D/PathFollow2D/Button");
+
+            if (button.Visible == false)
+            {
+                SlidingIn = false;
+                SlidingOut = true;
+            }
+            else
+            {
+                godotButton.Visible = button.Visible;
+            }
+
+            godotButton.Disabled = !button.IsEnabled;
+
+            godotButton.Text = button.Pressed ?
+                                button.PressedText :
+                                button.UnpressedText;
         }
     }
 }
