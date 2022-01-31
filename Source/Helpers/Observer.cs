@@ -10,7 +10,7 @@ public interface IObserver
 
 public interface IObservable
 {
-    void Add(IObserver observer);
-    void Remove(IObserver observer);
+    void AddObserver(IObserver observer);
+    void RemoveObserver(IObserver observer);
     void Notify();
 }

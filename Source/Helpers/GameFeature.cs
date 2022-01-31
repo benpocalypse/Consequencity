@@ -68,12 +68,12 @@ public sealed class GameFeature : IObservable
         return this;
     }
 
-    public void Add(IObserver observer)
+    public void AddObserver(IObserver observer)
     {
         _observers = _observers.Add(observer);
     }
 
-    public void Remove(IObserver observer)
+    public void RemoveObserver(IObserver observer)
     {
         _observers = _observers.Remove(observer);
     }

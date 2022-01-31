@@ -14,7 +14,6 @@ public class ThreeDTest : Spatial
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 		cameraBase = ((Spatial)this.GetNode("Cambase"));
 		camera = ((Camera)cameraBase.GetNode("Camera"));
-		GetNode("UiLayer").GetNode("UserInterface").Connect("On_ResidentialButton_pressed", this, nameof(On_ResidentialButton_pressed));
 		PopulateEngineMap();
 	}
 
@@ -272,13 +271,6 @@ public class ThreeDTest : Spatial
 
 			// FIXME - We don't have "delete" implemented correctly.
 		}
-	}
-
-	// FIXME - Remove this, this was just for testing.
-	private void On_ResidentialButton_pressed()
-	{
-		GD.Print("Residential Button pressed!");
-		GD.Print($"PlacementMode = {globals.PlacementMode}");
 	}
 
 	public void PopulateEngineMap()

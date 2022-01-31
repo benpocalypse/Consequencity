@@ -80,7 +80,7 @@ public sealed class EconomicEngine : IObserver
 			Agents.Add(new Agent());
 		}
 
-		featuresToWatch.ForEach(_ => _.Add(this));
+		featuresToWatch.ForEach(_ => _.AddObserver(this));
 	}
 
 	public void Update(float timeStep)

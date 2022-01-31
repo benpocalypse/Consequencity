@@ -20,38 +20,49 @@ public class MenuTree : Node2D
             isRootNode: true,
             rootParentId: 0
         );
-
-        /*
-        if (_isReady)
-        {
-            var rootButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
-            RootButton = (MenuButton)rootButtonScene.Instance();
-            RootButton.Direction = MenuButton.ButtonDirection.Below;
-            RootButton.IsEnabled = true;
-            RootButton.IsRootNode = true;
-            RootButton.UnpressedText = unpressedText;
-            RootButton.PressedText = pressedText;
-            RootButton.RootParentId = 0;
-
-            var curve = RootButton.GetNode<Path2D>("Path2D").Curve;
-            curve.ClearPoints();
-
-            AddChild(RootButton);
-        }
-        */
+        RootButton.Visible = true;
     }
 
     public void Visualize(MenuButton node, int xOffset, int yOffset)
     {
-        var visualButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButtonVisual.tscn");
-        var newButton = (MenuButtonVisual)visualButtonScene.Instance();
+        var resouceStringName = string.Empty;
+
+        switch (node.Direction)
+        {
+            case MenuButton.ButtonDirection.Below:
+                resouceStringName = "res://Components/UI/MenuButtonVisualBelow.tscn";
+                break;
+
+            case MenuButton.ButtonDirection.Right:
+                resouceStringName = "res://Components/UI/MenuButtonVisualRight.tscn";
+                break;
+
+            case MenuButton.ButtonDirection.Left:
+                resouceStringName = "res://Components/UI/MenuButtonVisualBelow.tscn";
+                break;
+        }
+
+        PackedScene visualButtonScene = (PackedScene)ResourceLoader.Load(resouceStringName);
+        var newButton = (Node)visualButtonScene.Instance();
 
         // FIXME - move this concern into the MenuButtonVisual node
         var button = newButton.GetNode<Button>("Path2D/PathFollow2D/Button");
         button.Text = node.UnpressedText;
 
-        newButton.Translate(new Vector2(xOffset, yOffset));
-        AddChild(newButton);
+        if (xOffset == 0 && yOffset == 0)
+        {
+            button.Visible = true;
+        }
+        else
+        {
+            button.Visible = false;
+        }
+
+        ((MenuButtonVisual)newButton).AddObserver(node);
+        ((MenuButton)node).AddObserver((MenuButtonVisual)newButton);
+
+        ((MenuButtonVisual)newButton).Translate(new Vector2(xOffset, yOffset));
+        this.AddChild(newButton);
 
         if (node.Left != null)
         {
@@ -68,50 +79,6 @@ public class MenuTree : Node2D
             Visualize(node.Below, xOffset + 0, yOffset + 50);
         }
     }
-
-/*
-    public MenuButton NewButton(MenuButton.ButtonDirection direction, string unpressedText, string pressedText, bool isRootNode, int rootParentId)
-    {
-        var newButtonScene = (PackedScene)ResourceLoader.Load("res://Components/UI/MenuButton.tscn");
-        var newButton = (MenuButton)newButtonScene.Instance();
-        GD.Print($"newButton.Id = {newButton.NativeInstance}");
-        newButton.Direction = direction;
-        newButton.IsEnabled = true;
-        newButton.Visible = false;
-        newButton.UnpressedText = unpressedText;
-        newButton.IsRootNode = isRootNode;
-        newButton.RootParentId = rootParentId;
-        newButton.PressedText = pressedText;
-
-        var curve = newButton.GetNode<Path2D>("Path2D").Curve;
-        curve.ClearPoints();
-        curve.AddPoint(new Vector2(0,0));
-
-        switch (direction)
-        {
-            case MenuButton.ButtonDirection.Left:
-                curve.AddPoint(new Vector2(-100,0));
-                newButton.Translate(new Vector2(-100, 50 * _numVertical));
-                break;
-
-            case MenuButton.ButtonDirection.Right:
-                curve.AddPoint(new Vector2(100, 0));
-                newButton.Translate(new Vector2(100 * _numHorizontal, 50 * _numVertical));
-                _numHorizontal += 1;
-                break;
-
-            case MenuButton.ButtonDirection.Below:
-                curve.AddPoint(new Vector2(0, 50));
-                newButton.Translate(new Vector2(0, 50 * _numVertical));
-                _numVertical += 1;
-                break;
-        }
-
-        AddChild(newButton);
-
-        return newButton;
-    }
-*/
 
 //  public override void _Process(float delta)
 //  {

@@ -32,7 +32,7 @@ public class MenuButton : IObservable, IObserver
     }
 
     // FIXME - Godot overrides.
-    public bool Visible = true;
+    public bool Visible = false;
     public bool Pressed = false;
     public string Text = string.Empty;
 
@@ -50,7 +50,7 @@ public class MenuButton : IObservable, IObserver
         set => _rootParentId = value;
     }
 
-    private bool _isEnabled = false;
+    private bool _isEnabled = true;
     public bool IsEnabled
     {
         get => _isEnabled;
@@ -100,24 +100,16 @@ public class MenuButton : IObservable, IObserver
         {
             case ButtonDirection.Left:
                 _left = child;
-                //_left.Translate(new Vector2(-100, 0));
-                //AddChild(Left);
                 break;
 
             case ButtonDirection.Right:
                 _right = child;
-                //_right.Translate(new Vector2(100, 0));
-                //AddChild(Right);
                 break;
 
             case ButtonDirection.Below:
                 _below = child;
-                //_below.Translate(new Vector2(0, 50));
-                //AddChild(Below);
                 break;
         }
-
-        //AddChild(child);
 
         return this;
     }
@@ -126,18 +118,21 @@ public class MenuButton : IObservable, IObserver
     {
         if ( _isEnabled && Visible )
         {
+            Pressed = !Pressed;
             Text = !Pressed ? _unpressedText :
                 _pressedText == string.Empty ?
                     _unpressedText :
                     _pressedText;
 
-            _left?.ParentPressed(ButtonDirection.Left, IsRootNode, RootParentId, Pressed);
-            _right?.ParentPressed(ButtonDirection.Right, IsRootNode, RootParentId, Pressed);
-            _below?.ParentPressed(ButtonDirection.Below, IsRootNode, RootParentId, Pressed);
+            _left?.ParentPressed(ButtonDirection.Left, IsRootNode, RootParentId);
+            _right?.ParentPressed(ButtonDirection.Right, IsRootNode, RootParentId);
+            _below?.ParentPressed(ButtonDirection.Below, IsRootNode, RootParentId);
+
+            Notify();
         }
     }
 
-    public void ParentPressed(ButtonDirection parentDirection, bool isRooteNode, int rootPressedId, bool parentPressed)
+    public void ParentPressed(ButtonDirection parentDirection, bool isRooteNode, int rootPressedId)
     {
         // FIXME - move into position?
         if (_isEnabled && (rootPressedId <= RootParentId || rootPressedId == 0) && isRooteNode == true)
@@ -145,36 +140,34 @@ public class MenuButton : IObservable, IObserver
             switch (parentDirection)
             {
                 case ButtonDirection.Below:
-                    _below?.ParentPressed(ButtonDirection.Below, isRooteNode, rootPressedId, parentPressed);
+                    _below?.ParentPressed(ButtonDirection.Below, isRooteNode, rootPressedId);
                     Visible = !Visible;
+                    Notify();
                     break;
 
                 case ButtonDirection.Left:
-                    _left?.ParentPressed(ButtonDirection.Left, isRooteNode, rootPressedId, parentPressed);
+                    _left?.ParentPressed(ButtonDirection.Left, isRooteNode, rootPressedId);
                     Visible = !Visible;
+                    Notify();
                     break;
 
                 case ButtonDirection.Right:
-                    _right?.ParentPressed(ButtonDirection.Right, isRooteNode, rootPressedId, parentPressed);
+                    _right?.ParentPressed(ButtonDirection.Right, isRooteNode, rootPressedId);
                     Visible = !Visible;
+                    Notify();
                     break;
             }
         }
     }
 
-    public void _on_Button_pressed()
-    {
-        this.ButtonPressed();
-    }
-
     // Observable
     private ImmutableList<IObserver> _observers = ImmutableList<IObserver>.Empty;
-    public void Add(IObserver observer)
+    public void AddObserver(IObserver observer)
     {
         _observers = _observers.Add(observer);
     }
 
-    public void Remove(IObserver observer)
+    public void RemoveObserver(IObserver observer)
     {
         _observers = _observers.Remove(observer);
     }
@@ -187,6 +180,6 @@ public class MenuButton : IObservable, IObserver
     // Observer
     public void PropertyChanged(IObservable observable)
     {
-
+        ButtonPressed();
     }
 }

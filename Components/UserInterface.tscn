@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Source/UserInterface.cs" type="Script" id=1]
 [ext_resource path="res://Components/UI/NotificationManager.tscn" type="PackedScene" id=2]
@@ -15,16 +15,6 @@ bg_color = Color( 1, 0.721569, 0.47451, 1 )
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.917647, 0.384314, 0.384314, 1 )
-
-[sub_resource type="Curve2D" id=5]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 192, 128, 0, 0, 0, 0, 192, 176 )
-}
-
-[sub_resource type="Curve2D" id=6]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.000526428, -136 )
-}
 
 [node name="UserInterface" type="Control"]
 anchor_right = 1.0
@@ -112,130 +102,6 @@ margin_left = -16.0
 margin_bottom = 23.0
 text = "A"
 valign = 1
-
-[node name="Path2D" type="Path2D" parent="."]
-position = Vector2( -128, -96 )
-curve = SubResource( 5 )
-
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2( 192, 128 )
-rotation = 1.5708
-rotate = false
-loop = false
-
-[node name="Path2D" type="Path2D" parent="Path2D/PathFollow2D"]
-curve = SubResource( 6 )
-
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D/PathFollow2D/Path2D"]
-rotate = false
-loop = false
-
-[node name="Commercial" type="Button" parent="Path2D/PathFollow2D/Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -15.9998
-margin_top = 47.9998
-margin_right = 98.0002
-margin_bottom = 86.9997
-rect_rotation = -89.9999
-disabled = true
-text = "Commercial"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Industrial" type="Button" parent="Path2D/PathFollow2D/Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -16.0003
-margin_top = -80.0002
-margin_right = 97.9997
-margin_bottom = -41.0002
-rect_rotation = -89.9999
-disabled = true
-text = "Industrial"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Agricultural" type="Button" parent="Path2D/PathFollow2D/Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -16.0008
-margin_top = -208.0
-margin_right = 98.9992
-margin_bottom = -168.0
-rect_rotation = -89.9999
-disabled = true
-text = "Agricultural"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Transportation" type="Button" parent="Path2D/PathFollow2D/Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -16.0012
-margin_top = -336.0
-margin_right = 97.9988
-margin_bottom = -296.0
-rect_rotation = -89.9999
-disabled = true
-text = "Transportation"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Residential" type="Button" parent="Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-anchor_left = -0.0833333
-anchor_top = -0.0953704
-anchor_right = -0.0833333
-anchor_bottom = -0.0953704
-margin_left = -95.9995
-margin_top = -144.0
-margin_right = 18.0005
-margin_bottom = -105.0
-rect_rotation = -89.9999
-rect_pivot_offset = Vector2( 136, 56 )
-disabled = true
-text = "Residential"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Select" type="Button" parent="Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 32.0002
-margin_top = 47.9999
-margin_right = 147.0
-margin_bottom = 87.9999
-rect_rotation = -89.9999
-text = "Select"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Delete" type="Button" parent="Path2D/PathFollow2D"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 80.0002
-margin_top = 47.9997
-margin_right = 194.0
-margin_bottom = 86.9997
-rect_rotation = -89.9999
-disabled = true
-text = "Delete"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuButton" type="Button" parent="."]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 88.0
-margin_bottom = 55.0
-toggle_mode = true
-action_mode = 0
-text = ">"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="StatPanel" type="PanelContainer" parent="."]
 modulate = Color( 1, 1, 1, 0.392157 )
@@ -330,14 +196,6 @@ __meta__ = {
 [node name="MenuTree" parent="." instance=ExtResource( 3 )]
 position = Vector2( 192, 128 )
 
-[connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Commercial" to="." method="_on_Commercial_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Industrial" to="." method="_on_Industrial_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Agricultural" to="." method="_on_Agricultural_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Path2D/PathFollow2D/Transportation" to="." method="_on_Transportation_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Residential" to="." method="_on_Residential_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Select" to="." method="_on_Select_pressed"]
-[connection signal="pressed" from="Path2D/PathFollow2D/Delete" to="." method="_on_Delete_pressed"]
-[connection signal="pressed" from="MenuButton" to="." method="_on_MenuButton_pressed"]
 [connection signal="pressed" from="PlayPauseButton" to="." method="_on_PlayPauseButton_pressed"]
 [connection signal="pressed" from="SpeedupButton" to="." method="_on_SpeedupButton_pressed"]
 [connection signal="pressed" from="SlowdownButton" to="." method="_on_SlowdownButton_pressed"]

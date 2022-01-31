@@ -39,6 +39,8 @@ public class UserInterface : Control, IObserver
 		{
 			switch (feature.BooleanFeature.Key)
 			{
+				// FIXME - Re-hook these up to the appropriate buttons from the new dynamic button system.
+				/*
 				case GameFeature.FeatureType.ResidentialZoning:
 					GetNode<Button>("Path2D/PathFollow2D/Residential").Disabled = !feature.BooleanFeature.Value;
 					break;
@@ -62,6 +64,7 @@ public class UserInterface : Control, IObserver
 				case GameFeature.FeatureType.DeleteZoning:
 					GetNode<Button>("Path2D/PathFollow2D/Delete").Disabled = !feature.BooleanFeature.Value;
 					break;
+				*/
 			}
 		}
 	}
@@ -71,30 +74,10 @@ public class UserInterface : Control, IObserver
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 
 		// FIXME - in the future only have this watch the features it cares about, not all the features.
-		globals.Features.ForEach(feature => feature.Add(this));
+		globals.Features.ForEach(feature => feature.AddObserver(this));
 
 		var menuTree = GetNode<MenuTree>("MenuTree");
 		menuTree.New(">", "^");
-
-	/*
-		var childButton = menuTree.NewButton(
-			direction: MenuButton.ButtonDirection.Below,
-			unpressedText: "I'm below1_1!",
-			pressedText: "I'm pressed!",
-			isRootNode: false,
-			rootParentId: 1);
-		menuTree.RootButton.AddChildButton(childButton);
-
-		childButton = menuTree.NewButton(
-			direction: MenuButton.ButtonDirection.Below,
-			unpressedText: "I'm below2_2!",
-			pressedText: "I'm pressed!",
-			isRootNode: true,
-			rootParentId: 2);
-
-		menuTree.RootButton.Below.AddChildButton(childButton);
-		*/
-
 
 		menuTree
 			.RootButton
@@ -152,74 +135,7 @@ public class UserInterface : Control, IObserver
 
 	public override void _Process(float delta)
 	{
-		if (_menuFadingIn == true)
-		{
-			var rootPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D"));
-			rootPathFollow2d.Offset += 150 * delta;
-
-			var rootPathChildren = rootPathFollow2d.GetChildren();
-
-			foreach (var rootChild in rootPathChildren)
-			{
-				if (rootChild.GetType().ToString() == "Godot.Button")
-				{
-					((Button)rootChild).Modulate = new Color(1,1,1,rootPathFollow2d.Offset/48);
-				}
-
-				if (rootPathFollow2d.Offset >= 47)
-				{
-					var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
-					childPathFollow2d.Offset += 150 * delta;
-
-					var subPathChildren = childPathFollow2d.GetChildren();
-
-					foreach (var subChild in subPathChildren)
-					{
-						((Button)subChild).Modulate = new Color(1,1,1,childPathFollow2d.Offset/136);
-					}
-				}
-			}
-		}
-
-		if (_menuFadingOut == true)
-		{
-			var childPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D/Path2D/PathFollow2D"));
-			childPathFollow2d.Offset -= 400 * delta;
-
-			var subPathChildren = childPathFollow2d.GetChildren();
-
-			foreach (var subChild in subPathChildren)
-			{
-				((Button)subChild).Modulate = new Color(1,1,1,childPathFollow2d.Offset/136);
-			}
-
-			if (childPathFollow2d.Offset <= 0)
-			{
-				var rootPathFollow2d = ((PathFollow2D)GetNode("Path2D/PathFollow2D"));
-				rootPathFollow2d.Offset -= 150 * delta;
-
-				var rootPathChildren = rootPathFollow2d.GetChildren();
-
-				foreach (var rootChild in rootPathChildren)
-				{
-					if (rootChild.GetType().ToString() == "Godot.Button")
-					{
-						((Button)rootChild).Modulate = new Color(1,1,1,rootPathFollow2d.Offset/48);
-					}
-
-					if (rootPathFollow2d.Offset <= 0)
-					{
-						if (rootChild.GetType().ToString() == "Godot.Button")
-							{
-								//((BaseButton)rootChild).Disabled = true;
-							}
-					}
-				}
-			}
-		}
-
 		_timeCounter += delta;
-
 
 		// Update our Info/Popup displays
 		if ( _timeCounter >= 1.0f )

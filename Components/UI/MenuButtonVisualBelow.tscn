@@ -4,7 +4,7 @@
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array(  )
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 48 )
 }
 
 [node name="Control" type="Node2D"]
@@ -18,8 +18,9 @@ rotate = false
 loop = false
 
 [node name="Button" type="Button" parent="Path2D/PathFollow2D"]
+margin_top = -50.0
 margin_right = 80.0
-margin_bottom = 40.0
+margin_bottom = -10.0
 toggle_mode = true
 __meta__ = {
 "_edit_use_anchors_": false
