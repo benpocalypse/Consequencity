@@ -102,12 +102,14 @@ public class UserInterface : Control, IObserver
 									menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
 									menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
 									menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
-									globals.PlacementMode = Globals.PlacementModeType.Residential;
+									globals.PlacementMode = Globals.PlacementModeType.Zone;
+									globals.PlacementZone = Globals.PlacementZoneType.Residential;
 									globals.InputMode = Globals.InputModeType.Place;
 								})
 								.WithUnpressedAction(() =>
 								{
 									globals.PlacementMode = Globals.PlacementModeType.None;
+									globals.PlacementZone = Globals.PlacementZoneType.None;
 									globals.InputMode = Globals.InputModeType.None;
 								})
 								.AddChildButton(
@@ -124,12 +126,14 @@ public class UserInterface : Control, IObserver
 											menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
 											menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
 											menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
-											globals.PlacementMode = Globals.PlacementModeType.Agricultural;
+											globals.PlacementMode = Globals.PlacementModeType.Zone;
+											globals.PlacementZone = Globals.PlacementZoneType.Agricultural;
 											globals.InputMode = Globals.InputModeType.Place;
 										})
 										.WithUnpressedAction(() =>
 										{
 											globals.PlacementMode = Globals.PlacementModeType.None;
+											globals.PlacementZone = Globals.PlacementZoneType.None;
 											globals.InputMode = Globals.InputModeType.None;
 										})
 										.AddChildButton(
@@ -146,12 +150,14 @@ public class UserInterface : Control, IObserver
 													menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
 													menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
 													menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
-													globals.PlacementMode = Globals.PlacementModeType.Commercial;
+													globals.PlacementMode = Globals.PlacementModeType.Zone;
+													globals.PlacementZone = Globals.PlacementZoneType.Commercial;
 													globals.InputMode = Globals.InputModeType.Place;
 												})
 												.WithUnpressedAction(() =>
 												{
 													globals.PlacementMode = Globals.PlacementModeType.None;
+													globals.PlacementZone = Globals.PlacementZoneType.None;
 													globals.InputMode = Globals.InputModeType.None;
 												})
 												.AddChildButton(
@@ -168,12 +174,14 @@ public class UserInterface : Control, IObserver
 														menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
 														menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
 														menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
-														globals.PlacementMode = Globals.PlacementModeType.Industrial;
+														globals.PlacementMode = Globals.PlacementModeType.Zone;
+														globals.PlacementZone = Globals.PlacementZoneType.Industrial;
 														globals.InputMode = Globals.InputModeType.Place;
 													})
 													.WithUnpressedAction(() =>
 													{
 														globals.PlacementMode = Globals.PlacementModeType.None;
+														globals.PlacementZone = Globals.PlacementZoneType.None;
 														globals.InputMode = Globals.InputModeType.None;
 													})
 
@@ -197,6 +205,26 @@ public class UserInterface : Control, IObserver
 									isRootNode: false,
 									rootParentId: 4
 									)
+									.WithIsEnabled(!globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced).BooleanFeature.Value)
+									.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced))
+									.WithPressedAction(() =>
+									{
+										menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
+										menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
+										menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
+										menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
+										globals.PlacementMode = Globals.PlacementModeType.Special;
+										globals.PlacementSpecial = Globals.PlacementSpecialType.PlayerHouse;
+										globals.PlacementZone = Globals.PlacementZoneType.None;
+										globals.InputMode = Globals.InputModeType.Place;
+									})
+									.WithUnpressedAction(() =>
+									{
+										globals.PlacementMode = Globals.PlacementModeType.None;
+										globals.PlacementSpecial = Globals.PlacementSpecialType.None;
+										globals.PlacementZone = Globals.PlacementZoneType.None;
+										globals.InputMode = Globals.InputModeType.None;
+									})
 								)
 							)
 					.Below.AddChildButton(
@@ -262,83 +290,6 @@ $@"Information:
 		if (Input.IsActionPressed("ui_cancel"))
 		{
 			GetTree().Quit();
-		}
-	}
-
-	public void _on_Residential_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.Residential;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_ResidentialButton_pressed));
-	}
-
-	public void _on_Commercial_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.Commercial;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_CommercialButton_pressed));
-	}
-
-	public void _on_Industrial_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.Industrial;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_IndustrialButton_pressed));
-	}
-
-	public void _on_Agricultural_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.Agricultural;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_AgriculturalButton_pressed));
-	}
-
-	public void _on_Transportation_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.Transportation;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_TransportationButton_pressed));
-	}
-
-	// FIXME - Revisit this. May need another input mode or something like that.
-	public void _on_Delete_pressed()
-	{
-		globals.PlacementMode = Globals.PlacementModeType.None;
-		globals.InputMode = Globals.InputModeType.Place;
-
-		EmitSignal(nameof(On_DeleteButton_pressed));
-	}
-
-	public void _on_Select_pressed()
-	{
-		globals.InputMode = Globals.InputModeType.Select;
-		globals.PlacementMode = Globals.PlacementModeType.None;
-
-		EmitSignal(nameof(On_SelectButton_pressed));
-	}
-
-	public void _on_MenuButton_pressed()
-	{
-		if (_menuFadingIn == false)
-		{
-			((Button)GetNode("MenuButton")).Text = "^";
-			_menuFadingIn = true;
-			_menuFadingOut = false;
-			globals.InputMode = Globals.InputModeType.None;
-			globals.PlacementMode = Globals.PlacementModeType.None;
-		}
-		else
-		{
-			((Button)GetNode("MenuButton")).Text = ">";
-			_menuFadingIn = false;
-			_menuFadingOut = true;
-			globals.InputMode = Globals.InputModeType.None;
-			globals.PlacementMode = Globals.PlacementModeType.None;
 		}
 	}
 

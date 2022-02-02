@@ -75,6 +75,9 @@ public class ThreeDTest : Spatial
 	private Vector3 currentClickPosition = new Vector3();
 	private List<Highlight> highlightSelectionlist = new List<Highlight>();
 	private List<Land> landSelectionList = new List<Land>();
+	private Building playerHouse = null;
+
+	// FIXME - Clean up this unweildy shitty monster of a function.
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (inputEvent is InputEventMouseButton mouseEvent)
@@ -118,7 +121,7 @@ public class ThreeDTest : Spatial
 							}
 						}
 
-						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode != Globals.PlacementModeType.None)
+						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode == Globals.PlacementModeType.Zone)
 						{
 							globals.Economy.SelectedLandList.Clear();
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
@@ -129,6 +132,29 @@ public class ThreeDTest : Spatial
 							if (!highlightSelectionlist.Contains(newHighlight))
 							{
 								highlightSelectionlist.Add(newHighlight);
+							}
+						}
+
+						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode == Globals.PlacementModeType.Special)
+						{
+							globals.Economy.SelectedLandList.Clear();
+
+							if (globals.PlacementSpecial == Globals.PlacementSpecialType.PlayerHouse)
+							{
+								if (playerHouse == null)
+								{
+									var playerHouseScene = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
+									playerHouse = (Building)playerHouseScene.Instance();
+									playerHouse.Translate(initialClickPosition);
+									AddChild(playerHouse);
+
+									// FIXME - This screams for a helper method or extension. It's something I'm going to commonly do.
+									var housePlaced = globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced);
+									globals.Features = globals.Features.Remove(housePlaced);
+                                    globals.Features = globals.Features.Add(housePlaced.WithValue(true));
+
+									// FIXME - Since GameFeatures aren't observable, the MenuButton class doesn't see this change. Hrmm.
+								}
 							}
 						}
 
@@ -167,8 +193,8 @@ public class ThreeDTest : Spatial
 						var selectedCollider = ((StaticBody)result["collider"]);
 						var selectedLand = ((Land)selectedCollider.GetParent());
 
-						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode));
-						globals.Economy.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementMode);
+						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone));
+						globals.Economy.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone);
 
 						light.QueueFree();
 					}
@@ -209,7 +235,6 @@ public class ThreeDTest : Spatial
 
 		if (leftButtonClicked && inputEvent is InputEventMouseMotion motionEvent)
 		{
-
 			if (globals.InputMode != Globals.InputModeType.None)
 			{
 				var fromPos = camera.ProjectRayOrigin(motionEvent.Position);
@@ -225,14 +250,6 @@ public class ThreeDTest : Spatial
 
 					if (currentClickPosition != previousClickPosition)
 					{
-						// Clear the current list of highlights.
-						foreach (Highlight light in highlightSelectionlist)
-						{
-							light.QueueFree();
-						}
-
-						highlightSelectionlist.Clear();
-
 						var xIncrement = 2.0f;
 						var zIncrement = 2.0f;
 
@@ -246,21 +263,36 @@ public class ThreeDTest : Spatial
 							zIncrement = -2.0f;
 						}
 
-						// Draw a rectangle of highlights from the initial click position to the current click position.
-						for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
+						if (globals.PlacementZone != Globals.PlacementZoneType.None)
 						{
-							for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
+							// Clear the current list of highlights.
+							foreach (Highlight light in highlightSelectionlist)
 							{
-								var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-								Highlight newHighlight = (Highlight)highlight.Instance();
-								newHighlight.Translate(new Vector3(x, 0, z));
-								AddChild(newHighlight);
+								light.QueueFree();
+							}
 
-								if (!highlightSelectionlist.Contains(newHighlight))
+							highlightSelectionlist.Clear();
+
+							// Draw a rectangle of highlights from the initial click position to the current click position.
+							for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
+							{
+								for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
 								{
-									highlightSelectionlist.Add(newHighlight);
+									var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
+									Highlight newHighlight = (Highlight)highlight.Instance();
+									newHighlight.Translate(new Vector3(x, 0, z));
+									AddChild(newHighlight);
+
+									if (!highlightSelectionlist.Contains(newHighlight))
+									{
+										highlightSelectionlist.Add(newHighlight);
+									}
 								}
 							}
+						}
+						else if (globals.PlacementSpecial == Globals.PlacementSpecialType.PlayerHouse)
+						{// TODO - What a hack this all is :/
+							playerHouse.Translation = new Vector3(currentClickPosition.x,1.0f,currentClickPosition.z);
 						}
 
 						previousClickPosition = currentClickPosition;

@@ -11,7 +11,8 @@ public sealed class GameFeature : IObservable
         AgriculturalZoning = 3,
         TransportationZoning = 4,
         DeleteZoning = 5,
-        PopulationGrowthRate = 6
+        PopulationGrowthRate = 6,
+        PlayerHousePlaced = 7
     }
 
     private KeyValuePair<FeatureType, bool> _booleanFeature = new KeyValuePair<FeatureType, bool>();

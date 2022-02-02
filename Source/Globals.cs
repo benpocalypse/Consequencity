@@ -37,14 +37,30 @@ public class Globals : Node
 		Agricultural = 3
 	}
 
-	public enum PlacementModeType
+	public enum PlacementZoneType
 	{
 		None,
 		Residential,
 		Commercial,
 		Industrial,
 		Agricultural,
-		Transportation,
+		Transportation
+	}
+
+	public enum PlacementModeType
+	{
+		None,
+		Zone,
+		Special,
+		Delete
+	}
+
+	public enum PlacementSpecialType
+	{
+		None,
+		PlayerHouse,
+		TownSquare
+		// TODO - Lots more ideas.
 	}
 
 	public enum InputModeType
@@ -72,6 +88,8 @@ public class Globals : Node
 	public DecisionEngine Decisions;
 	public NotificationManager Notifications;
 	public PlacementModeType PlacementMode = PlacementModeType.None;
+	public PlacementZoneType PlacementZone = PlacementZoneType.None;
+	public PlacementSpecialType PlacementSpecial = PlacementSpecialType.None;
 	public InputModeType InputMode = InputModeType.None;
 
 	public ImmutableList<GameFeature> Features = ImmutableList<GameFeature>.Empty
@@ -80,7 +98,8 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.IndustrialZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
-			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 1.0f));
+			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 1.0f))
+			.Add(new GameFeature(GameFeature.FeatureType.PlayerHousePlaced, false));
 
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;
@@ -146,32 +165,32 @@ public class Globals : Node
 		}
 	}
 
-	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementModeType _type)
+	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementZoneType _type)
 	{
 		LandSpaceType result = LandSpaceType.None;
 		switch (_type)
 		{
-			case PlacementModeType.None:
+			case PlacementZoneType.None:
 				result = LandSpaceType.None;
 				break;
 
-			case PlacementModeType.Residential:
+			case PlacementZoneType.Residential:
 				result = LandSpaceType.Residential;
 				break;
 
-			case PlacementModeType.Commercial:
+			case PlacementZoneType.Commercial:
 				result = LandSpaceType.Commercial;
 				break;
 
-			case PlacementModeType.Industrial:
+			case PlacementZoneType.Industrial:
 				result = LandSpaceType.Industrial;
 				break;
 
-			case PlacementModeType.Agricultural:
+			case PlacementZoneType.Agricultural:
 				result = LandSpaceType.Agricultural;
 				break;
 
-			case PlacementModeType.Transportation:
+			case PlacementZoneType.Transportation:
 				result = LandSpaceType.Transportation;
 				break;
 		}
