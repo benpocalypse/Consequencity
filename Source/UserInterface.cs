@@ -96,6 +96,20 @@ public class UserInterface : Control, IObserver
 								isRootNode: true,
 								rootParentId: 4)
 								.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning).BooleanFeature.Value)
+								.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning))
+								.WithPressedAction(() =>
+								{
+									menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
+									menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
+									menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
+									globals.PlacementMode = Globals.PlacementModeType.Residential;
+									globals.InputMode = Globals.InputModeType.Place;
+								})
+								.WithUnpressedAction(() =>
+								{
+									globals.PlacementMode = Globals.PlacementModeType.None;
+									globals.InputMode = Globals.InputModeType.None;
+								})
 								.AddChildButton(
 									new MenuButton(
 										direction: MenuButton.ButtonDirection.Right,
@@ -103,6 +117,21 @@ public class UserInterface : Control, IObserver
 										pressedText: "Agricultural",
 										isRootNode: false,
 										rootParentId: 3)
+										.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.AgriculturalZoning).BooleanFeature.Value)
+										.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.AgriculturalZoning))
+										.WithPressedAction(() =>
+										{
+											menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
+											menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
+											menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
+											globals.PlacementMode = Globals.PlacementModeType.Agricultural;
+											globals.InputMode = Globals.InputModeType.Place;
+										})
+										.WithUnpressedAction(() =>
+										{
+											globals.PlacementMode = Globals.PlacementModeType.None;
+											globals.InputMode = Globals.InputModeType.None;
+										})
 										.AddChildButton(
 											new MenuButton(
 												direction: MenuButton.ButtonDirection.Right,
@@ -110,6 +139,21 @@ public class UserInterface : Control, IObserver
 												pressedText: "Commercial",
 												isRootNode: false,
 												rootParentId: 3)
+												.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.CommercialZoning).BooleanFeature.Value)
+												.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.CommercialZoning))
+												.WithPressedAction(() =>
+												{
+													menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
+													menuTree.RootButton.FindButtonByText("Industrial").ButtonUnpressed();
+													menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
+													globals.PlacementMode = Globals.PlacementModeType.Commercial;
+													globals.InputMode = Globals.InputModeType.Place;
+												})
+												.WithUnpressedAction(() =>
+												{
+													globals.PlacementMode = Globals.PlacementModeType.None;
+													globals.InputMode = Globals.InputModeType.None;
+												})
 												.AddChildButton(
 												new MenuButton(
 													direction: MenuButton.ButtonDirection.Right,
@@ -117,58 +161,51 @@ public class UserInterface : Control, IObserver
 													pressedText: "Industrial",
 													isRootNode: false,
 													rootParentId: 3)
-											)
+													.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.IndustrialZoning).BooleanFeature.Value)
+													.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.IndustrialZoning))
+													.WithPressedAction(() =>
+													{
+														menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();
+														menuTree.RootButton.FindButtonByText("Residential").ButtonUnpressed();
+														menuTree.RootButton.FindButtonByText("Agricultural").ButtonUnpressed();
+														globals.PlacementMode = Globals.PlacementModeType.Industrial;
+														globals.InputMode = Globals.InputModeType.Place;
+													})
+													.WithUnpressedAction(() =>
+													{
+														globals.PlacementMode = Globals.PlacementModeType.None;
+														globals.InputMode = Globals.InputModeType.None;
+													})
+
+												)
 										)
 								)
-								/*.AddChildButton(
-									new MenuButton(
-										direction: MenuButton.ButtonDirection.Below,
-										unpressedText: "Low",
-										pressedText: "Low",
-										isRootNode: false,
-										rootParentId: 5)
-								)*/
 							)
 						)
 					.Below.AddChildButton(
 						new MenuButton(
 							direction: MenuButton.ButtonDirection.Below,
-							unpressedText: "I'm below2_2!",
-							pressedText: "I'm pressed!",
+							unpressedText: "Place",
+							pressedText: "Place",
 							isRootNode: true,
 							rootParentId: 1)
+							.AddChildButton(
+								new MenuButton(
+									direction: MenuButton.ButtonDirection.Right,
+									unpressedText: "Your House",
+									pressedText: "Your House",
+									isRootNode: false,
+									rootParentId: 4
+									)
+								)
 							)
 					.Below.AddChildButton(
 						new MenuButton(
 							direction: MenuButton.ButtonDirection.Below,
-							unpressedText: "I'm below3_1",
-							pressedText: "I'm pressed!",
+							unpressedText: "Delete",
+							pressedText: "Delete",
 							isRootNode: false,
-							rootParentId: 1)
-							)
-					.AddChildButton(
-						new MenuButton(
-							direction: MenuButton.ButtonDirection.Right,
-							unpressedText: "I'm Right!_2",
-							pressedText: "I'm pressed!",
-							isRootNode: false,
-							rootParentId: 2)
-							)
-						.Right.AddChildButton(
-							new MenuButton(
-								direction: MenuButton.ButtonDirection.Right,
-								unpressedText: "Further Right!_2",
-								pressedText: "I'm pressed!",
-								isRootNode: true,
-								rootParentId: 2)
-								.AddChildButton(
-									new MenuButton(
-										direction: MenuButton.ButtonDirection.Below,
-										unpressedText: "Further Below!_3",
-										pressedText: "I'm pressed!",
-										isRootNode: false,
-										rootParentId: 3)
-								)
+							rootParentId: 0)
 							);
 
 		menuTree.Visualize(menuTree.RootButton, 0, 0);

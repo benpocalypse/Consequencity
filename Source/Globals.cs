@@ -140,9 +140,9 @@ public class Globals : Node
 		if (Notifications != null)
 		{
 			Notifications.New(
-				type: NotificationType.Actionable,
+				type: NotificationType.Ephemeral,
 				icon: NotificationManager.NotificationIconType.Question,
-				text: $"You chose {decisionText.ToLower()} to letting people live on the island.");
+				text: $"You answered {decisionText.ToLower()} to the question.");
 		}
 	}
 

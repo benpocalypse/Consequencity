@@ -87,7 +87,7 @@ public class ThreeDTest : Spatial
 						leftButtonClicked = true;
 
 						var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
-						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this actually be?
+						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this number actually be?
 						var space_state = GetWorld().DirectSpaceState;
 						var selection = space_state.IntersectRay(fromPos, toPos);
 

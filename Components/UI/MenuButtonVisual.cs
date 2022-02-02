@@ -84,7 +84,7 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
             }
 
             godotButton.Disabled = !button.IsEnabled;
-
+            godotButton.Pressed = button.Pressed;
             godotButton.Text = button.Pressed ?
                                 button.PressedText :
                                 button.UnpressedText;

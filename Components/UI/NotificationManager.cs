@@ -12,6 +12,7 @@ public sealed class NotificationManager : Node
         Sticky
     }
 
+    // TODO - Add graphical displays for these.
     public enum NotificationIconType
     {
         None = 0,
@@ -49,16 +50,6 @@ public sealed class NotificationManager : Node
                     if (notify.EphemeralTime == new TimeSpan(0,0,0))
                     {
                         notificationsToRemove = notificationsToRemove.Add(notify);
-
-                        New(
-                            type: NotificationType.Ephemeral,
-                            icon: NotificationManager.NotificationIconType.None,
-                            text: "But now this one...");
-
-                        New(
-                            type: NotificationType.Ephemeral,
-                            icon: NotificationManager.NotificationIconType.None,
-                            text: "and this one will appear!");
                     }
                 }
             }
@@ -96,10 +87,5 @@ public sealed class NotificationManager : Node
     {
         _notificationList = _notificationList.Remove(acknowledgedNotification);
         acknowledgedNotification.Dismiss();
-
-        New(
-            type: NotificationType.Ephemeral,
-            icon: NotificationManager.NotificationIconType.None,
-            text: "This notification will disappear in roughly 5 seconds.");
     }
 }

@@ -6,12 +6,12 @@ public sealed class GameFeature : IObservable
     public enum FeatureType
     {
         ResidentialZoning = 0,
-        CommercialZoning,
-        IndustrialZoning,
-        AgriculturalZoning,
-        TransportationZoning,
-        DeleteZoning,
-        PopulationGrowthRate
+        CommercialZoning = 1,
+        IndustrialZoning = 2,
+        AgriculturalZoning = 3,
+        TransportationZoning = 4,
+        DeleteZoning = 5,
+        PopulationGrowthRate = 6
     }
 
     private KeyValuePair<FeatureType, bool> _booleanFeature = new KeyValuePair<FeatureType, bool>();
@@ -46,12 +46,12 @@ public sealed class GameFeature : IObservable
 
     public GameFeature(FeatureType feature, bool value)
     {
-        BooleanFeature = new KeyValuePair<FeatureType, bool>(feature, value);
+        _booleanFeature = new KeyValuePair<FeatureType, bool>(feature, value);
     }
 
     public GameFeature(FeatureType feature, float value)
     {
-        FloatFeature = new KeyValuePair<FeatureType, float>(feature, value);
+        _floatFeature = new KeyValuePair<FeatureType, float>(feature, value);
     }
 
     public GameFeature WithValue(bool value)

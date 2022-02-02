@@ -9,6 +9,7 @@ public sealed class DecisionEngine
     private Globals globals;
     private BehaviorTree _behaviorTree;
     private string _decisionText = string.Empty;
+    private string _choiceText = string.Empty;
 
     public DecisionEngine()
     {
@@ -31,6 +32,7 @@ public sealed class DecisionEngine
                             .Add(
                                 () =>
                                 {
+                                    // FIXME - this enables residential zoning before the choice is made.
                                     var enableResidentialZoning = globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning);
                                     globals.Features = globals.Features.Remove(enableResidentialZoning);
                                     globals.Features = globals.Features.Add(enableResidentialZoning.WithValue(true));
@@ -40,7 +42,7 @@ public sealed class DecisionEngine
                     .AddChild(
                         new BehaviorNode(
                             entranceCriteria:
-                                new NodeTransitionCriteria(() => { return _decisionText == "Yes" && globals.Economy.Population == 3; }),
+                                new NodeTransitionCriteria(() => { return _choiceText == "Yes" && globals.Economy.Population == 3; }),
                             actions:
                                 ImmutableList<Action>.Empty
                                     .Add(
@@ -56,7 +58,7 @@ public sealed class DecisionEngine
                             entranceCriteria:
                                 new NodeTransitionCriteria(() =>
                                 {
-                                    return _decisionText == "No";
+                                    return _choiceText == "No";
                                 }),
                             actions:
                                 ImmutableList<Action>.Empty
@@ -78,8 +80,8 @@ public sealed class DecisionEngine
         _behaviorTree.Update();
     }
 
-    public void DecisionMade(string decisionText)
+    public void DecisionMade(string choiceText)
     {
-        this._decisionText = decisionText;
+        this._choiceText = choiceText;
     }
 }
