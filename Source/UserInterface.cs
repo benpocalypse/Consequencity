@@ -205,8 +205,8 @@ public class UserInterface : Control, IObserver
 									isRootNode: false,
 									rootParentId: 4
 									)
-									.WithIsEnabled(!globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced).BooleanFeature.Value)
-									.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced))
+									.WithIsEnabled(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced).BooleanFeature.Value)
+									.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced))
 									.WithPressedAction(() =>
 									{
 										menuTree.RootButton.FindButtonByText("Commercial").ButtonUnpressed();

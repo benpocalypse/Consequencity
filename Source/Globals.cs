@@ -99,7 +99,7 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 1.0f))
-			.Add(new GameFeature(GameFeature.FeatureType.PlayerHousePlaced, false));
+			.Add(new GameFeature(GameFeature.FeatureType.PlayerHouseNotPlaced, true));
 
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;

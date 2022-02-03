@@ -149,9 +149,9 @@ public class ThreeDTest : Spatial
 									AddChild(playerHouse);
 
 									// FIXME - This screams for a helper method or extension. It's something I'm going to commonly do.
-									var housePlaced = globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.PlayerHousePlaced);
+									var housePlaced = globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced);
 									globals.Features = globals.Features.Remove(housePlaced);
-                                    globals.Features = globals.Features.Add(housePlaced.WithValue(true));
+									globals.Features = globals.Features.Add(housePlaced.WithValue(false));
 
 									// FIXME - Since GameFeatures aren't observable, the MenuButton class doesn't see this change. Hrmm.
 								}
