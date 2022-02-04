@@ -88,6 +88,8 @@ public class UserInterface : Control, IObserver
 						pressedText: "Zone",
 						isRootNode: true,
 						rootParentId: 2)
+						.WithIsEnabled(false)
+						.WithObserveGameFeature(globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning))
 						.AddChildButton(
 							new MenuButton(
 								direction: MenuButton.ButtonDirection.Right,
@@ -197,6 +199,8 @@ public class UserInterface : Control, IObserver
 							pressedText: "Place",
 							isRootNode: true,
 							rootParentId: 1)
+							.WithIsEnabled(false)
+							.WithObserveGameFeature(globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerCanPlaceSpecial))
 							.AddChildButton(
 								new MenuButton(
 									direction: MenuButton.ButtonDirection.Right,
@@ -226,7 +230,8 @@ public class UserInterface : Control, IObserver
 										globals.InputMode = Globals.InputModeType.None;
 									})
 								)
-							)
+							);
+							/*
 					.Below.AddChildButton(
 						new MenuButton(
 							direction: MenuButton.ButtonDirection.Below,
@@ -235,6 +240,7 @@ public class UserInterface : Control, IObserver
 							isRootNode: false,
 							rootParentId: 0)
 							);
+							*/
 
 		menuTree.Visualize(menuTree.RootButton, 0, 0);
 	}

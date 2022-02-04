@@ -152,8 +152,6 @@ public class ThreeDTest : Spatial
 									var housePlaced = globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced);
 									globals.Features = globals.Features.Remove(housePlaced);
 									globals.Features = globals.Features.Add(housePlaced.WithValue(false));
-
-									// FIXME - Since GameFeatures aren't observable, the MenuButton class doesn't see this change. Hrmm.
 								}
 							}
 						}

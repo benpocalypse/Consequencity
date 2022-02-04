@@ -12,11 +12,13 @@ public sealed class BehaviorTree
 
 public sealed class BehaviorNode
 {
-    public ImmutableList<Action> ActionList = ImmutableList<Action>.Empty;
+    public ImmutableList<Action> EntranceActionList = ImmutableList<Action>.Empty;
+    public ImmutableList<Action> ExitActionList = ImmutableList<Action>.Empty;
     public ImmutableList<BehaviorNode> Children = ImmutableList<BehaviorNode>.Empty;
     public NodeTransitionCriteria EntranceCriteria = new NodeTransitionCriteria(null);
 
-    private bool _actionsPerformed = false;
+    private bool _entranceActionsPerformed = false;
+    private bool _exitActionsPerformed = false;
     public bool EntranceCriteriaMet = false;
 
     public BehaviorNode AddChild(BehaviorNode child)
@@ -36,23 +38,30 @@ public sealed class BehaviorNode
         EntranceCriteria = entranceCriteria;
     }
 
-    public BehaviorNode(ImmutableList<Action> actions)
+    public BehaviorNode(ImmutableList<Action> entranceActions)
     {
-        ActionList = actions;
+        EntranceActionList = entranceActions;
     }
 
-    public BehaviorNode(NodeTransitionCriteria entranceCriteria, ImmutableList<Action> actions)
+    public BehaviorNode(NodeTransitionCriteria entranceCriteria, ImmutableList<Action> entranceActions)
     {
         EntranceCriteria = entranceCriteria;
-        ActionList = actions;
+        EntranceActionList = entranceActions;
+    }
+
+    public BehaviorNode(NodeTransitionCriteria entranceCriteria, ImmutableList<Action> entranceActions, ImmutableList<Action> exitActions)
+    {
+        EntranceCriteria = entranceCriteria;
+        EntranceActionList = entranceActions;
+        ExitActionList = exitActions;
     }
 
     public void Update()
     {
         // If we perform this branch, we've alread evaluated this node.
-        if (_actionsPerformed == true)
+        if (_entranceActionsPerformed == true)
         {
-            var childCriteriaMet = false;
+            var areAnyChildEntranceCriteriaMet = false;
 
             foreach (var child in Children)
             {
@@ -62,34 +71,37 @@ public sealed class BehaviorNode
                 // so that they don't respond to input as well.
                 if (child.EntranceCriteriaMet == true)
                 {
-                    childCriteriaMet = true;
+                    areAnyChildEntranceCriteriaMet = true;
                 }
             }
 
-            if (childCriteriaMet == true)
+            if (areAnyChildEntranceCriteriaMet == true)
             {
                 Children = Children.RemoveAll(_ => _.EntranceCriteriaMet == false);
+
+                if (_exitActionsPerformed == false && ExitActionList.Count() > 0)
+                {
+                    ExitActionList.ForEach(exitAction => exitAction());
+                    _exitActionsPerformed = true;
+                }
             }
         }
 
         EntranceCriteriaMet = EntranceCriteria.Evaluate();
 
         // If we've met our entrance criteria, but haven't performed our actions, do so now.
-        if (EntranceCriteriaMet == true && _actionsPerformed == false)
+        if (EntranceCriteriaMet == true && _entranceActionsPerformed == false)
         {
-            _actionsPerformed = true;
+            _entranceActionsPerformed = true;
 
-            foreach (var nodeAction in ActionList)
-            {
-                nodeAction();
-            }
+            EntranceActionList.ForEach(entranceAction => entranceAction());
         }
     }
 }
 
 public sealed class NodeTransitionCriteria
 {
-    private Func<bool> _condition;
+    private Func<bool> _condition = null;
     public NodeTransitionCriteria(Func<bool> condition)
     {
         _condition = condition;

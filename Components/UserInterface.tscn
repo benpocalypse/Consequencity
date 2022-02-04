@@ -194,7 +194,7 @@ __meta__ = {
 [node name="NotificationManager" parent="." instance=ExtResource( 2 )]
 
 [node name="MenuTree" parent="." instance=ExtResource( 3 )]
-position = Vector2( 192, 128 )
+position = Vector2( 16, 16 )
 
 [connection signal="pressed" from="PlayPauseButton" to="." method="_on_PlayPauseButton_pressed"]
 [connection signal="pressed" from="SpeedupButton" to="." method="_on_SpeedupButton_pressed"]

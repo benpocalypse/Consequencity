@@ -98,7 +98,8 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.IndustrialZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.AgriculturalZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
-			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 1.0f))
+			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 0.0f))
+			.Add(new GameFeature(GameFeature.FeatureType.PlayerCanPlaceSpecial, false))
 			.Add(new GameFeature(GameFeature.FeatureType.PlayerHouseNotPlaced, true));
 
 
