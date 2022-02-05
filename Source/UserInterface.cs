@@ -89,7 +89,7 @@ public class UserInterface : Control, IObserver
 						isRootNode: true,
 						rootParentId: 2)
 						.WithIsEnabled(false)
-						.WithObserveGameFeature(globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.ResidentialZoning))
+						.WithObserveGameFeature(globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.AgriculturalZoning))
 						.AddChildButton(
 							new MenuButton(
 								direction: MenuButton.ButtonDirection.Right,

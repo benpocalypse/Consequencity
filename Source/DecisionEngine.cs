@@ -52,38 +52,49 @@ public sealed class DecisionEngine
                                                 _decisionText: "Now that you've had a look around the island, why not find a spot to build your house?",
                                                 _decisions: new List<string>() { "Ok"});
                                             globals.Decisions.TransitionStopWatch.Stop();
-                                    }
-                                ),
-                            exitActions: ImmutableList<Action>.Empty
-                                .Add(() =>
-                                    {
-                                        var enableSpecialPlacement = globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerCanPlaceSpecial);
-                                        globals.Features = globals.Features.Remove(enableSpecialPlacement);
-                                        globals.Features = globals.Features.Add(enableSpecialPlacement.WithValue(true));
 
-                                        var enablePlayerHousePlacement = globals.Features.First(_ => _.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced);
-                                        globals.Features = globals.Features.Remove(enablePlayerHousePlacement);
-                                        globals.Features = globals.Features.Add(enablePlayerHousePlacement.WithValue(true));
-
+                                            globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerCanPlaceSpecial, true);
+                                        globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerHouseNotPlaced, true);
                                     }
                                 )
-                        )
-                        .AddChild(
-                            new BehaviorNode(
-                                entranceCriteria:
-                                // FIXME - Need a way to detect when the player has placed their house.
-                                    new NodeTransitionCriteria(() => true),
-                                entranceActions: ImmutableList<Action>.Empty
-                                    .Add(() =>
-                                        {
-                                            globals.PopupDialog(
-                                                    _decisionText: "Why didn't this work?",
-                                                    _decisions: new List<string>() { "Ok"});
-                                                TransitionStopWatch.Stop();
-                                        }
-                                    )
                             )
-                        )
+                            .AddChild(
+                                new BehaviorNode(
+                                    entranceCriteria: new NodeTransitionCriteria(() => globals.Features.GetGameFeatureValue(GameFeature.FeatureType.PlayerHouseNotPlaced) == false),
+                                    entranceActions: ImmutableList<Action>.Empty
+                                        .Add(() =>  globals.Decisions.TransitionStopWatch.Restart())
+                                )
+                                .AddChild(
+                                    new BehaviorNode(
+                                        entranceCriteria:
+                                            new NodeTransitionCriteria(() => globals.Decisions.TransitionStopWatch.ElapsedMilliseconds >= 5_000),
+                                        entranceActions: ImmutableList<Action>.Empty
+                                            .Add(() =>
+                                                {
+                                                    globals.PopupDialog(
+                                                        _decisionText: "You're probably getting tired of scavenging for food. Why not try building a few spaces for gardens?",
+                                                        _decisions: new List<string>() { "Ok"});
+                                                    globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.AgriculturalZoning, true);
+                                                }
+                                            )
+                                    )
+                                    .AddChild(
+                                        new BehaviorNode(
+                                            entranceCriteria:
+                                                new NodeTransitionCriteria(() => globals.Economy.Map.Where(_ => _.Value.Type == Globals.LandSpaceType.Agricultural).Count() >= 3),
+                                            entranceActions: ImmutableList<Action>.Empty
+                                                .Add(() =>
+                                                    {
+                                                        globals.PopupDialog(
+                                                                _decisionText: "Nice work!",
+                                                                _decisions: new List<string>() { "Ok"});
+                                                            TransitionStopWatch.Stop();
+                                                    }
+                                                )
+                                        )
+                                    )
+                                )
+                            )
                     )
                 )
             );

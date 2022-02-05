@@ -71,7 +71,7 @@ public sealed class EconomicEngine : IObserver
 		{
 			for (int j = 0; j < _mapHeight; j++)
 			{
-				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType)_random.Next(0,5)));
+				Map.Add(new Vector2(i,j), new LandSpace((Globals.LandSpaceType.None)));//_random.Next(0,5)));
 			}
 		}
 

@@ -82,7 +82,7 @@ public class ThreeDTest : Spatial
 	{
 		if (inputEvent is InputEventMouseButton mouseEvent)
 		{
-			if (mouseEvent.Pressed)
+			if (mouseEvent.Pressed == true)
 			{
 				switch ((ButtonList)mouseEvent.ButtonIndex)
 				{
@@ -106,24 +106,13 @@ public class ThreeDTest : Spatial
 
 						landSelectionList.ForEach(_ => _.Unselected());
 						landSelectionList.Clear();
+						globals.Economy.SelectedLandList.Clear();
 
-						if (globals.InputMode == Globals.InputModeType.Select)
+						if (
+							 (globals.InputMode == Globals.InputModeType.Select) ||
+							 (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode == Globals.PlacementModeType.Zone)
+						   )
 						{
-							globals.Economy.SelectedLandList.Clear();
-							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-							Highlight newHighlight = (Highlight)highlight.Instance();
-							newHighlight.Translate(initialClickPosition);
-							AddChild(newHighlight);
-
-							if (!highlightSelectionlist.Contains(newHighlight))
-							{
-								highlightSelectionlist.Add(newHighlight);
-							}
-						}
-
-						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode == Globals.PlacementModeType.Zone)
-						{
-							globals.Economy.SelectedLandList.Clear();
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
 							Highlight newHighlight = (Highlight)highlight.Instance();
 							newHighlight.Translate(initialClickPosition);
@@ -137,8 +126,6 @@ public class ThreeDTest : Spatial
 
 						if (globals.InputMode == Globals.InputModeType.Place && globals.PlacementMode == Globals.PlacementModeType.Special)
 						{
-							globals.Economy.SelectedLandList.Clear();
-
 							if (globals.PlacementSpecial == Globals.PlacementSpecialType.PlayerHouse)
 							{
 								if (playerHouse == null)
@@ -148,10 +135,7 @@ public class ThreeDTest : Spatial
 									playerHouse.Translate(initialClickPosition);
 									AddChild(playerHouse);
 
-									// FIXME - This screams for a helper method or extension. It's something I'm going to commonly do.
-									var housePlaced = globals.Features.First(feat => feat.BooleanFeature.Key == GameFeature.FeatureType.PlayerHouseNotPlaced);
-									globals.Features = globals.Features.Remove(housePlaced);
-									globals.Features = globals.Features.Add(housePlaced.WithValue(false));
+									globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerHouseNotPlaced, false);
 								}
 							}
 						}
