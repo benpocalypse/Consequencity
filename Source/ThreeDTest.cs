@@ -178,6 +178,14 @@ public class ThreeDTest : Spatial
 						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone));
 						globals.Economy.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone);
 
+						if (globals.PlacementZone == Globals.PlacementZoneType.Agricultural)
+						{
+							var gardenScene = (PackedScene)ResourceLoader.Load("res://Components/Garden.tscn");
+							var garden = (Spatial)gardenScene.Instance();
+							garden.Translate(initialClickPosition);
+							AddChild(garden);
+						}
+
 						light.QueueFree();
 					}
 

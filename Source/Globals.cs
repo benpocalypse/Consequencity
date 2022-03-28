@@ -161,7 +161,7 @@ public class Globals : Node
 		{
 			Notifications.New(
 				type: NotificationType.Ephemeral,
-				icon: NotificationManager.NotificationIconType.Question,
+				icon: NotificationManager.NotificationIconType.None,
 				text: $"You answered {decisionText.ToLower()} to the question.");
 		}
 	}
