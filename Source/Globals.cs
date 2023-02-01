@@ -100,7 +100,8 @@ public class Globals : Node
 			.Add(new GameFeature(GameFeature.FeatureType.DeleteZoning, false))
 			.Add(new GameFeature(GameFeature.FeatureType.PopulationGrowthRate, 0.0f))
 			.Add(new GameFeature(GameFeature.FeatureType.PlayerCanPlaceSpecial, false))
-			.Add(new GameFeature(GameFeature.FeatureType.PlayerHouseNotPlaced, true));
+			.Add(new GameFeature(GameFeature.FeatureType.PlayerHouseNotPlaced, true))
+			.Add(new GameFeature(GameFeature.FeatureType.DialogAcknowledged, false));
 
 
 	private GameRunningType _gameRunning = GameRunningType.Playing;
@@ -144,6 +145,9 @@ public class Globals : Node
 
 		decisionDialog.Connect("DecisionMade", this, nameof(_on_DecisionMade));
 
+		var globals = Globals.Instance;
+		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, false);
+
 		_gameRunning = GameRunningType.Paused;
 		this.AddChild(decisionDialog);
 		decisionDialog.PopupCentered();
@@ -164,6 +168,9 @@ public class Globals : Node
 				icon: NotificationManager.NotificationIconType.None,
 				text: $"You answered {decisionText.ToLower()} to the question.");
 		}
+
+		var globals = Globals.Instance;
+		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, true);
 	}
 
 	public LandSpaceType PlacementModeTypeToLandSpaceType(PlacementZoneType _type)
