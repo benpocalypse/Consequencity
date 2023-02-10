@@ -148,16 +148,26 @@ public class Globals : Node
 		var globals = Globals.Instance;
 		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, false);
 
-		_gameRunning = GameRunningType.Paused;
+		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
+		var userInterface = (UserInterface)userInterfaceScene.Instance();
+		userInterface.DisableAllButtons();
+
+		globals.GameRunning = GameRunningType.Paused;
 		this.AddChild(decisionDialog);
 		decisionDialog.PopupCentered();
 	}
 
 	public void _on_DecisionMade(string decisionText)
 	{
+		var globals = Globals.Instance;
 		GD.Print($"Decision: {decisionText}");
 		Decisions.DecisionMade(decisionText);
-		_gameRunning = GameRunningType.Playing;
+
+		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
+		var userInterface = (UserInterface)userInterfaceScene.Instance();
+		userInterface.DisableAllButtons();
+
+		globals.GameRunning = GameRunningType.Playing;
 
 		Notifications = GetTree().CurrentScene.GetNode<NotificationManager>("UiLayer/UserInterface/NotificationManager");
 
@@ -169,7 +179,6 @@ public class Globals : Node
 				text: $"You answered {decisionText.ToLower()} to the question.");
 		}
 
-		var globals = Globals.Instance;
 		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, true);
 	}
 
@@ -206,16 +215,6 @@ public class Globals : Node
 		return result;
 	}
 
-/*
-	public readonly Vector2 MoneyBagLocation = new Vector2(1200, 56);
-
-	public int PlayerScore = 0;
-	public int PlayerMaxHealth = 3;
-	public int PlayerHealth = 3;
-	public int LeftArmDamage = 1;
-	public int RightArmDamage = 1;
-*/
-
 	// Save file data to persist
 	private const string saveFile = "user://saveFile.save";
 	public int HighestScore = 0;
@@ -233,10 +232,6 @@ public class Globals : Node
 		instance = GetNode<Globals>("/root/ConsequencityGlobals");
 		Decisions =  new DecisionEngine();
 		Economy = new EconomicEngine(this.Features);
-		//Notifications = new NotificationManager();
-
-		//GetTree().CurrentScene.AddChild(Notifications);
-		//this.AddChild(Notifications);
 	}
 
 	public override void _Notification(int notification)

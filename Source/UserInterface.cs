@@ -299,18 +299,34 @@ $@"Information:
 		}
 	}
 
+	public void DisableAllButtons()
+	{
+		((Button)GetNode("PlayPauseButton")).Disabled = true;
+		((Button)GetNode("SpeedupButton")).Disabled = true;
+		((Button)GetNode("SlowdownButton")).Disabled = true;
+	}
+
+	public void EnableAllButtons()
+	{
+		((Button)GetNode("PlayPauseButton")).Disabled = false;
+		((Button)GetNode("SpeedupButton")).Disabled = false;
+		((Button)GetNode("SlowdownButton")).Disabled = false;
+	}
+
 	public void _on_PlayPauseButton_pressed()
 	{
 		if (globals.GameRunning == Globals.GameRunningType.Playing)
 		{
-			((Button)GetNode("PlayPauseButton")).Text = "||";
+			GD.Print("Play/Paused pressed while game is Playing.");
+			((Button)GetNode("PlayPauseButton")).Text = ">";
 			((Button)GetNode("SpeedupButton")).Disabled = true;
 			((Button)GetNode("SlowdownButton")).Disabled = true;
 			globals.GameRunning = Globals.GameRunningType.Paused;
 		}
 		else
 		{
-			((Button)GetNode("PlayPauseButton")).Text = ">";
+			GD.Print("Play/Paused pressed while game is Paused.");
+			((Button)GetNode("PlayPauseButton")).Text = "||";
 
 			if (globals.Gamespeed != Globals.GametimeType.Fasteset)
 			{
