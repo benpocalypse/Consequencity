@@ -18,13 +18,13 @@ public class ThreeDTest : Spatial
 	}
 
 	public static Vector3 PointOnCircle(float radius, float angleInDegrees, Vector3 origin, float factor)
-    {
-        // Convert from degrees to radians via multiplication by PI/180
-        float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F)) + origin.x;
-        float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F)) + origin.y;
+	{
+		// Convert from degrees to radians via multiplication by PI/180
+		float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F)) + origin.x;
+		float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F)) + origin.y;
 
-        return new Vector3(90, y, factor *  x);
-    }
+		return new Vector3(90, y, factor *  x);
+	}
 
 	private float angleInDegrees = 0.0f;
 
@@ -56,10 +56,13 @@ public class ThreeDTest : Spatial
 		}
 
 		var sunLight = GetNode<Spatial>("SunLight");
-		angleInDegrees += delta * 30;
-		var pOc1 = PointOnCircle(90, angleInDegrees, new Vector3(30, 0, 90), 1);
-		sunLight.Translation = pOc1;
-		sunLight.LookAt(new Vector3(30,0,30), Vector3.Left);
+		if (globals.GameRunning != Globals.GameRunningType.Paused)
+		{
+			angleInDegrees += delta * ((float)globals.Gamespeed) * 30;
+			var pOc1 = PointOnCircle(90, angleInDegrees, new Vector3(30, 0, 90), 1);
+			sunLight.Translation = pOc1;
+			sunLight.LookAt(new Vector3(30,0,30), Vector3.Left);
+		}
 
 		//var pathToFollow = GetNode<PathFollow>("Path/PathFollow");
 		//pathToFollow.Offset += 10 * delta;

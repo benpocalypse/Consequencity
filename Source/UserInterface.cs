@@ -69,7 +69,7 @@ public class UserInterface : Control, IObserver
 		}
 	}
 
-    public override void _Ready()
+	public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
 

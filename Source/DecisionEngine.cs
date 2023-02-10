@@ -30,7 +30,7 @@ public sealed class DecisionEngine
                 .AddChild(
                     new BehaviorNode(
                         entranceCriteria:
-                            new NodeTransitionCriteria(() => globals.Decisions.TransitionStopWatch.ElapsedMilliseconds >= 5_000 ),
+                            new NodeTransitionCriteria(() => globals.Decisions.TransitionStopWatch.ElapsedMilliseconds >= 1_000),
                         entranceActions:
                             ImmutableList<Action>.Empty
                                 .Add(() =>
@@ -44,16 +44,19 @@ public sealed class DecisionEngine
                         )
                     .AddChild(
                         new BehaviorNode(
-                            entranceCriteria: new NodeTransitionCriteria(() => globals.Decisions.TransitionStopWatch.ElapsedMilliseconds >= 10_000 ),
+                            entranceCriteria:
+                                new NodeTransitionCriteria(() =>
+                                    globals.Features.GetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged) == true &&
+                                    globals.Decisions.TransitionStopWatch.ElapsedMilliseconds >= 5_000),
                             entranceActions: ImmutableList<Action>.Empty
                                 .Add(() =>
                                     {
                                         globals.PopupDialog(
                                                 _decisionText: "Now that you've had a look around the island, why not find a spot to build your house?",
                                                 _decisions: new List<string>() { "Ok"});
-                                            globals.Decisions.TransitionStopWatch.Stop();
+                                        globals.Decisions.TransitionStopWatch.Stop();
 
-                                            globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerCanPlaceSpecial, true);
+                                        globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerCanPlaceSpecial, true);
                                         globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.PlayerHouseNotPlaced, true);
                                     }
                                 )

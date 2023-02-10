@@ -104,7 +104,6 @@ text = "A"
 valign = 1
 
 [node name="StatPanel" type="PanelContainer" parent="."]
-modulate = Color( 1, 1, 1, 0.392157 )
 margin_left = 16.0
 margin_top = 976.0
 margin_right = 272.0
