@@ -58,6 +58,10 @@ move_down={
  ]
 }
 
+[mono]
+
+project/assembly_name="Consequencity"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
