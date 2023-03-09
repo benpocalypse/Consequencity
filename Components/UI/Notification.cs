@@ -2,10 +2,10 @@ using Godot;
 using System;
 using static NotificationManager;
 
-public class Notification : Control
+public partial class Notification : Control
 {
     [Signal]
-    public delegate void Acknowledged();
+    public delegate void AcknowledgedEventHandler();
     private bool _isReady = false;
     private NotificationType _type = NotificationType.Ephemeral;
     public NotificationType Type
@@ -21,7 +21,7 @@ public class Notification : Control
         set => _ephemeralTime = value;
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
     }
 
@@ -38,7 +38,7 @@ public class Notification : Control
             switch (_type)
             {
                 case NotificationType.Actionable:
-                    button.Connect("pressed", this, nameof(_on_Button_pressed));
+                    button.Connect("pressed",new Callable(this,nameof(_on_Button_pressed)));
                     button.Visible = true;
                     GetNode<VSeparator>("PanelContainer/HBoxContainer/VSeparator2").Visible = true;
                     break;
@@ -74,7 +74,7 @@ public class Notification : Control
             switch (type)
             {
                 case NotificationType.Actionable:
-                    button.Connect("pressed", this, nameof(_on_Button_pressed));
+                    button.Connect("pressed",new Callable(this,nameof(_on_Button_pressed)));
                     button.Visible = true;
                     GetNode<VSeparator>("PanelContainer/HBoxContainer/VSeparator2").Visible = true;
                     break;
@@ -116,7 +116,7 @@ public class Notification : Control
     {
         if (_type == NotificationType.Actionable)
         {
-            EmitSignal(nameof(Acknowledged), this);
+            EmitSignal(nameof(AcknowledgedEventHandler), this);
         }
     }
 }

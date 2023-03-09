@@ -4,32 +4,32 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-public class UserInterface : Control, IObserver
+public partial class UserInterface : Control, IObserver
 {
 	[Signal]
-	public delegate void On_ResidentialButton_pressed();
+	public delegate void On_ResidentialButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_CommercialButton_pressed();
+	public delegate void On_CommercialButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_IndustrialButton_pressed();
+	public delegate void On_IndustrialButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_AgriculturalButton_pressed();
+	public delegate void On_AgriculturalButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_TransportationButton_pressed();
+	public delegate void On_TransportationButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_DeleteButton_pressed();
+	public delegate void On_DeleteButton_pressedEventHandler();
 
 	[Signal]
-	public delegate void On_SelectButton_pressed();
+	public delegate void On_SelectButton_pressedEventHandler();
 
 	private Globals globals;
 
-	private float _timeCounter = 0.0f;
+	private double _timeCounter = 0.0f;
 	private bool _menuFadingIn = false;
 	private bool _menuFadingOut = false;
 
@@ -245,7 +245,7 @@ public class UserInterface : Control, IObserver
 		menuTree.Visualize(menuTree.RootButton, 0, 0);
 	}
 
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
 		_timeCounter += delta;
 

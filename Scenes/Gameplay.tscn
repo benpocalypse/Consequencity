@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Components/Land.tscn" type="PackedScene" id=1]
 
-[node name="Spatial" type="Spatial"]
+[node name="Node3D" type="Node3D"]
 
 [node name="Land" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.416091, -0.10264, 0.291206 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.416091, -0.10264, 0.291206 )

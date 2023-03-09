@@ -3,34 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class ThreeDTest : Spatial
+public partial class ThreeDTest : Node3D
 {
-	private Spatial cameraBase;
-	private Camera camera;
+	private Node3D cameraBase;
+	private Camera3D camera;
 	private Globals globals;
 
 	public override void _Ready()
 	{
 		globals = (Globals)GetNode("/root/ConsequencityGlobals");
-		cameraBase = ((Spatial)this.GetNode("Cambase"));
-		camera = ((Camera)cameraBase.GetNode("Camera"));
+		cameraBase = ((Node3D)this.GetNode("Cambase"));
+		camera = ((Camera3D)cameraBase.GetNode("Camera3D"));
 		PopulateEngineMap();
 	}
 
 	public static Vector3 PointOnCircle(float radius, float angleInDegrees, Vector3 origin, float factor)
 	{
 		// Convert from degrees to radians via multiplication by PI/180
-		float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F)) + origin.x;
-		float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F)) + origin.y;
+		float x = (float)(radius * Math.Cos(angleInDegrees * Math.PI / 180F)) + origin.X;
+		float y = (float)(radius * Math.Sin(angleInDegrees * Math.PI / 180F)) + origin.Y;
 
 		return new Vector3(90, y, factor *  x);
 	}
 
-	private float angleInDegrees = 0.0f;
+	private double _angleInDegrees = 0.0f;
 
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
-		var camPosition = cameraBase.GlobalTransform.origin;
+		var camPosition = cameraBase.GlobalTransform.Origin;
 
 		if (Input.IsActionPressed("move_left"))
 		{
@@ -55,19 +55,19 @@ public class ThreeDTest : Spatial
 			cameraBase.Translate(newPosition);
 		}
 
-		var sunLight = GetNode<Spatial>("SunLight");
+		var sunLight = GetNode<Node3D>("SunLight");
 		if (globals.GameRunning != Globals.GameRunningType.Paused)
 		{
-			angleInDegrees += delta * ((float)globals.Gamespeed) * 30;
-			var pOc1 = PointOnCircle(90, angleInDegrees, new Vector3(30, 0, 90), 1);
-			sunLight.Translation = pOc1;
+			_angleInDegrees += delta * ((double)globals.Gamespeed) * 30;
+			var pOc1 = PointOnCircle(90, ((float)_angleInDegrees), new Vector3(30, 0, 90), 1);
+			sunLight.Position = pOc1;
 			sunLight.LookAt(new Vector3(30,0,30), Vector3.Left);
 		}
 
-		//var pathToFollow = GetNode<PathFollow>("Path/PathFollow");
+		//var pathToFollow = GetNode<PathFollow3D>("Path3D/PathFollow3D");
 		//pathToFollow.Offset += 10 * delta;
 
-		globals.Economy.Update(delta * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
+		globals.Economy.Update(((float)delta) * ((float)globals.Gamespeed) * ((float)globals.GameRunning));
 		globals.Decisions.Update();
 		UpdateAgentMap();
 	}
@@ -87,23 +87,23 @@ public class ThreeDTest : Spatial
 		{
 			if (mouseEvent.Pressed == true)
 			{
-				switch ((ButtonList)mouseEvent.ButtonIndex)
+				switch (mouseEvent.ButtonIndex)
 				{
-					case ButtonList.Left:
+					case MouseButton.Left:
 						leftButtonClicked = true;
 
 						var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
 						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this number actually be?
-						var space_state = GetWorld().DirectSpaceState;
-						var selection = space_state.IntersectRay(fromPos, toPos);
+						var space_state = GetWorld3D().DirectSpaceState;
+						var selection = space_state.IntersectRay(PhysicsRayQueryParameters3D.Create(fromPos, toPos));
 
 						try
 						{
-							var selectedCollider = ((StaticBody)selection["collider"]);
+							var selectedCollider = ((StaticBody3D)selection["collider"]);
 							var selectedLand = ((Land)selectedCollider.GetParent());
 
-							initialClickPosition = selectedLand.Translation;
-							previousClickPosition = selectedLand.Translation;
+							initialClickPosition = new Vector3(selectedLand.LandPosition.X, selectedLand.LandPosition.Y, 0);
+							previousClickPosition = new Vector3(selectedLand.LandPosition.X, selectedLand.LandPosition.Y, 0);
 						}
 						catch(Exception){}
 
@@ -117,7 +117,7 @@ public class ThreeDTest : Spatial
 						   )
 						{
 							var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-							Highlight newHighlight = (Highlight)highlight.Instance();
+							Highlight newHighlight = (Highlight)highlight.Instantiate();
 							newHighlight.Translate(initialClickPosition);
 							AddChild(newHighlight);
 
@@ -134,7 +134,7 @@ public class ThreeDTest : Spatial
 								if (playerHouse == null)
 								{
 									var playerHouseScene = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
-									playerHouse = (Building)playerHouseScene.Instance();
+									playerHouse = (Building)playerHouseScene.Instantiate();
 									playerHouse.Translate(initialClickPosition);
 									AddChild(playerHouse);
 
@@ -147,12 +147,12 @@ public class ThreeDTest : Spatial
 
 						break;
 
-					case ButtonList.WheelUp:
+					case MouseButton.WheelUp :
 						var newPosition = new Vector3(0, -0.5f, 0);
 						cameraBase.Translate(newPosition);
 						break;
 
-					case ButtonList.WheelDown:
+					case MouseButton.WheelDown:
 						newPosition = new Vector3(0, 0.5f, 0);
 						cameraBase.Translate(newPosition);
 						break;
@@ -166,25 +166,25 @@ public class ThreeDTest : Spatial
 				{
 					foreach (Highlight light in highlightSelectionlist)
 					{
-						var spaceState = GetWorld().DirectSpaceState;
+						var spaceState = GetWorld3D().DirectSpaceState;
 						var result = spaceState.IntersectRay(
-							from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
-							to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
+							PhysicsRayQueryParameters3D.Create(
+							from: new Vector3(light.Position.X + 0.5f, 1.0f, light.Position.Z + 0.5f),
+							to: new Vector3(light.Position.X + 0.5f, 0.0f, light.Position.Z + 0.5f),
 							exclude: null,
-							collisionMask: 2147483647,
-							collideWithBodies: true,
-							collideWithAreas: true);
+							collisionMask: 2147483647)
+						);
 
-						var selectedCollider = ((StaticBody)result["collider"]);
+						var selectedCollider = ((StaticBody3D)result["collider"]);
 						var selectedLand = ((Land)selectedCollider.GetParent());
 
 						selectedLand.SetLandType(globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone));
-						globals.Economy.Map[selectedLand.Position].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone);
+						globals.Economy.Map[selectedLand.LandPosition].Type = globals.PlacementModeTypeToLandSpaceType(globals.PlacementZone);
 
 						if (globals.PlacementZone == Globals.PlacementZoneType.Agricultural)
 						{
 							var gardenScene = (PackedScene)ResourceLoader.Load("res://Components/Garden.tscn");
-							var garden = (Spatial)gardenScene.Instance();
+							var garden = (Node3D)gardenScene.Instantiate();
 							garden.Translate(initialClickPosition);
 							AddChild(garden);
 						}
@@ -199,21 +199,21 @@ public class ThreeDTest : Spatial
 				{
 					foreach (Highlight light in highlightSelectionlist)
 					{
-						var spaceState = GetWorld().DirectSpaceState;
+						var spaceState = GetWorld3D().DirectSpaceState;
 						var result = spaceState.IntersectRay(
-							from: new Vector3(light.Translation.x + 0.5f, 1.0f, light.Translation.z + 0.5f),
-							to: new Vector3(light.Translation.x + 0.5f, 0.0f, light.Translation.z + 0.5f),
+							PhysicsRayQueryParameters3D.Create(
+							from: new Vector3(light.Position.X + 0.5f, 1.0f, light.Position.Z + 0.5f),
+							to: new Vector3(light.Position.X + 0.5f, 0.0f, light.Position.Z + 0.5f),
 							exclude: null,
-							collisionMask: 2147483647,
-							collideWithBodies: true,
-							collideWithAreas: true);
+							collisionMask: 2147483647)
+						);
 
-						var selectedCollider = ((StaticBody)result["collider"]);
+						var selectedCollider = ((StaticBody3D)result["collider"]);
 						var selectedLand = ((Land)selectedCollider.GetParent());
 
 						landSelectionList.Add(selectedLand);
 
-						globals.Economy.SelectedLandList.Add(globals.Economy.Map[selectedLand.Position]);
+						globals.Economy.SelectedLandList.Add(globals.Economy.Map[selectedLand.LandPosition]);
 						selectedLand.Selected();
 
 						light.QueueFree();
@@ -232,26 +232,27 @@ public class ThreeDTest : Spatial
 			{
 				var fromPos = camera.ProjectRayOrigin(motionEvent.Position);
 				var toPos = fromPos + camera.ProjectRayNormal(motionEvent.Position) * 1000; // FIXME - what should this actually be?
-				var space_state = GetWorld().DirectSpaceState;
-				var selection = space_state.IntersectRay(fromPos, toPos);
+				var spaceState = GetWorld3D().DirectSpaceState;
+				var selection = spaceState.IntersectRay(PhysicsRayQueryParameters3D.Create(fromPos, toPos));
 
 				try
 				{
-					var selectedCollider = ((StaticBody)selection["collider"]);
+					var selectedCollider = ((StaticBody3D)selection["collider"]);
 					var selectedLand = ((Land)selectedCollider.GetParent());
-					currentClickPosition = selectedLand.Translation;
+					// FIXME - might need to make selectedLand.Position into a Vector3
+					currentClickPosition = new Vector3(selectedLand.LandPosition.X, selectedLand.LandPosition.Y, 0);
 
 					if (currentClickPosition != previousClickPosition)
 					{
 						var xIncrement = 2.0f;
 						var zIncrement = 2.0f;
 
-						if (initialClickPosition.x > currentClickPosition.x)
+						if (initialClickPosition.X > currentClickPosition.X)
 						{
 							xIncrement = -2.0f;
 						}
 
-						if (initialClickPosition.z > currentClickPosition.z)
+						if (initialClickPosition.Z > currentClickPosition.Z)
 						{
 							zIncrement = -2.0f;
 						}
@@ -267,12 +268,12 @@ public class ThreeDTest : Spatial
 							highlightSelectionlist.Clear();
 
 							// Draw a rectangle of highlights from the initial click position to the current click position.
-							for (var x = initialClickPosition.x; x != currentClickPosition.x + xIncrement; x += xIncrement)
+							for (var x = initialClickPosition.X; x != currentClickPosition.X + xIncrement; x += xIncrement)
 							{
-								for (var z = initialClickPosition.z; z != currentClickPosition.z + zIncrement; z += zIncrement)
+								for (var z = initialClickPosition.X; z != currentClickPosition.Z + zIncrement; z += zIncrement)
 								{
 									var highlight = (PackedScene)ResourceLoader.Load("res://Components/Highlight.tscn");
-									Highlight newHighlight = (Highlight)highlight.Instance();
+									Highlight newHighlight = (Highlight)highlight.Instantiate();
 									newHighlight.Translate(new Vector3(x, 0, z));
 									AddChild(newHighlight);
 
@@ -285,7 +286,7 @@ public class ThreeDTest : Spatial
 						}
 						else if (globals.PlacementSpecial == Globals.PlacementSpecialType.PlayerHouse)
 						{// TODO - What a hack this all is :/
-							playerHouse.Translation = new Vector3(currentClickPosition.x,1.0f,currentClickPosition.z);
+							playerHouse.Position = new Vector3(currentClickPosition.X, 1.0f, currentClickPosition.Z);
 						}
 
 						previousClickPosition = currentClickPosition;
@@ -303,8 +304,8 @@ public class ThreeDTest : Spatial
 		foreach (var space in globals.Economy.Map)
 		{
 			var land = (PackedScene)ResourceLoader.Load("res://Components/Land.tscn");
-			Land newLand = (Land)land.Instance();
-			var newPos = new Vector3(space.Key.x * 2, 0, space.Key.y * 2);
+			Land newLand = (Land)land.Instantiate();
+			var newPos = new Vector3(space.Key.X * 2, 0, space.Key.Y * 2);
 			newLand.SetLandType(space.Value.Type);
 			newLand.SetPosition(space.Key);
 			newLand.Translate(newPos);
@@ -321,8 +322,8 @@ public class ThreeDTest : Spatial
 			{
 				agent.HomeHasBeenDrawn = true;
 				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
-				Building newBuilding = (Building)building.Instance();
-				var housePosition = new Vector3(agent.Home.x * 2, 0, agent.Home.y * 2);
+				Building newBuilding = (Building)building.Instantiate();
+				var housePosition = new Vector3(agent.Home.X * 2, 0, agent.Home.Y * 2);
 				newBuilding.Translate(housePosition);
 				newBuilding.SetType(Globals.LandSpaceType.Residential);
 				AddChild(newBuilding);
@@ -332,9 +333,9 @@ public class ThreeDTest : Spatial
 			{
 				agent.JobHasBeenDrawn = true;
 				var building = (PackedScene)ResourceLoader.Load("res://Components/Building.tscn");
-				Building newBuilding = (Building)building.Instance();
+				Building newBuilding = (Building)building.Instantiate();
 				newBuilding.SetType((Globals.LandSpaceType)agent.JobType);
-				var jobPosition = new Vector3(agent.JobLocation.x * 2, 0, agent.JobLocation.y * 2);
+				var jobPosition = new Vector3(agent.JobLocation.X* 2, 0, agent.JobLocation.Y * 2);
 				newBuilding.Translate(jobPosition);
 				AddChild(newBuilding);
 			}

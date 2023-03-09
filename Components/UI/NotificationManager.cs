@@ -3,7 +3,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 
-public sealed class NotificationManager : Node
+public partial class NotificationManager : Node
 {
     public enum NotificationType
     {
@@ -22,7 +22,7 @@ public sealed class NotificationManager : Node
     }
 
     private bool _isReady = false;
-    private float _secondTick = 0.0f;
+    private double _secondTick = 0.0;
 
     private ImmutableList<Notification> _notificationList = ImmutableList<Notification>.Empty;
 
@@ -31,7 +31,7 @@ public sealed class NotificationManager : Node
         _isReady = true;
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         _secondTick += delta;
 
@@ -68,9 +68,9 @@ public sealed class NotificationManager : Node
         {
             var notification = (PackedScene)ResourceLoader.Load("res://Components/UI/Notification.tscn");
 
-            Notification newNotification = (Notification)notification.Instance();
+            Notification newNotification = (Notification)notification.Instantiate();
 
-            newNotification.Connect("Acknowledged", this, nameof(Notification_Acknowledged));
+            newNotification.Connect("AcknowledgedEventHandler",new Callable(this,nameof(Notification_Acknowledged)));
             newNotification.New(
                 type: type,
                 icon: icon,

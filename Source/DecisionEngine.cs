@@ -35,7 +35,7 @@ public sealed class DecisionEngine
                             ImmutableList<Action>.Empty
                                 .Add(() =>
                                     {
-                                        globals.PopupDialog(
+                                        globals.Popup(
                                             _decisionText: "You did it. You made it to your own deserted island. Why don't you take some time to look around with the W, A, S, and D keys. You can also use the mouse wheel to zoom in and out.",
                                             _decisions: new List<string>() { "Ok"});
                                         globals.Decisions.TransitionStopWatch.Restart();
@@ -51,7 +51,7 @@ public sealed class DecisionEngine
                             entranceActions: ImmutableList<Action>.Empty
                                 .Add(() =>
                                     {
-                                        globals.PopupDialog(
+                                        globals.Popup(
                                                 _decisionText: "Now that you've had a look around the island, why not find a spot to build your house?",
                                                 _decisions: new List<string>() { "Ok"});
                                         globals.Decisions.TransitionStopWatch.Stop();
@@ -74,7 +74,7 @@ public sealed class DecisionEngine
                                         entranceActions: ImmutableList<Action>.Empty
                                             .Add(() =>
                                                 {
-                                                    globals.PopupDialog(
+                                                    globals.Popup(
                                                         _decisionText: "You're probably getting tired of scavenging for food. Why not try building a few spaces for gardens?",
                                                         _decisions: new List<string>() { "Ok"});
                                                     globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.AgriculturalZoning, true);
@@ -88,7 +88,7 @@ public sealed class DecisionEngine
                                             entranceActions: ImmutableList<Action>.Empty
                                                 .Add(() =>
                                                     {
-                                                        globals.PopupDialog(
+                                                        globals.Popup(
                                                                 _decisionText: "Nice work!",
                                                                 _decisions: new List<string>() { "Ok"});
                                                             TransitionStopWatch.Stop();
@@ -112,7 +112,7 @@ public sealed class DecisionEngine
                     entranceActions:
                         ImmutableList<Action>.Empty
                             .Add(
-                                () => globals.PopupDialog(
+                                () => globals.Popup(
                                         _decisionText: "More people have moved in, and they want the ability to buy things. Should we mint a currency for them?",
                                         _decisions: new List<string>() { "Yes", "No"})
                                     // FIXME - Continue the tree.
@@ -126,7 +126,7 @@ public sealed class DecisionEngine
         _behaviorTree.Update();
     }
 
-    public void DecisionMade(string choiceText)
+    public void DecisionMadeEventHandler(string choiceText)
     {
         this._choiceText = choiceText;
     }

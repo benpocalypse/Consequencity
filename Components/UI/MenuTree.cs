@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class MenuTree : Node2D
+public partial class MenuTree : Node2D
 {
     private bool _isReady = false;
     public MenuButton RootButton;
@@ -43,7 +43,7 @@ public class MenuTree : Node2D
         }
 
         PackedScene visualButtonScene = (PackedScene)ResourceLoader.Load(resouceStringName);
-        var newButton = (Node)visualButtonScene.Instance();
+        var newButton = (Node)visualButtonScene.Instantiate();
 
         // FIXME - move this concern into the MenuButtonVisual node
         var button = newButton.GetNode<Button>("Path2D/PathFollow2D/Button");

@@ -41,7 +41,7 @@ public static class MenuButtonExtensions
     }
 }
 
-public class MenuButton : IObservable, IObserver
+public partial class MenuButton : IObservable, IObserver
 {
     public enum ButtonDirection
     {

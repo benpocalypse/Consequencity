@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Highlight : Spatial
+public partial class Highlight : Node3D
 {
     public override void _Ready()
     {

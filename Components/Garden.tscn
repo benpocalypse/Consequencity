@@ -2,9 +2,9 @@
 
 [ext_resource path="res://Assets/Graphics/3DTest/Garden.obj" type="ArrayMesh" id=1]
 
-[node name="Spatial" type="Spatial"]
+[node name="Node3D" type="Node3D"]
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource( 1 )
 material/0 = null
 material/1 = null

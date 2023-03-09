@@ -1,42 +1,26 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://erq3junipquu"]
 
-[ext_resource path="res://Components/UI/DecisionDialog.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://Components/UI/DecisionDialog.cs" id="1"]
 
-[node name="PopupDialog" type="PopupDialog"]
+[node name="Popup" type="Popup"]
+size = Vector2i(958, 137)
 visible = true
-margin_right = 400.0
-margin_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-rect_min_size = Vector2( 400, 160 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-popup_exclusive = true
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+exclusive = true
+script = ExtResource("1")
 
 [node name="DecisionText" type="Label" parent="."]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 380.0
-margin_bottom = 100.0
-rect_min_size = Vector2( 360, 75 )
-text = "Now that you live here, other people have noticed and would like to join you. Will you let other people live on your island?"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_minimum_size = Vector2(360, 75)
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 380.0
+offset_bottom = 100.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 20.0
-margin_top = 100.0
-margin_right = 360.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 360, 37 )
-custom_constants/separation = 10
+custom_minimum_size = Vector2(360, 37)
+offset_left = 20.0
+offset_top = 100.0
+offset_right = 360.0
+offset_bottom = 37.0
 alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[connection signal="DecisionMade" from="." to="." method="_on_DecisionButton_pressed"]

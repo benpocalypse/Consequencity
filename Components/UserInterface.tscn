@@ -25,20 +25,20 @@ __meta__ = {
 }
 
 [node name="Demand" type="RichTextLabel" parent="."]
-margin_left = 1752.0
-margin_top = 24.0
-margin_right = 1864.0
-margin_bottom = 41.0
+offset_left = 1752.0
+offset_top = 24.0
+offset_right = 1864.0
+offset_bottom = 41.0
 text = "Demand"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ResidentialProgress" type="ProgressBar" parent="."]
-margin_left = 1752.0
-margin_top = 48.0
-margin_right = 1904.0
-margin_bottom = 73.0
+offset_left = 1752.0
+offset_top = 48.0
+offset_right = 1904.0
+offset_bottom = 73.0
 custom_styles/fg = SubResource( 1 )
 rounded = true
 __meta__ = {
@@ -46,41 +46,41 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="ResidentialProgress"]
-margin_left = -16.0
-margin_bottom = 25.0
+offset_left = -16.0
+offset_bottom = 25.0
 text = "R"
 valign = 1
 
 [node name="CommercialProgress" type="ProgressBar" parent="."]
-margin_left = 1752.0
-margin_top = 80.0
-margin_right = 1904.0
-margin_bottom = 104.0
+offset_left = 1752.0
+offset_top = 80.0
+offset_right = 1904.0
+offset_bottom = 104.0
 custom_styles/fg = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="CommercialProgress"]
-margin_left = -16.0
-margin_bottom = 24.0
+offset_left = -16.0
+offset_bottom = 24.0
 text = "C"
 valign = 1
 
 [node name="IndustrialProgress" type="ProgressBar" parent="."]
-margin_left = 1752.0
-margin_top = 112.0
-margin_right = 1904.0
-margin_bottom = 136.0
+offset_left = 1752.0
+offset_top = 112.0
+offset_right = 1904.0
+offset_bottom = 136.0
 custom_styles/fg = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="IndustrialProgress"]
-margin_left = -16.0
-margin_top = -2.0
-margin_bottom = 24.0
+offset_left = -16.0
+offset_top = -2.0
+offset_bottom = 24.0
 text = "I"
 valign = 1
 __meta__ = {
@@ -88,102 +88,102 @@ __meta__ = {
 }
 
 [node name="AgriculturalProgress" type="ProgressBar" parent="."]
-margin_left = 1752.0
-margin_top = 144.0
-margin_right = 1904.0
-margin_bottom = 168.0
+offset_left = 1752.0
+offset_top = 144.0
+offset_right = 1904.0
+offset_bottom = 168.0
 custom_styles/fg = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="AgriculturalProgress"]
-margin_left = -16.0
-margin_bottom = 23.0
+offset_left = -16.0
+offset_bottom = 23.0
 text = "A"
 valign = 1
 
 [node name="StatPanel" type="PanelContainer" parent="."]
-margin_left = 16.0
-margin_top = 976.0
-margin_right = 272.0
-margin_bottom = 1062.0
+offset_left = 16.0
+offset_top = 976.0
+offset_right = 272.0
+offset_bottom = 1062.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="StatPanel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 249.0
-margin_bottom = 79.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 249.0
+offset_bottom = 79.0
 
 [node name="Gamespeed" type="Label" parent="StatPanel/VBoxContainer"]
-margin_right = 242.0
-margin_bottom = 14.0
+offset_right = 242.0
+offset_bottom = 14.0
 text = "Speed: "
 
 [node name="Date" type="Label" parent="StatPanel/VBoxContainer"]
-margin_top = 18.0
-margin_right = 242.0
-margin_bottom = 32.0
+offset_top = 18.0
+offset_right = 242.0
+offset_bottom = 32.0
 text = "Date:"
 
 [node name="Population" type="Label" parent="StatPanel/VBoxContainer"]
-margin_top = 36.0
-margin_right = 242.0
-margin_bottom = 50.0
+offset_top = 36.0
+offset_right = 242.0
+offset_bottom = 50.0
 text = "Population: 0"
 
 [node name="Funds" type="Label" parent="StatPanel/VBoxContainer"]
-margin_top = 54.0
-margin_right = 242.0
-margin_bottom = 68.0
+offset_top = 54.0
+offset_right = 242.0
+offset_bottom = 68.0
 text = "Funds:"
 
 [node name="InfoPanel" type="PanelContainer" parent="."]
 visible = false
-margin_left = 1688.0
-margin_top = 944.0
-margin_right = 1905.0
-margin_bottom = 1064.0
+offset_left = 1688.0
+offset_top = 944.0
+offset_right = 1905.0
+offset_bottom = 1064.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="InfoPopup" type="RichTextLabel" parent="InfoPanel"]
 visible = false
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 322.0
-margin_bottom = 113.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 322.0
+offset_bottom = 113.0
 text = "Information:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PlayPauseButton" type="Button" parent="."]
-margin_left = 896.0
-margin_top = 16.0
-margin_right = 936.0
-margin_bottom = 48.0
+offset_left = 896.0
+offset_top = 16.0
+offset_right = 936.0
+offset_bottom = 48.0
 text = "||"
 
 [node name="SpeedupButton" type="Button" parent="."]
-margin_left = 952.0
-margin_top = 16.0
-margin_right = 992.0
-margin_bottom = 48.0
+offset_left = 952.0
+offset_top = 16.0
+offset_right = 992.0
+offset_bottom = 48.0
 text = ">>"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SlowdownButton" type="Button" parent="."]
-margin_left = 840.0
-margin_top = 16.0
-margin_right = 880.0
-margin_bottom = 48.0
+offset_left = 840.0
+offset_top = 16.0
+offset_right = 880.0
+offset_bottom = 48.0
 disabled = true
 text = "<<"
 __meta__ = {

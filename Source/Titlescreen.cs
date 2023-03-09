@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Titlescreen : Node
+public partial class Titlescreen : Node
 {
 	private Globals globals;
 

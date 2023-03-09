@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Gameplay : Node
+public partial class Gameplay : Node
 {
 
 	// Called when the node enters the scene tree for the first time.

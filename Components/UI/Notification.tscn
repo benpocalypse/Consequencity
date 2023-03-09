@@ -6,26 +6,26 @@
 resource_name = "Grow"
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("PanelContainer:rect_scale")
+tracks/0/path = NodePath("PanelContainer:scale")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 0.4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.3, 0.4 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("PanelContainer:rect_pivot_offset")
+tracks/1/path = NodePath("PanelContainer:pivot_offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ Vector2( 235, 40 ) ]
 }
@@ -34,14 +34,14 @@ tracks/1/keys = {
 resource_name = "Shrink"
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("PanelContainer:rect_scale")
+tracks/0/path = NodePath("PanelContainer:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.1, 0.3 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 1.1, 1.1 ), Vector2( 1e-05, 1e-05 ) ]
 }
@@ -49,25 +49,25 @@ tracks/0/keys = {
 [node name="Notification" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 450, 80 )
+custom_minimum_size = Vector2( 450, 80 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-rect_min_size = Vector2( 470, 45 )
-rect_pivot_offset = Vector2( 235, 40 )
+custom_minimum_size = Vector2( 470, 45 )
+pivot_offset = Vector2( 235, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 463.0
-margin_bottom = 47.0
-rect_min_size = Vector2( 0, 40 )
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 463.0
+offset_bottom = 47.0
+custom_minimum_size = Vector2( 0, 40 )
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
@@ -75,23 +75,23 @@ __meta__ = {
 
 [node name="Icon" type="TextureRect" parent="PanelContainer/HBoxContainer"]
 visible = false
-margin_right = 32.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 32, 32 )
+offset_right = 32.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 32, 32 )
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer"]
 visible = false
-margin_right = 4.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
+offset_right = 4.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 0, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="NotificationText" type="Label" parent="PanelContainer/HBoxContainer"]
-margin_right = 300.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 300, 40 )
+offset_right = 300.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 300, 40 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 valign = 1
@@ -102,20 +102,20 @@ __meta__ = {
 
 [node name="VSeparator2" type="VSeparator" parent="PanelContainer/HBoxContainer"]
 visible = false
-margin_left = 410.0
-margin_right = 414.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
+offset_left = 410.0
+offset_right = 414.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 0, 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button" type="Button" parent="PanelContainer/HBoxContainer"]
 visible = false
-margin_left = 419.0
-margin_right = 456.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 37, 37 )
+offset_left = 419.0
+offset_right = 456.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 37, 37 )
 text = "X"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Immutable;
 
-public class MenuButtonVisual : Node2D, IObserver, IObservable
+public partial class MenuButtonVisual : Node2D, IObserver, IObservable
 {
     public bool SlidingIn = true;
     public bool SlidingOut = false;
@@ -10,7 +10,7 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
     public override void _Ready()
     {
         var button = this.GetNode<Button>("Path2D/PathFollow2D/Button");
-        button.Connect("pressed", this, nameof(_on_Button_pressed));
+        button.Connect("pressed",new Callable(this,nameof(_on_Button_pressed)));
     }
 
     public void _on_Button_pressed()
@@ -18,16 +18,16 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
         Notify();
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         if (this.GetNode<Button>("Path2D/PathFollow2D/Button").Visible && SlidingIn)
         {
             var pathFollow2d = this.GetNode<PathFollow2D>("Path2D/PathFollow2D");
-            pathFollow2d.Offset += 250 * delta;
+            pathFollow2d.Progress += (float)(250f * delta);
 
-            this.GetNode<Button>("Path2D/PathFollow2D/Button").Modulate = new Color(1,1,1,pathFollow2d.UnitOffset/1.0f);
+            this.GetNode<Button>("Path2D/PathFollow2D/Button").Modulate = new Color(1,1,1,pathFollow2d.ProgressRatio/1.0f);
 
-            if (pathFollow2d.UnitOffset >= 1.0)
+            if (pathFollow2d.ProgressRatio >= 1.0)
             {
                 SlidingIn = false;
             }
@@ -36,11 +36,11 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
         if (SlidingOut == true)
         {
             var pathFollow2d = this.GetNode<PathFollow2D>("Path2D/PathFollow2D");
-            pathFollow2d.Offset -= 250 * delta;
+            pathFollow2d.Progress -= (float)(250 * delta);
 
-            this.GetNode<Button>("Path2D/PathFollow2D/Button").Modulate = new Color(1,1,1,pathFollow2d.UnitOffset/1.0f);
+            this.GetNode<Button>("Path2D/PathFollow2D/Button").Modulate = new Color(1,1,1,pathFollow2d.ProgressRatio/1.0f);
 
-            if (pathFollow2d.UnitOffset <= 0)
+            if (pathFollow2d.ProgressRatio <= 0)
             {
                 this.GetNode<Button>("Path2D/PathFollow2D/Button").Visible = false;
                 SlidingOut = false;
@@ -84,7 +84,7 @@ public class MenuButtonVisual : Node2D, IObserver, IObservable
             }
 
             godotButton.Disabled = !button.IsEnabled;
-            godotButton.Pressed = button.Pressed;
+            godotButton.ButtonPressed = button.Pressed;
             godotButton.Text = button.Pressed ?
                                 button.PressedText :
                                 button.UnpressedText;

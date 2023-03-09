@@ -2,9 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using static NotificationManager;
 
-public class Globals : Node
+public partial class Globals : Node
 {
 	public enum Scenes
 	{
@@ -135,21 +136,21 @@ public class Globals : Node
 		}
 	}
 
-	public void PopupDialog(string _decisionText, List<string> _decisions)
+	public void Popup(string _decisionText, List<string> _decisions)
 	{
 		var decisionDialogScene = (PackedScene)ResourceLoader.Load("res://Components/UI/DecisionDialog.tscn");
-		var decisionDialog = (DecisionDialog)decisionDialogScene.Instance();
+		var decisionDialog = (DecisionDialog)decisionDialogScene.Instantiate(); //.Instance();
 		decisionDialog.New(
 			decisionText: _decisionText,
 			decisionButtonText: _decisions);
 
-		decisionDialog.Connect("DecisionMade", this, nameof(_on_DecisionMade));
+		decisionDialog.Connect("DecisionMadeEventHandler",new Callable(this,nameof(_on_DecisionMade)));
 
 		var globals = Globals.Instance;
 		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, false);
 
 		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
-		var userInterface = (UserInterface)userInterfaceScene.Instance();
+		var userInterface = (UserInterface)userInterfaceScene.Instantiate();
 		userInterface.DisableAllButtons();
 
 		globals.GameRunning = GameRunningType.Paused;
@@ -161,10 +162,10 @@ public class Globals : Node
 	{
 		var globals = Globals.Instance;
 		GD.Print($"Decision: {decisionText}");
-		Decisions.DecisionMade(decisionText);
+		Decisions.DecisionMadeEventHandler(decisionText);
 
 		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
-		var userInterface = (UserInterface)userInterfaceScene.Instance();
+		var userInterface = (UserInterface)userInterfaceScene.Instantiate();
 		userInterface.DisableAllButtons();
 
 		globals.GameRunning = GameRunningType.Playing;
@@ -226,7 +227,7 @@ public class Globals : Node
 	{
 		//RestorePersistedData();
 
-		Viewport root = GetTree().Root;
+		var root = GetTree().Root;
 		CurrentSceneFile = root.GetChild(root.GetChildCount() - 1);
 
 		instance = GetNode<Globals>("/root/ConsequencityGlobals");
@@ -237,7 +238,7 @@ public class Globals : Node
 	public override void _Notification(int notification)
 	{
 		// Save on quit. Note that you can call `DataManager.Save()` whenever you want
-		if (notification == MainLoop.NotificationWmQuitRequest)
+		if (notification == NotificationWMCloseRequest)
 		{
 			StorePersistedData();
 			GetTree().Quit();
@@ -253,6 +254,7 @@ public class Globals : Node
 
 	public void StorePersistedData()
 	{
+		/* FIXME - Reimplement this with .NET 6.
 		var file = new File();
 
 		var fileExists = file.FileExists(saveFile);
@@ -270,10 +272,12 @@ public class Globals : Node
 		file.StoreVar(HighestScore);
 
 		file.Close();
+		*/
 	}
 
 	public void RestorePersistedData()
 	{
+		/* FIXME - Reimplement this with .NET 6.
 		var file = new File();
 
 		var ifExists = file.FileExists(saveFile);
@@ -287,6 +291,7 @@ public class Globals : Node
 
 			file.Close();
 		}
+		*/
 	}
 
 	public void GotoScene(Scenes nextScene)
@@ -311,7 +316,7 @@ public class Globals : Node
 		var nextScene = (PackedScene)GD.Load(path);
 
 		// Instance the new scene.
-		CurrentSceneFile = nextScene.Instance();
+		CurrentSceneFile = nextScene.Instantiate();
 
 		// Add it to the active scene, as child of root.
 		GetTree().Root.AddChild(CurrentSceneFile);
