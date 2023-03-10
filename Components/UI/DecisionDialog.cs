@@ -5,7 +5,10 @@ using System.Collections.Generic;
 public partial class DecisionDialog : Popup
 {
 	[Signal]
-	public delegate void DecisionMadeEventHandler(string _decisionText);
+	public delegate void DecisionMadeEventHandler(string decisionText);
+	
+	[Signal]
+	public delegate void TestEventHandler();
 
 	private string _decisionText = string.Empty;
 	private List<string> _decisionButtonText = new List<string>();
@@ -19,12 +22,10 @@ public partial class DecisionDialog : Popup
 		{
 			var newButton = new Button();
 			newButton.Text = decision;
-			//newButton.Connect("pressed", new Callable(this, nameof(_on_DecisionButton_pressed)) );
-			newButton.Pressed += _on_DecisionButton_pressed;
-			
-			// , new Godot.Collections.Array { newButton.Text }
+			newButton.Pressed += () => _on_DecisionButton_pressed(_decisionText);
 			newButton.CustomMinimumSize = new Vector2(50, 30);
 			newButton.Size = new Vector2(50, 30);
+
 			GetNode<HBoxContainer>("HBoxContainer").AddChild(newButton);
 		}
 	}
@@ -36,10 +37,10 @@ public partial class DecisionDialog : Popup
 		this.Popup();
 	}
 
-	public void _on_DecisionButton_pressed()//(string buttonText = "")
+	public void _on_DecisionButton_pressed(string buttonText = "")
 	{
-		GD.Print("Decision Made button pressed!");
-		EmitSignal(nameof(DecisionMadeEventHandler), "blaaah");//buttonText);
+		//EmitSignal(SignalName.DecisionMade, buttonText);
+		EmitSignal(SignalName.Test);
 		this.QueueFree();
 	}
 }

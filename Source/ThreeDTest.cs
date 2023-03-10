@@ -91,6 +91,7 @@ public partial class ThreeDTest : Node3D
 				{
 					case MouseButton.Left:
 						leftButtonClicked = true;
+						GD.Print("Left button clicked.");
 
 						var fromPos = camera.ProjectRayOrigin(mouseEvent.Position);
 						var toPos = fromPos + camera.ProjectRayNormal(mouseEvent.Position) * 1000; // FIXME - what should this number actually be?
@@ -105,7 +106,7 @@ public partial class ThreeDTest : Node3D
 							initialClickPosition = new Vector3(selectedLand.LandPosition.X, selectedLand.LandPosition.Y, 0);
 							previousClickPosition = new Vector3(selectedLand.LandPosition.X, selectedLand.LandPosition.Y, 0);
 						}
-						catch(Exception){}
+						catch(Exception) { GD.Print("Caught exception."); } // FIXME - Not sure exctly why this is being hit.
 
 						landSelectionList.ForEach(_ => _.Unselected());
 						landSelectionList.Clear();
@@ -286,6 +287,7 @@ public partial class ThreeDTest : Node3D
 						}
 						else if (globals.PlacementSpecial == Globals.PlacementSpecialType.PlayerHouse)
 						{// TODO - What a hack this all is :/
+							GD.Print("Placing player house.");
 							playerHouse.Position = new Vector3(currentClickPosition.X, 1.0f, currentClickPosition.Z);
 						}
 

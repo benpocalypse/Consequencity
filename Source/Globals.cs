@@ -144,7 +144,11 @@ public partial class Globals : Node
 			decisionText: _decisionText,
 			decisionButtonText: _decisions);
 
-		decisionDialog.Connect("DecisionMadeEventHandler",new Callable(this,nameof(_on_DecisionMade)));
+		// FIXME - Figure out why passing a string argument to the delegate crashes godot.
+		//decisionDialog.Connect("DecisionMade",new Callable(this,nameof(_on_DecisionMade)));
+		//decisionDialog.DecisionMade += _on_DecisionMade;
+		//decisionDialog.DecisionMade += (a) => GD.Print($"FUUUUUCK: {a}");
+		decisionDialog.Test += _on_DecisionMade2;
 
 		var globals = Globals.Instance;
 		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, false);
@@ -156,12 +160,39 @@ public partial class Globals : Node
 		globals.GameRunning = GameRunningType.Paused;
 		this.AddChild(decisionDialog);
 		decisionDialog.PopupCentered();
+		GD.Print("Popup created!");
+	}
+
+	// FIXME - Remove this, and use the version that takes an argument.
+	public void _on_DecisionMade2()
+	{
+		GD.Print($"Decision:");
+		var globals = Globals.Instance;
+		Decisions.DecisionMadeEventHandler(string.Empty);
+
+		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
+		var userInterface = (UserInterface)userInterfaceScene.Instantiate();
+		userInterface.DisableAllButtons();
+
+		globals.GameRunning = GameRunningType.Playing;
+
+		Notifications = GetTree().CurrentScene.GetNode<NotificationManager>("UiLayer/UserInterface/NotificationManager");
+
+		if (Notifications != null)
+		{
+			Notifications.New(
+				type: NotificationType.Ephemeral,
+				icon: NotificationManager.NotificationIconType.None,
+				text: $"You answered {string.Empty.ToLower()} to the question.");
+		}
+
+		globals.Features = globals.Features.SetGameFeatureValue(GameFeature.FeatureType.DialogAcknowledged, true);
 	}
 
 	public void _on_DecisionMade(string decisionText)
 	{
-		var globals = Globals.Instance;
 		GD.Print($"Decision: {decisionText}");
+		var globals = Globals.Instance;
 		Decisions.DecisionMadeEventHandler(decisionText);
 
 		var userInterfaceScene = (PackedScene)ResourceLoader.Load("res://Components/UserInterface.tscn");
