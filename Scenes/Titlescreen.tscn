@@ -7,10 +7,10 @@
 script = ExtResource("1_jcw64")
 
 [node name="TitleText" type="RichTextLabel" parent="."]
-offset_left = 850.922
-offset_top = 513.852
-offset_right = 945.922
-offset_bottom = 529.852
+offset_left = 831.0
+offset_top = 513.0
+offset_right = 957.0
+offset_bottom = 541.0
 scale = Vector2(2, 2)
 text = "Consequencity"
 

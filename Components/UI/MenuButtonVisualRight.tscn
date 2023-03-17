@@ -1,28 +1,29 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://1ygkta0puu3b"]
 
-[ext_resource path="res://Components/UI/MenuButtonVisual.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://Components/UI/MenuButtonVisual.cs" id="1"]
 
-[sub_resource type="Curve2D" id=1]
+[sub_resource type="Curve2D" id="1"]
 _data = {
-"points": PackedVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 1 )
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 1)
 }
+point_count = 2
 
 [node name="Control" type="Node2D"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Path2D" type="Path2D" parent="."]
-curve = SubResource( 1 )
+curve = SubResource("1")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-rotate = false
+rotation = 0.0113631
 loop = false
 
 [node name="Button" type="Button" parent="Path2D/PathFollow2D"]
-offset_left = -80.0
-offset_bottom = 40.0
+offset_left = -79.5011
+offset_top = 43.9062
+offset_right = 0.498932
+offset_bottom = 83.9062
+rotation = -0.0108597
 toggle_mode = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="pressed" from="Path2D/PathFollow2D/Button" to="." method="_on_Button_pressed"]
